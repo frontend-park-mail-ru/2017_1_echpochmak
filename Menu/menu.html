@@ -6,13 +6,13 @@
   <title>Меню</title>
   <style>
    @font-face{
-    font-family: aAlbionicTitulInfl;
+	font-family: aAlbionicTitulInfl;
    src: url(font/aAlbionicTitulInfl.ttf) format("truetype") ;
    }
 
-    .btn-class:visited {
-      text-decoration: none;
-    }
+	.btn-class:visited {
+	  text-decoration: none;
+	}
   .btn-class{
    display: inline-block;
    border:1px solid #64734D;
@@ -32,14 +32,17 @@
    text-decoration: none;
    margin-right: 5%;
   }
+
   .bl{
-    padding-bottom: 5%;
+	padding-bottom: 1%;
   }
-  .parent {
+
+
+  .parent{
+	width: 100%;
+    height: 100%;
     position: fixed;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
     overflow: auto;
     white-space: nowrap;
@@ -51,95 +54,97 @@
         display: inline-block;
         vertical-align: middle;
         content: '';
-    }
-  }
+    	}
+	}
 
   .padd{
-    .block {
-    display: inline-block;
     white-space: normal;
     vertical-align: middle;
     text-align: left;
-    
-    .bl {
-        display: block;
-        border: none;
-      }
-    }
   }
 
   #ruby{
-    background-image: url(img/ruby.png) ;
-    background-repeat:  no-repeat;
-    background-position: 20%;
+	background-image: url(img/ruby.png) ;
+	background-repeat:  no-repeat;
+	background-position: 20%;
   }
+
   #ruby:hover, #ruby:active{
-    background-image: url(img/ruby1.png) ;
-    background-repeat:  no-repeat;
-    text-decoration: none;
-    border:1px solid #93A871;
-    border-radius: 50px;
-    color: #3B1A1A;  }
+	background-image: url(img/ruby1.png) ;
+	background-repeat:  no-repeat;
+	text-decoration: none;
+	border:1px solid #93A871;
+	border-radius: 50px;
+	color: #3B1A1A;  
+  }
 
   #izum{
-    background-image: url(img/izum.png) ;
-    background-repeat:  no-repeat;
-    background-position: 20%;
+	background-image: url(img/izum.png) ;
+	background-repeat:  no-repeat;
+	background-position: 20%;
   }
   #izum:hover, #izum:active{
-    background-image: url(img/izum1.png) ;
-    background-repeat:  no-repeat;
-    text-decoration: none;
-    border:1px solid #93A871;
-    border-radius: 50px;
-    color: #3B1A1A;  }
+	background-image: url(img/izum1.png) ;
+	background-repeat:  no-repeat;
+	text-decoration: none;
+	border:1px solid #93A871;
+	border-radius: 50px;
+	color: #3B1A1A;  
+  }
 
   #saph{
-    background-image: url(img/saph.png) ;
-    background-repeat:  no-repeat;
-    background-position: 20%;
+	background-image: url(img/saph.png) ;
+	background-repeat:  no-repeat;
+	background-position: 20%;
   }
   #saph:hover, #saph:active{
-    background-image: url(img/saph1.png) ;
-    background-repeat:  no-repeat;
-    text-decoration: none;
-    border:1px solid #93A871;
-    border-radius: 50px;
-    color: #3B1A1A;  
+	background-image: url(img/saph1.png) ;
+	background-repeat:  no-repeat;
+	text-decoration: none;
+	border:1px solid #93A871;
+	border-radius: 50px;
+	color: #3B1A1A;  
   }
 
   #bril{
-    background-image: url(img/bril.png) ;
-    background-repeat:  no-repeat;
-    background-position: 20%;
+	background-image: url(img/bril.png) ;
+	background-repeat:  no-repeat;
+	background-position: 20%;
   }
 
   #bril:hover, #bril:active{
-    background-image: url(img/bril1.png) ;
-    background-repeat:  no-repeat;
-    text-decoration: none;
-    border:1px solid #93A871;
-    border-radius: 50px;
-    color: #3B1A1A;  
+	background-image: url(img/bril1.png) ;
+	background-repeat:  no-repeat;
+	text-decoration: none;
+	border:1px solid #93A871;
+	border-radius: 50px;
+	color: #3B1A1A;  
   }
 
+
   #kirka {
-    background-position: left bottom;
-    position:fixed;
-    bottom:0%;   
-    left:-7%;
+	background-position: left bottom;
+	position:fixed;
+	bottom:0%;   
+	left:-7%;
   }
 
   .txt{
-     color:  #3B1A1A;
-     font-family: aAlbionicTitulInfl, cursive;
-     display:inline;
+	 color:  #3B1A1A;
+	 font-family: aAlbionicTitulInfl, cursive;
+	 display:inline;
   }
 
   #divtxt{
-     position: fixed;
-     top: 3%;
-     right: 3%;
+  	 position: absolute;
+	 top: 0;
+	 right: 3%
+  }
+
+  #divbut{
+  	position: absolute;
+  	top: 8%;
+  	right: 3%;
   }
 
   .button {
@@ -190,53 +195,47 @@
    color: #c47937;
    }
 
-  #registr{
-   position: fixed;
-   top: 10%;
-   right: 12%;
-  }
-
-  #login{
-   position: fixed;
-   top: 10%;
-   right: 4%;
-  }
+  
   </style>
  </head>
  <body background="img\bokeh_texture_iiiiiii_by_ladyfatadudesons-d4z27vh (2).jpg">
 
 <img src="img/Pickaxe1.png" id="kirka">
 
-<div id = "divtxt" >
-    <h3 class = "txt">Вы вошли как </h3>
-    <h2 class = "txt"> Гость </h2>
-</div>
-<div>
-  <a href='#' class='button' id = "registr">Регистрация</a>
-</div>
-<div>
-  <a href='#' class='button' id="login">Вход</a>
-</div>
  <div class="parent" >
    <div class="padd">
-    <div class="bl" align="center">
-      <span >
-        <a href="#" class="btn-class" id = "ruby"> Играть </a>
-      </span>
-      <span>
-        <a href="#" class="btn-class" id = "saph"> Меню </a>
-      </span>
-    </div>
-     <div class="bl" align="center">
-      <span >
-        <a href="#" class="btn-class" id = "izum"> Меню </a>
-      </span>
-      <span >
-        <a href="#" class="btn-class" id = "bril"> Меню </a>
-      </div>
-     </span>
-    </div>
+	<div class="bl" align="center">
+	  <span >
+		<a href="#" class="btn-class" id = "ruby"> Играть </a>
+	  </span>
+	  <span>
+		<a href="#" class="btn-class" id = "saph"> Меню </a>
+	  </span>
+	</div>
+	 <div class="bl" align="center">
+	  <span >
+		<a href="#" class="btn-class" id = "izum"> Меню </a>
+	  </span>
+	  <span >
+		<a href="#" class="btn-class" id = "bril"> Меню </a>
+	 </span>
+	</div>
    </div>
 </div>
+
+
+<div align="right" id="divtxt">
+	<h3 class = "txt">Вы вошли как </h3>
+	<h2 class = "txt"> Гость </h2>
+</div>
+<div align="right" id = "divbut">
+  <span>
+	<a href='#' class='button' id = "registr">Регистрация</a>
+  </span>
+  <span>
+	<a href='#' class='button' id="login">Вход</a>
+  </span>
+</div>
+
 </body>
 </html>

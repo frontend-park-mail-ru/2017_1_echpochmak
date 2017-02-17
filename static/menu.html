@@ -1,34 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 	<head>
-		<meta charset="UTF-8">
-		<title>MazeTowers</title>
+		<meta charset="utf-8">
+		<link href="css/styles.css" rel="stylesheet">
+		<title>Меню</title>
+
 	</head>
 
-	<body>
+	<body background="img\back_green.jpg">
 
-		<div align="center">
-			<br><br><br>
-			<h1>GAME MENU</h1>
+		<img src="img/Pickaxe1.png" id="kirka">
 
-			<h3>
-				<a href="/login" id="login"> Войти </a>
-			</h3>
-			<h3>
-				<a href="/signup" id="signup"> Зарегистрироваться </a>
-			</h3>
-			<h3>
-				<a href="/leaderboard" id="leaderboard"> Доска почёта </a>
-			</h3>
-			<h3>
-				<a href="/about" id="about"> Об игре </a>
-			</h3>
-			<h3>
-				<a href="/game" id="game"> Играть! </a>
-			</h3>
+		 <div class="parent" >
+			<div class="padd">
+				
+				<div class="bl" align="center">
+					<span >
+					<a href="#" class="btn-class" id = "ruby"> Одиночная игра </a>
+					</span>
+					<span>
+					<a href="#" class="btn-class" id = "saph"> Мультиплеер </a>
+					</span>
+				</div>
+				
+				<div class="bl" align="center">
+					<span >
+						<a href="#" class="btn-class" id = "izum"> Об игре </a>
+					</span>
+					
+					<span >
+						<a href="#" class="btn-class" id = "bril"> Лидеры </a>
+					</span>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div align="right" id="divtxt">
+			<h3 class = "txt">Вы вошли как </h3>
+			<h2 class = "txt"> Гость </h2>
+		</div>
+
+		<div align="right" id = "divbut">
+			<span>
+				<a href='#' class='button' id = "registr">Регистрация</a>
+			</span>
+	
+			<span>
+				<a href='#' class='button' id="login">Вход</a>
+			</span>
 		</div>
 
 	</body>
-
 </html>

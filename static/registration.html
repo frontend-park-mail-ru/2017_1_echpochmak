@@ -16,26 +16,41 @@
 
     <a href="#" class="Aback"><img class = "back"src="img\back.png"> </a>
     <p class="BackMenu">Обратно в меню</p>
-    <div class="log" >
+
+    <div class="registration" >
 
       <form class="form-horizontal">
 
         <div class="row line">  
-          <label for="inputEmail3" class="col-xs-2 col-sm-2 col-md-2 control-label">Login</label>
+          <label for="inputEmail3" class="col-xs-2 col-sm-2 col-md-2 control-label">Email</label>
           <div class="col-xs-5 col-sm-5 col-md-5">
-            <input type="text" class="form-control input-lg" id="inputEmail3" placeholder="Enter your login">
+            <input type="email" class="form-control input-lg" id="inputEmail3" placeholder="Enter your email">
           </div>
         </div>    
         
+        <div class="row line">  
+          <label for="inputlogin" class="col-xs-2 col-sm-2 col-md-2 control-label">login</label>
+          <div class="col-xs-5 col-sm-5 col-md-5">
+            <input type="text" class="form-control input-lg" id="inputlogin" placeholder="Enter your login">
+          </div>
+        </div>  
+
         <div class="row line">
           <label for="InpPass" class="col-xs-2 col-sm-2 col-md-2 control-label">Password</label>
           <div class="col-xs-5 col-sm-5 col-md-5">
             <input type="password" class="form-control input-lg" id="InpPass" placeholder="Enter your password">
           </div>
         </div>     
+
+        <div class="row">
+          <label for="InpRPass" class="col-xs-3 col-sm-3 col-md-3 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 control-label">Repeat Password</label>
+          <div class="col-xs-4 col-sm-4 col-md-4">
+            <input type="password" class="form-control input-lg" id="InpRPass" placeholder="Repeat your password">
+          </div>
+        </div>     
         
         <div  align="center">
-          <button type="submit" class="btn btn-default btn-lg">Sign in!</button>
+          <button type="submit" class="btn btn-default btn-lg">Register!</button>
         </div>
       </form>
       

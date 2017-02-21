@@ -1,3 +1,7 @@
+html {
+	/*width: 90%;*/
+}
+
 @font-face{
 	font-family: aAlbionicTitulInfl;
 	src: url(font/aAlbionicTitulInfl.ttf) format("truetype") ;
@@ -52,77 +56,58 @@
 }*/
 
 .padd {
-/*	white-space: normal;
-	vertical-align: middle;
-	text-align: left;*/
-	margin: 0;
+	width: 99%;
     position: absolute;
+    transform: translateY(-50%);
     top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+}
+
+.menu-button {
+	background-repeat:  no-repeat;
+	background-position: 20%;
+	margin-right: 0.5%;
+	margin-left: 0.5%;
+}
+
+.menu-button:hover, .menu-button:active {
+	background-repeat:  no-repeat;
+	text-decoration: none;
+	border:1px solid #93A871;
+	border-radius: 50px;
+	color: #3B1A1A;  
 }
 
 #ruby {
 	background-image: url(../img/ruby.png) ;
-	background-repeat:  no-repeat;
-	background-position: 20%;
 }
 
 #ruby:hover, #ruby:active {
 	background-image: url(../img/ruby1.png) ;
-	background-repeat:  no-repeat;
-	text-decoration: none;
-	border:1px solid #93A871;
-	border-radius: 50px;
-	color: #3B1A1A;  
 }
 
 #izum {
 	background-image: url(../img/izum.png) ;
-	background-repeat:  no-repeat;
-	background-position: 20%;
 }
 
 #izum:hover, #izum:active {
 	background-image: url(../img/izum1.png) ;
-	background-repeat:  no-repeat;
-	text-decoration: none;
-	border:1px solid #93A871;
-	border-radius: 50px;
-	color: #3B1A1A;  
 }
 
 #saph {
 	background-image: url(../img/saph.png) ;
-	background-repeat:  no-repeat;
-	background-position: 20%;
 }
 
 #saph:hover, #saph:active {
 	background-image: url(../img/saph1.png) ;
-	background-repeat:  no-repeat;
-	text-decoration: none;
-	border:1px solid #93A871;
-	border-radius: 50px;
-	color: #3B1A1A;  
 }
 
 #bril {
 	background-image: url(../img/bril.png) ;
-	background-repeat:  no-repeat;
-	background-position: 20%;
 }
 
 #bril:hover, #bril:active {
 	background-image: url(../img/bril1.png) ;
-	background-repeat:  no-repeat;
-	text-decoration: none;
-	border:1px solid #93A871;
-	border-radius: 50px;
-	color: #3B1A1A;  
 }
-
 
 #kirka {
 	background-position: left bottom;
@@ -172,6 +157,7 @@
 	text-decoration: none;
 	vertical-align: middle;
 }
+
 .button:hover {
 	border: 1px solid #0a3c59;
 	text-shadow: #1e4158 0 1px 0;

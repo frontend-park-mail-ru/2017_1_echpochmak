@@ -1,10 +1,42 @@
-html {
-	/*width: 90%;*/
+@font-face {
+	font-family: aAlbionicTitulInfl;
+	src: url(../font/aAlbionicTitulInfl.ttf) format("truetype");
 }
 
-@font-face{
-	font-family: aAlbionicTitulInfl;
-	src: url(font/aAlbionicTitulInfl.ttf) format("truetype") ;
+body {
+	font-family: aAlbionicTitulInfl, cursive;
+	background-size: auto;
+}
+
+.back {
+	font-size: 18pt;
+	color: #3B1A1A;
+	padding-right: 1%;
+	padding-top: 1%;
+}
+
+.back a {
+	display: inline-block;
+	margin-right: 4%;
+}
+
+.back img {
+	max-width: 14%;
+	max-height: auto;
+}
+
+.control-label {
+	font-size: 20pt;
+}
+
+.line { 
+	/*margin-left: 20%;*/
+	padding-bottom: 1%;
+	/*margin-bottom: 3%;*/
+}
+
+#subm {
+	padding-top: 1%;
 }
 
 .btn-class:visited {
@@ -34,26 +66,6 @@ html {
 .bl {
 	padding-bottom: 1%;
 }
-
-
-/*.parent {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	overflow: auto;
-	white-space: nowrap;
-	text-align: center;
-	font-size: 0;
-	
-	&:before {
-			height: 100%;
-			display: inline-block;
-			vertical-align: middle;
-			content: '';
-	}
-}*/
 
 .padd {
 	width: 99%;

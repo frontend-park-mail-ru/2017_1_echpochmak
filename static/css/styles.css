@@ -9,7 +9,7 @@ body {
 }
 
 .list {
-	/*position: relative;*/
+	position: relative;
 	background-color: #DBFCA9;
 	margin-left: 15%;
 	margin-right: 15%;

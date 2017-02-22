@@ -1,11 +1,43 @@
 @font-face {
-	font-family: aAlbionicTitulInfl;
-	src: url(../font/aAlbionicTitulInfl.ttf) format("truetype");
+	/*font-family: aAlbionicTitulInfl;*/
+	/*src: url(../font/aAlbionicTitulInfl.ttf) format("truetype");*/
 }
 
 body {
 	font-family: aAlbionicTitulInfl, cursive;
 	background-size: auto;
+}
+
+.list {
+	/*position: relative;*/
+	background-color: #DBFCA9;
+	margin-left: 15%;
+	margin-right: 15%;
+	margin-top: 3%;
+	margin-bottom: 3%;
+	padding: 3%;
+	font-size: 18pt;
+	border-radius: 20px;
+	border:1px solid #64734D;
+}
+
+.list-header {
+	font-size: 30pt;
+	margin-bottom: 3%;
+	margin-top: -2%;
+}
+
+.list-header hr {
+	color: #64734D;
+	background-color: #64734D;
+	opacity: 1;
+	height: 1px;
+	border: 0;
+}
+
+.list-sub-header {	
+	font-size: 22pt;
+	margin-bottom: 2%;
 }
 
 .back {
@@ -30,9 +62,7 @@ body {
 }
 
 .line { 
-	/*margin-left: 20%;*/
 	padding-bottom: 1%;
-	/*margin-bottom: 3%;*/
 }
 
 #subm {
@@ -72,6 +102,8 @@ body {
     position: absolute;
     transform: translateY(-50%);
     top: 50%;
+    /*margin-top: 5%;*/
+    /*padding-bottom: 5%;*/
 }
 
 .menu-button {

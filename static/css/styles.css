@@ -3,6 +3,10 @@
 	src: url(font/aAlbionicTitulInfl.ttf) format("truetype") ;
 }
 
+#registration, #login, #leader, #game, #about {
+	display: none;
+}
+
 .btn-class:visited {
 	text-decoration: none;
 }

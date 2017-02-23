@@ -16,25 +16,25 @@
 		about = document.getElementById('about_div')
 
 		$('#signap_form').click(function(){
-			registration.setAtribute('display', 'none');
-			menu.setAtribute('display', 'block')
+			registration.setAttribute('display', 'none');
+			menu.setAttribute('display', 'block')
 		})
 
 		$('#login_form').click(function(){
-			login.setAtribute('display', 'none');
-			menu.setAtribute('display', 'block')
+			login.setAttribute('display', 'none');
+			menu.setAttribute('display', 'block')
 		})
 
 		$('#registr').on('click', function(){
 			console.log(menu)
 			console.log(registration)
-			$('#registration_div').setAtribute('display', 'block');
-			menu.setAtribute('display', 'none')
+			$('#registration_div').setAttribute('display', 'block');
+			menu.setAttribute('display', 'none')
 		})
 
 		$('#login').on('click', function(){
-			login.setAtribute('display', 'block');
-			menu.setAtribute('display', 'none')
+			login.setAttribute('display', 'block');
+			menu.setAttribute('display', 'none')
 		})
 	</script>
 

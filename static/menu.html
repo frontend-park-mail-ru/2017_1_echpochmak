@@ -7,48 +7,7 @@
 
 		<script type="text/javascript" src="/home/ivyazmin/park/JavaScript/2017_1_echpochmak/static/js/jquery-3.1.1.js"></script>
 
-	<script type="text/javascript">
-		registration = document.getElementById('registration_div');
-		menu = document.getElementById('menu_div')
-		login = document.getElementById('login_div')
-		leader = document.getElementById('leader_div')
-		game = document.getElementById('game_div')
-		about = document.getElementById('about_div')
-
-		button_registration = document.getElementById('registr')
-		button_login = document.getElementById('login')
-
-		login_form = document.getElementById('login_form')
-		signup_form = document.getElementById('signup_form')
-
-		signup_form.click(function(){
-			registration.setAttribute('display', 'none');
-			menu.setAttribute('display', 'block')
-		})
-
-		login_form.click(function(){
-			login.setAttribute('display', 'none');
-			menu.setAttribute('display', 'block')
-		})
-
-		button_registration.click(function(){
-			console.log(menu)
-			console.log(registration)
-			registration.setAttribute('display', 'block');
-			menu.setAttribute('display', 'none')
-		})
-
-		button_login.click(function(){
-			login.setAttribute('display', 'block');
-			menu.setAttribute('display', 'none')
-		})
-	</script>
-
-	<style type="text/css">
-		#registration_div, #login_div, #leader_div, #game_div, #about_div {
-	display: none;
-}
-	</style>
+	
 
 
 	</head>
@@ -123,6 +82,34 @@
       
   </div>  
 
+
+  <div class="container log" id="login_div">
+
+      <form class="form-horizontal">
+
+        <div class="row line">  
+          <label for="inputEmail3" class="col-xs-2 col-sm-2 col-md-2 control-label">Логин</label>
+          <div class="col-xs-5 col-sm-5 col-md-5">
+            <input type="text" class="form-control input-lg" id="inputEmail3" placeholder="Введите логин" required>
+          </div>
+        </div>    
+        
+        <div class="row line">
+          <label for="InpPass" class="col-xs-2 col-sm-2 col-md-2 control-label">Пароль</label>
+          <div class="col-xs-5 col-sm-5 col-md-5">
+            <input type="password" class="form-control input-lg" id="InpPass" placeholder="Введите Пароль" required>
+          </div>
+        </div>     
+        
+        <div  class = "row" align="center">
+          <button type="submit" class="btn btn-default btn-lg" id="login_form">Войти!</button>
+        </div>
+      </form>
+      
+  </div>
+
+
+
   <div align="center" id="leader_div">
 			<br><br><br>
 			<h1>ДОСКА ПОЧЁТА</h1>
@@ -179,6 +166,46 @@
 				<a href='#' class='button' id="login">Вход</a>
 			</span>
 		</div>
+
+<script type="text/javascript">
+		registration = document.getElementById('registration_div');
+		menu = document.getElementById('menu_div');
+		login = document.getElementById('login_div');
+		leader = document.getElementById('leader_div');
+		game = document.getElementById('game_div');
+		about = document.getElementById('about_div');
+
+		button_registration = document.getElementById('registr');
+		button_login = document.getElementById('login');
+
+		login_form = document.getElementById('login_form');
+		signup_form = document.getElementById('signup_form');
+
+		signup_form.addEventListener('click', function() {
+			registration.setAttribute('display', 'none');
+			menu.setAttribute('display', 'block');
+		});
+
+		login_form.addEventListener('click', function() {
+			login.setAttribute('display', 'none');
+			menu.setAttribute('display', 'block');
+		});
+			
+		button_registration.addEventListener('click', function() {
+			registration.setAttribute('display', 'block');
+			menu.setAttribute('display', 'none');
+			console.log(button_registration);
+			console.log(registration);
+			console.log(menu);
+		});
+
+		button_login.addEventListener('click', function() {
+			login.setAttribute('display', 'block');
+			menu.setAttribute('display', 'none');
+		});
+	</script>
+
+
 
 	</body>
 </html>

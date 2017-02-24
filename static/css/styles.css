@@ -3,7 +3,7 @@
 	src: url(font/aAlbionicTitulInfl.ttf) format("truetype") ;
 }
 
-#registration_div, #login_div, #leader_div, #game_div, #about_div {
+.hidden{
 	display: none;
 }
 

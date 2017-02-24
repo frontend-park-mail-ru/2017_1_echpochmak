@@ -18,6 +18,8 @@
 
 		<img src="img/Pickaxe1.png" id="kirka">
 
+		
+
 		 <div class="parent" id="menu_div">
 			<div class="padd">
 				
@@ -43,98 +45,148 @@
 			</div>
 		</div>
 
-		<div class="container registration" id="registration_div" >
+		<div class="content" id="registration_div">
+			<div class="padd">
+				<form class="form-horizontal" method="POST">
 
-      <form class="form-horizontal">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<label for="inputEmail3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Email</label>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<input type="email" class="form-control input-lg" id="inputEmail3" placeholder="Введите ваш email" required>
+						</div>
+					</div>
+				
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<label for="inputlogin" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Логин</label>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<input type="text" class="form-control input-lg" id="inputlogin" placeholder="Введите ваш логин" required>
+						</div>
+					</div>
 
-        <div class="row line">  
-          <label for="inputEmail3" class="col-xs-2 col-sm-2 col-md-2 control-label">Email</label>
-          <div class="col-xs-5 col-sm-5 col-md-5">
-            <input type="email" class="form-control input-lg" id="inputEmail3" placeholder="Введите ваш email" required>
-          </div>
-        </div>    
-        
-        <div class="row line">  
-          <label for="inputlogin" class="col-xs-2 col-sm-2 col-md-2 control-label">Логин</label>
-          <div class="col-xs-5 col-sm-5 col-md-5">
-            <input type="text" class="form-control input-lg" id="inputlogin" placeholder="Введите ваш логин" required>
-          </div>
-        </div>  
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<label for="InpPass" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Пароль</label>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<input type="password" class="form-control input-lg" id="InpPass" placeholder="Введите ваш пароль" required>
+						</div>
+					</div>
 
-        <div class="row line">
-          <label for="InpPass" class="col-xs-2 col-sm-2 col-md-2 control-label">Пароль</label>
-          <div class="col-xs-5 col-sm-5 col-md-5">
-            <input type="password" class="form-control input-lg" id="InpPass" placeholder="Введите ваш пароль" required>
-          </div>
-        </div>     
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<label for="InpRPass" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Повторите пароль</label>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<input type="password" class="form-control input-lg" id="InpRPass" placeholder="Повторите пароль" required>
+						</div>
+					</div>
+					
+					<div  class = "col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"> </div>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" align="">
+							<button type="submit" class="btn btn-default btn-lg" id="signup_form">Зарегистрироваться</button>
+						</div>
+					</div>
 
-        <div class="row">
-          <label for="InpRPass" class="col-xs-3 col-sm-3 col-md-3 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 control-label">Повторите пароль</label>
-          <div class="col-xs-4 col-sm-4 col-md-4">
-            <input type="password" class="form-control input-lg" id="InpRPass" placeholder="Повторите пароль" required>
-          </div>
-        </div>     
-        
-        <div  class = "row" align="center" id="subm">
-          <button type="submit" class="btn btn-default btn-lg" id="signup_form">Регистрация!</button>
-        </div>
-      </form>
-      
-  </div>  
-
-
-  <div class="container log" id="login_div">
-
-      <form class="form-horizontal">
-
-        <div class="row line">  
-          <label for="inputEmail3" class="col-xs-2 col-sm-2 col-md-2 control-label">Логин</label>
-          <div class="col-xs-5 col-sm-5 col-md-5">
-            <input type="text" class="form-control input-lg" id="inputEmail3" placeholder="Введите логин" required>
-          </div>
-        </div>    
-        
-        <div class="row line">
-          <label for="InpPass" class="col-xs-2 col-sm-2 col-md-2 control-label">Пароль</label>
-          <div class="col-xs-5 col-sm-5 col-md-5">
-            <input type="password" class="form-control input-lg" id="InpPass" placeholder="Введите Пароль" required>
-          </div>
-        </div>     
-        
-        <div  class = "row" align="center">
-          <button type="submit" class="btn btn-default btn-lg" id="login_form">Войти!</button>
-        </div>
-      </form>
-      
-  </div>
+				</form>
+			</div>
+		</div>  
 
 
+  <div class="content" id="login_div">
+			<div class="padd">
+				
+				<form class="form-horizontal" method="POST">
 
-  <div align="center" id="leader_div">
-			<br><br><br>
-			<h1>ДОСКА ПОЧЁТА</h1>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<label for="inputEmail3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Логин</label>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<input type="text" class="form-control input-lg" id="inputEmail3" placeholder="Введите логин" required>
+						</div>
+					</div>
 
-			<h3>
-				1) Первый почетный игрок
-			</h3>
-			<h3>
-				2) Второй почетный игрок
-			</h3>
-			<h3>
-				3) Третий почетный игрок
-			</h3>
-			<h3>
-				4) Четвертый почетный игрок
-			</h3>
-			<h3>
-				5) Пятый почетный игрок
-			</h3>
-			<h3>
-				...
-			</h3>
-			<h3>
-				1оо5оо) ты
-			</h3>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<label for="inputEmail3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Пароль</label>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+							<input type="password" class="form-control input-lg" id="inputEmail3" placeholder="Введите пароль" required>
+						</div>
+					</div>
+
+					<div  class = "col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
+						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"> </div>
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" align="">
+							<button type="submit" class="btn btn-default btn-lg" id="login_form">Войти</button>
+						</div>
+					</div>
+
+				</form>
+			
+			</div>	
+		</div>
+
+
+
+  <div class="content" id="leader_div">
+			
+			<div class="list">
+
+				<div class="list-header" align="center">
+					Доска героев
+					<hr>
+				</div>
+
+				<div class="line row list-sub-header">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> Рейтинг </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> Имя </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> Результат </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 1. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 2. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 3. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 4. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 5. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 6. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 7. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+				<div class="line row">
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 8. </div>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> LA </div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 666 </div>
+				</div>
+
+			</div>
+
 		</div>
 
 		<div align="center" id="game_div">
@@ -142,13 +194,70 @@
 			<h1>ТУТ ИГРА</h1>			
 		</div>
 
-		<div align="center" id="about_div">
-			<br><br><br>
-			<h1>ОБ ИГРЕ</h1>
-			<br><br>
+		<div class="content" id="about_div">
+		
+			<div class="list">
 
-			Крутая игра будет
-			
+				<div class="list-header" align="center">
+					Gem-TD
+					<hr>
+				</div>
+
+				<div>
+					<b>Жанр</b>: Tower Defense<br>
+					<b>Количество игроков</b>: 1-4<br>
+					<b>Особенности</b>: сложная, но интересная Tower Defence, у всех вышек есть способности, успех в немалой степени зависит от случайности.<br>
+					<b>Задача</b>: уничтожить все волны мобов<br>
+					<b>Количество волн: </b>  <br>
+					<b>Поражение</b>: пропустить некоторое количество мобов / боссов к кристаллу (количество зависит от типа и уровня хп пропущенных)<br>
+					<br>
+
+
+					<b>Суть игры:</b><br>
+					<div style="padding-left: 30px">Игра относится к подкатегории TD, в которых необходимо строить лабиринт для врагов, окутывая вышками и баррикадами контрольные точки, в которые все враги обязаны заходить в определенной последовательности. Контрольные точки выделены зеленым узором, а дорожки, по которым враги потенциально могут идти, светло-зеленым цветом.<br>
+					</div><br>
+					
+
+					<b>Основные факты о вышках:</b><br>
+					<ul>
+					<li>Каждый раунд вы можете разместить 5 гемов, так называются все вышки, они же составляющие для спец.вышек.</li>
+					<li>Гемы представляют собой драгоценные камни - опалы, аметисты, рубины, топазы, эмеральды, аквамарины, алмазы. Все они имеют различные типы атак, например, рубин бьет в сплеше, опалы дают ауру скорости атаки, топазы бьют в несколько целей и т.д.</li>
+					</li>
+					<li>Различные камни объединяются в спец. вышки<br>
+					</li>
+					</li>
+					<li>За каждый раунд после установки 5 гемов, оставить вы сможете лишь один из них, остальные будут превращены в скалы. Однако если в вашем наборе есть сочетание для спец. вышки, вы можете её сразу построить.</li>
+					</li>
+					</ul><b><br>
+					
+					
+					Факты о волнах:</b><br>
+					<ul>
+					<li>Наземные юниты будут ходить от стрелки к стрелке по кратчайшему пути, нарисованный путь не имеет значения</li>
+					<li>Летающие юниты всегда идут прямым путем, игнорируя препятствия</li>
+					<li>На магически неуязвимых юнитов не работают замедление, понижение урона, яд, сплеш и вышки Asteriated ruby / Vulcano не наносят урона.</li>
+					<li>Некоторые волны - боссы, все летающие, секрет убийства - настакивать замедление и минус броню, очень «сильная» вышка для этого - quartz.</li>
+					<li>Также имеются волны юнитов с уворотам, физически иммунных юнитов и быстрых юнитов, которые не замедляются.</li>
+					</ul>
+					<br>
+
+
+					<b>Факты и советы по  постройке лабиринта:</b><br>
+					<ul>
+					<li>Вышки выгоднее всего строить ближе к центру - пересечению путей следования летающих юнитов</li>
+					<li>Поскольку существует 5 стрелок (включая старт и финиш - всего 7 точек для посещения юнитами), можно построить такой лабиринт, для которого наземные юниты будут путешествовать через одну и ту же область 6 раз (это максимум).</li>
+					</ul>
+					<br>
+
+
+					<b>Прохождение.</b><br>
+					<div style="padding-left: 30px">Залогом успешной игры является построение лабиринта по типу «сильных», баланс в вышках для прохождения разных волн (физически и магически иммунных), и немного удачи.&#8203;
+
+					</div>
+
+				</div>
+
+			</div>
 		</div>
 
 
@@ -167,6 +276,11 @@
 			</span>
 		</div>
 
+		<div align="right" class="back" id="back">
+			 <a href="#" id="button_back"> <img src="img/back.png"> </a>
+			 <p> Обратно в меню </p>
+		</div>
+
 <script type="text/javascript">
 		registration = document.getElementById('registration_div');
 		menu = document.getElementById('menu_div');
@@ -174,34 +288,104 @@
 		leader = document.getElementById('leader_div');
 		game = document.getElementById('game_div');
 		about = document.getElementById('about_div');
+		divbut = document.getElementById('divbut');
+		divtxt = document.getElementById('divtxt');
+		divback = document.getElementById('back');
 
 		button_registration = document.getElementById('registr');
 		button_login = document.getElementById('login');
+		button_back = document.getElementById('button_back');
 
 		login_form = document.getElementById('login_form');
 		signup_form = document.getElementById('signup_form');
 
+		button_singl = document.getElementById('izum');
+		button_mult = document.getElementById('saph');
+		button_about = document.getElementById('ruby');
+		button_leader = document.getElementById('bril')
+
+		registration.classList.add('hidden');
+		login.classList.add('hidden');
+		leader.classList.add('hidden');
+		game.classList.add('hidden');
+		about.classList.add('hidden');
+		divback.classList.add('hidden');
+
+
 		signup_form.addEventListener('click', function() {
-			registration.setAttribute('display', 'none');
-			menu.setAttribute('display', 'block');
+			registration.classList.add('hidden');
+			divback.classList.add('hidden');
+			menu.classList.remove('hidden');
+			divbut.classList.remove('hidden');
+			divtxt.classList.remove('hidden');
 		});
 
 		login_form.addEventListener('click', function() {
-			login.setAttribute('display', 'none');
-			menu.setAttribute('display', 'block');
+			login.classList.add('hidden');
+			divback.classList.add('hidden');
+			menu.classList.remove('hidden');
+			divbut.classList.remove('hidden');
+			divtxt.classList.remove('hidden');
 		});
 			
 		button_registration.addEventListener('click', function() {
-			registration.setAttribute('display', 'block');
-			menu.setAttribute('display', 'none');
-			console.log(button_registration);
-			console.log(registration);
-			console.log(menu);
+			registration.classList.remove('hidden');
+			divback.classList.remove('hidden');
+			menu.classList.add('hidden');
+			divbut.classList.add('hidden');
+			divtxt.classList.add('hidden');
 		});
 
 		button_login.addEventListener('click', function() {
-			login.setAttribute('display', 'block');
-			menu.setAttribute('display', 'none');
+			login.classList.remove('hidden');
+			divback.classList.remove('hidden');
+			menu.classList.add('hidden');
+			divbut.classList.add('hidden');
+			divtxt.classList.add('hidden');
+		});
+
+		button_back.addEventListener('click', function() {
+			registration.classList.add('hidden');
+			login.classList.add('hidden');
+			leader.classList.add('hidden');
+			game.classList.add('hidden');
+			about.classList.add('hidden');
+			divback.classList.add('hidden');
+			menu.classList.remove('hidden');
+			divbut.classList.remove('hidden');
+			divtxt.classList.remove('hidden');
+		});
+
+		button_singl.addEventListener('click', function() {
+			game.classList.remove('hidden');
+			divback.classList.remove('hidden');
+			menu.classList.add('hidden');
+			divbut.classList.add('hidden');
+			divtxt.classList.add('hidden');
+		});
+
+		button_mult.addEventListener('click', function() {
+			game.classList.remove('hidden');
+			divback.classList.remove('hidden');
+			menu.classList.add('hidden');
+			divbut.classList.add('hidden');
+			divtxt.classList.add('hidden');
+		});
+
+		button_about.addEventListener('click', function() {
+			about.classList.remove('hidden');
+			divback.classList.remove('hidden');
+			menu.classList.add('hidden');
+			divbut.classList.add('hidden');
+			divtxt.classList.add('hidden');
+		});
+
+		button_leader.addEventListener('click', function() {
+			leader.classList.remove('hidden');
+			divback.classList.remove('hidden');
+			menu.classList.add('hidden');
+			divbut.classList.add('hidden');
+			divtxt.classList.add('hidden');
 		});
 	</script>
 

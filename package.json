@@ -1,0 +1,19 @@
+{
+  "name": "Gem-TD",
+  "version": "1.0.0",
+  "description": "Gem-TD",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EchpochmakTP/2017_1_echpochmak.git"
+  },
+  "keywords": [],
+  "author": "",
+  "homepage": "https://github.com/EchpochmakTP/2017_1_echpochmak#readme",
+  "dependencies": {
+    "express": "^4.14.1"
+  }
+}

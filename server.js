@@ -14,19 +14,20 @@ const worker = function (request, response) {
 	let content;
 	if (url === '/') {
 		content = fs.readFileSync('./static/menu.html', 'utf8');
-	} else if (url === '/login') {
-		content = fs.readFileSync('./static/login.html', 'utf8');
-	} else if (url === '/signup') {
-		content = fs.readFileSync('./static/signup.html', 'utf8');
-	} else if (url === '/leaderboard') {
-		content = fs.readFileSync('./static/leaderboard.html', 'utf8');
-	} else if (url === '/about') {
-		content = fs.readFileSync('./static/about.html', 'utf8');
-	} else if (url === '/game') {
-		content = fs.readFileSync('./static/game.html', 'utf8');
-	} else {
-		content = fs.readFileSync('./static/menu.html', 'utf8');
-	}
+	} 
+	// else if (url === '/login') {
+	// 	content = fs.readFileSync('./static/login.html', 'utf8');
+	// } else if (url === '/signup') {
+	// 	content = fs.readFileSync('./static/signup.html', 'utf8');
+	// } else if (url === '/leaderboard') {
+	// 	content = fs.readFileSync('./static/leaderboard.html', 'utf8');
+	// } else if (url === '/about') {
+	// 	content = fs.readFileSync('./static/about.html', 'utf8');
+	// } else if (url === '/game') {
+	// 	content = fs.readFileSync('./static/game.html', 'utf8');
+	// } else {
+	// 	content = fs.readFileSync('./static/menu.html', 'utf8');
+	// }
 
 	// Записываем заголовок в ответ
 	response.writeHead(200, {"Content-Type": "text/html"});

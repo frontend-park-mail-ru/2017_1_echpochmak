@@ -276,6 +276,12 @@
 			</span>
 		</div>
 
+		<div align="right" id = "divbut2">
+			<span>
+				<a href='#' class='button' id = "exit">Выйти</a>
+			</span>
+		</div>
+
 		<div align="right" class="back" id="back">
 			 <a href="#" id="button_back"> <img src="img/back.png"> </a>
 			 <p> Обратно в меню </p>
@@ -289,6 +295,7 @@
 		game = document.getElementById('game_div');
 		about = document.getElementById('about_div');
 		divbut = document.getElementById('divbut');
+		divbut2 = document.getElementById('divbut2');
 		divtxt = document.getElementById('divtxt');
 		divback = document.getElementById('back');
 
@@ -310,23 +317,32 @@
 		game.classList.add('hidden');
 		about.classList.add('hidden');
 		divback.classList.add('hidden');
+		divbut2.classList.add('hidden');
+
+		is_login = 0;
 
 
 		signup_form.addEventListener('click', function() {
 			registration.classList.add('hidden');
 			divback.classList.add('hidden');
 			menu.classList.remove('hidden');
-			divbut.classList.remove('hidden');
+			divbut2.classList.remove('hidden');
 			divtxt.classList.remove('hidden');
+			divtxt.children[1].textContent = '';
+			is_login = 1;
 		});
 
 		login_form.addEventListener('click', function() {
 			login.classList.add('hidden');
 			divback.classList.add('hidden');
 			menu.classList.remove('hidden');
-			divbut.classList.remove('hidden');
+			divbut2.classList.remove('hidden');
 			divtxt.classList.remove('hidden');
+			divtxt.children[1].textContent = '';
+			is_login = 1;
 		});
+
+
 			
 		button_registration.addEventListener('click', function() {
 			registration.classList.remove('hidden');
@@ -334,6 +350,8 @@
 			menu.classList.add('hidden');
 			divbut.classList.add('hidden');
 			divtxt.classList.add('hidden');
+			
+
 		});
 
 		button_login.addEventListener('click', function() {
@@ -344,6 +362,13 @@
 			divtxt.classList.add('hidden');
 		});
 
+		exit.addEventListener('click', function() {
+			divbut2.classList.add('hidden');
+			divbut.classList.remove('hidden');
+			divtxt.children[1].textContent = 'Гость';
+			is_login = 0;
+		});
+
 		button_back.addEventListener('click', function() {
 			registration.classList.add('hidden');
 			login.classList.add('hidden');
@@ -352,8 +377,12 @@
 			about.classList.add('hidden');
 			divback.classList.add('hidden');
 			menu.classList.remove('hidden');
-			divbut.classList.remove('hidden');
 			divtxt.classList.remove('hidden');
+			if (is_login){
+				divbut2.classList.remove('hidden');
+			} else {
+				divbut.classList.remove('hidden');
+			}
 		});
 
 		button_singl.addEventListener('click', function() {
@@ -361,6 +390,7 @@
 			divback.classList.remove('hidden');
 			menu.classList.add('hidden');
 			divbut.classList.add('hidden');
+			divbut2.classList.add('hidden');
 			divtxt.classList.add('hidden');
 		});
 
@@ -369,6 +399,7 @@
 			divback.classList.remove('hidden');
 			menu.classList.add('hidden');
 			divbut.classList.add('hidden');
+			divbut2.classList.add('hidden');
 			divtxt.classList.add('hidden');
 		});
 
@@ -377,6 +408,7 @@
 			divback.classList.remove('hidden');
 			menu.classList.add('hidden');
 			divbut.classList.add('hidden');
+			divbut2.classList.add('hidden');
 			divtxt.classList.add('hidden');
 		});
 
@@ -385,6 +417,7 @@
 			divback.classList.remove('hidden');
 			menu.classList.add('hidden');
 			divbut.classList.add('hidden');
+			divbut2.classList.add('hidden');
 			divtxt.classList.add('hidden');
 		});
 	</script>

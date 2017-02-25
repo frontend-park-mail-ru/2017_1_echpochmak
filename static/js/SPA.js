@@ -26,6 +26,8 @@ about.hidden = true;
 back.hidden = true;
 
 button_registration.addEventListener('click', function() {
+	event.preventDefault();
+
 	menu.hidden = true;
 	greeting.hidden = true;
 	registration.hidden = false;
@@ -35,6 +37,8 @@ button_registration.addEventListener('click', function() {
 });
 
 button_login.addEventListener('click', function() {
+	event.preventDefault();
+
 	menu.hidden = true;
 	greeting.hidden = true;
 	login.hidden = false;
@@ -44,6 +48,8 @@ button_login.addEventListener('click', function() {
 });
 
 button_back.addEventListener('click', function() {
+	event.preventDefault();
+
 	registration.hidden = true;
 	login.hidden = true;
 	leaderboard.hidden = true;
@@ -58,6 +64,8 @@ button_back.addEventListener('click', function() {
 });
 
 button_single.addEventListener('click', function() {
+	event.preventDefault();
+
 	menu.hidden = true;
 	greeting.hidden = true;
 	game.hidden = false;
@@ -65,6 +73,8 @@ button_single.addEventListener('click', function() {
 });
 
 button_multi.addEventListener('click', function() {
+	event.preventDefault();
+
 	menu.hidden = true;
 	greeting.hidden = true;
 	game.hidden = false;
@@ -72,6 +82,8 @@ button_multi.addEventListener('click', function() {
 });
 
 button_about.addEventListener('click', function() {
+	event.preventDefault();
+
 	menu.hidden = true;
 	greeting.hidden = true;
 	about.hidden = false;
@@ -79,6 +91,8 @@ button_about.addEventListener('click', function() {
 });
 
 button_leaders.addEventListener('click', function() {
+	event.preventDefault();
+
 	menu.hidden = true;
 	greeting.hidden = true;
 	leaderboard.hidden = false;

@@ -49,33 +49,33 @@
 
 			<div class="padd">
 
-				<form class="form-horizontal" method="POST">
+				<form action="#" class="form-horizontal">
 
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
-						<label for="inputEmail3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Email</label>
+						<label class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Email</label>
 						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-							<input type="email" class="form-control input-lg" id="inputEmail3" placeholder="Введите ваш email" required>
+							<input type="email" class="form-control input-lg email-input" placeholder="Введите ваш email" required>
 						</div>
 					</div>
 				
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
-						<label for="inputlogin" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Логин</label>
+						<label class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Логин</label>
 						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-							<input type="text" class="form-control input-lg" id="inputlogin" placeholder="Введите ваш логин" required>
+							<input type="text" class="form-control input-lg login-input" placeholder="Введите ваш логин" required>
 						</div>
 					</div>
 
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
-						<label for="InpPass" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Пароль</label>
+						<label class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Пароль</label>
 						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-							<input type="password" class="form-control input-lg" id="InpPass" placeholder="Введите ваш пароль" required>
+							<input type="password" class="form-control input-lg password-input" placeholder="Введите ваш пароль" required>
 						</div>
 					</div>
 
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
-						<label for="InpRPass" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Повторите пароль</label>
+						<label class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Повторите пароль</label>
 						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-							<input type="password" class="form-control input-lg" id="InpRPass" placeholder="Повторите пароль" required>
+							<input type="password" class="form-control input-lg password-input" placeholder="Повторите пароль" required>
 						</div>
 					</div>
 					
@@ -94,25 +94,25 @@
 
 			<div class="padd">
 				
-				<form class="form-horizontal" method="POST">
+				<form action="#" class="form-horizontal">
 
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
-						<label for="inputEmail3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Логин</label>
+						<label class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Логин</label>
 						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-							<input type="text" class="form-control input-lg" id="inputEmail3" placeholder="Введите логин" required>
+							<input type="text" class="form-control input-lg login-input" placeholder="Введите логин" required>
 						</div>
 					</div>
 
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
-						<label for="inputEmail3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Пароль</label>
+						<label class="col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label">Пароль</label>
 						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-							<input type="password" class="form-control input-lg" id="inputEmail3" placeholder="Введите пароль" required>
+							<input type="password" class="form-control input-lg password-input" placeholder="Введите пароль" required>
 						</div>
 					</div>
 
 					<div  class = "col-xs-12 col-sm-12 col-md-12 col-lg-12 line">
 						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"> </div>
-						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" align="">
+						<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
 							<button type="submit" class="btn btn-default btn-lg">Войти</button>
 						</div>
 					</div>
@@ -257,12 +257,13 @@
 
 		<div class="greeting">
 
+
 			<div align="right" id="divtxt">
 				<h3 class = "txt">Вы вошли как </h3>
-				<h2 class = "txt"> Гость </h2>
+				<h2 class = "txt username"> Гость </h2>
 			</div>
 
-			<div align="right" id = "divbut">
+			<div align="right" id = "divbut" class="no-authorized">
 				<span>
 					<a href='#' class='button registration-button'>Регистрация</a>
 				</span>
@@ -272,10 +273,17 @@
 				</span>
 			</div>
 
+			<div align="right" id = "divbut" class="authorized">
+				<span>
+					<a href='#' class='button exit-button'>Выйти</a>
+				</span>
+			</div>
+
 		</div>
 
 	</body>
 
 	<script type="text/javascript" src="./js/SPA.js"></script>
+	<script type="text/javascript" src="./js/authorize.js"></script>
 
 </html>

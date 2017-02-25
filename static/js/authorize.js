@@ -2,20 +2,20 @@
 
 const anonym_user = 'Гость';
 
-const authorized_block = document.getElementsByClassName('authorized')[0];
-const no_authorized_block = document.getElementsByClassName('no-authorized')[0];
-const username_block = greeting.getElementsByClassName('username')[0];
+const authorized_block = document.querySelector('.authorized');
+const no_authorized_block = document.querySelector('.no-authorized');
+const username_block = greeting.querySelector('.username');
 
-const login_form = login.getElementsByTagName('form')[0];
-const registration_form = registration.getElementsByTagName('form')[0];
+const login_form = login.querySelector('form');
+const registration_form = registration.querySelector('form');
 
-const button_exit = document.getElementsByClassName('exit-button')[0];
+const button_exit = document.querySelector('.exit-button');
 
 authorized_block.hidden = true;
 
 let is_authorized = false;
 
-registration_form.addEventListener('submit', function() {
+registration_form.addEventListener('submit', () => {
 	event.preventDefault();
 
 	registration.hidden = true;
@@ -25,14 +25,14 @@ registration_form.addEventListener('submit', function() {
 	no_authorized_block.hidden = true;
 	authorized_block.hidden = false;
 
-	document.body.background = './img/back_green.jpg';
+	document.body.background = green_background;
 
 	is_authorized = true;
-	let user = registration_form.getElementsByClassName('login-input')[0].value;
+	let user = registration_form.querySelector('.login-input').value;
 	username_block.textContent = user;
 });
 
-login_form.addEventListener('submit', function() {
+login_form.addEventListener('submit', () => {
 	event.preventDefault();
 
 	login.hidden = true;
@@ -42,14 +42,14 @@ login_form.addEventListener('submit', function() {
 	no_authorized_block.hidden = true;
 	authorized_block.hidden = false;
 
-	document.body.background = './img/back_green.jpg';
+	document.body.background = green_background;
 
 	is_authorized = true;
-	let user = login_form.getElementsByClassName('login-input')[0].value;
+	let user = login_form.querySelector('.login-input').value;
 	username_block.textContent = user;
 });
 
-button_exit.addEventListener('click', function() {
+button_exit.addEventListener('click', () => {
 	event.preventDefault();
 
 	authorized_block.hidden = true;

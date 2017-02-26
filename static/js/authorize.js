@@ -18,35 +18,44 @@ let is_authorized = false;
 registration_form.addEventListener('submit', () => {
 	event.preventDefault();
 
-	registration.hidden = true;
-	back.hidden = true;
-	menu.hidden = false;
-	greeting.hidden = false;
-	no_authorized_block.hidden = true;
-	authorized_block.hidden = false;
+	if (validate_registration()) {
+		registration.hidden = true;
+		back.hidden = true;
+		menu.hidden = false;
+		greeting.hidden = false;
+		no_authorized_block.hidden = true;
+		authorized_block.hidden = false;
 
-	document.body.background = green_background;
+		document.body.background = green_background;
 
-	is_authorized = true;
-	let user = registration_form.querySelector('.login-input').value;
-	username_block.textContent = user;
+		is_authorized = true;
+		let user = registration_form.querySelector('.login-input input').value;
+		username_block.textContent = user;
+
+		registration_form.reset();
+	}
 });
 
 login_form.addEventListener('submit', () => {
 	event.preventDefault();
 
-	login.hidden = true;
-	back.hidden = true;
-	menu.hidden = false;
-	greeting.hidden = false;
-	no_authorized_block.hidden = true;
-	authorized_block.hidden = false;
+	if(validate_login()) {
 
-	document.body.background = green_background;
+		login.hidden = true;
+		back.hidden = true;
+		menu.hidden = false;
+		greeting.hidden = false;
+		no_authorized_block.hidden = true;
+		authorized_block.hidden = false;
 
-	is_authorized = true;
-	let user = login_form.querySelector('.login-input').value;
-	username_block.textContent = user;
+		document.body.background = green_background;
+
+		is_authorized = true;
+		let user = login_form.querySelector('.login-input').value;
+		username_block.textContent = user;
+
+		login_form.reset();
+	}
 });
 
 button_exit.addEventListener('click', () => {

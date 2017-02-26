@@ -4,6 +4,11 @@ body {
 	background-attachment: fixed;
 }
 
+.error-message {
+	color: red;
+	font-size: 15px;
+}
+
 .list {
 	position: relative;
 	background-color: #DBFCA9;

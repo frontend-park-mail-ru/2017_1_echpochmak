@@ -4,7 +4,8 @@ const menu = document.querySelector('.menu');
 const registration = document.querySelector('.registration');
 const login = document.querySelector('.login');
 const leaderboard = document.querySelector('.leaderboard');
-const game = document.querySelector('.game');
+const singleplayer = document.querySelector('.singleplayer');
+const multiplayer = document.querySelector('.multiplayer');
 const about = document.querySelector('.about');
 const greeting = document.querySelector('.greeting');
 const back = document.querySelector('.back');
@@ -24,7 +25,8 @@ const white_background = './img/back_white.jpg';
 registration.hidden = true;
 login.hidden = true;
 leaderboard.hidden = true;
-game.hidden = true;
+singleplayer.hidden = true;
+multiplayer.hidden = true;
 about.hidden = true;
 back.hidden = true;
 
@@ -56,7 +58,8 @@ button_back.addEventListener('click', () => {
 	registration.hidden = true;
 	login.hidden = true;
 	leaderboard.hidden = true;
-	game.hidden = true;
+	singleplayer.hidden = true;
+	multiplayer.hidden = true;
 	about.hidden = true;
 	back.hidden = true;
 
@@ -71,7 +74,7 @@ button_single.addEventListener('click', () => {
 
 	menu.hidden = true;
 	greeting.hidden = true;
-	game.hidden = false;
+	singleplayer.hidden = false;
 	back.hidden = false;
 });
 
@@ -80,8 +83,21 @@ button_multi.addEventListener('click', () => {
 
 	menu.hidden = true;
 	greeting.hidden = true;
-	game.hidden = false;
+	multiplayer.hidden = false;
 	back.hidden = false;
+
+	const auth_message = multiplayer.querySelector('.authorized');
+	const no_auth_message = multiplayer.querySelector('.no-authorized');
+
+	// if (is_authorized) {
+	// 	no_auth_message.hidden = true;
+	// 	auth_message.hidden = false;
+	// } else {
+
+	// }
+
+	no_auth_message.hidden = is_authorized;
+	auth_message.hidden = !is_authorized;
 });
 
 button_about.addEventListener('click', () => {

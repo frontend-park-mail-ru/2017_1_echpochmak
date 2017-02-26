@@ -2,8 +2,8 @@
 
 const anonym_user = 'Гость';
 
-const authorized_block = document.querySelector('.authorized');
-const no_authorized_block = document.querySelector('.no-authorized');
+const authorized_block = greeting.querySelector('.authorized');
+const no_authorized_block = greeting.querySelector('.no-authorized');
 const username_block = greeting.querySelector('.username');
 
 const login_form = login.querySelector('form');

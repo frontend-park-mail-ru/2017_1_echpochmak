@@ -51,7 +51,7 @@ login_form.addEventListener('submit', () => {
 		document.body.background = green_background;
 
 		is_authorized = true;
-		let user = login_form.querySelector('.login-input').value;
+		let user = login_form.querySelector('.login-input input').value;
 		username_block.textContent = user;
 
 		login_form.reset();

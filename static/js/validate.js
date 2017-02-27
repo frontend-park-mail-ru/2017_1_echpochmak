@@ -12,7 +12,6 @@ const validate_registration = () => {
 	const pass_repeat = registration_form.querySelectorAll('.password-input input')[1];
 	const pass_repeat_error = registration_form.querySelectorAll('.password-input .error-message')[1];	
 
-
 	login_error.textContent = "";
 	email_error.textContent = "";
 	pass_error.textContent = "";

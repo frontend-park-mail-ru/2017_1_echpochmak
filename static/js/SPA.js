@@ -85,19 +85,6 @@ button_multi.addEventListener('click', () => {
 	greeting.hidden = true;
 	multiplayer.hidden = false;
 	back.hidden = false;
-
-	const auth_message = multiplayer.querySelector('.authorized');
-	const no_auth_message = multiplayer.querySelector('.no-authorized');
-
-	// if (is_authorized) {
-	// 	no_auth_message.hidden = true;
-	// 	auth_message.hidden = false;
-	// } else {
-
-	// }
-
-	no_auth_message.hidden = is_authorized;
-	auth_message.hidden = !is_authorized;
 });
 
 button_about.addEventListener('click', () => {

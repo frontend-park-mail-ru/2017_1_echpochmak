@@ -4,10 +4,8 @@
 
 	class Button extends BaseBlock {
 		constructor(text = '', attrs = {}) {
+			attrs['type'] = 'submit';
 			super('button', attrs);
-			this.setAttrs({
-				'type': 'submit'
-			});
 			this.get().innerHTML = text;
 		}
 	}

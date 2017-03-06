@@ -1,84 +1,90 @@
 'use strict';
 
-const anonym_user = 'Гость';
+(function() = {
 
-const authorized_block = document.querySelectorAll('.authorized');
-const no_authorized_block = document.querySelectorAll('.no-authorized');
-const username_block = greeting.querySelector('.username');
+	const Authorize = {
 
-const login_form = login.querySelector('form');
-const registration_form = registration.querySelector('form');
+		anonym_user: 'Гость',
+		authorized_block: document.querySelectorAll('.authorized'),
+		no_authorized_block: document.querySelectorAll('.no-authorized'),
+		username_block: greeting.querySelector('.username'),
 
-const button_exit = document.querySelector('.exit-button');
+		// const login_form = login.querySelector('form');
+		// const registration_form = registration.querySelector('form');
 
-authorized_block.forEach( (item, i, arr) => {
-		item.hidden = true;
-	});
+		// const button_exit = document.querySelector('.exit-button');
 
-const authorize = (username) => {
+		authorized_block.forEach( (item, i, arr) => {
+				item.hidden = true;
+			});
 
-	no_authorized_block.forEach( (item, i, arr) => {
-		item.hidden = true;
-	});
+		const authorize = (username) => {
 
-	authorized_block.forEach( (item, i, arr) => {
-		item.hidden = false;
-	});
+			no_authorized_block.forEach( (item, i, arr) => {
+				item.hidden = true;
+			});
 
-	username_block.textContent = username;
-}
+			authorized_block.forEach( (item, i, arr) => {
+				item.hidden = false;
+			});
 
-const deauthorize = () => {
-	
-	authorized_block.forEach( (item, i, arr) => {
-		item.hidden = true;
-	});
+			username_block.textContent = username;
+		}
 
-	no_authorized_block.forEach( (item, i, arr) => {
-		item.hidden = false;
-	});
+		const deauthorize = () => {
+			
+			authorized_block.forEach( (item, i, arr) => {
+				item.hidden = true;
+			});
 
-	username_block.textContent = anonym_user;
-}
+			no_authorized_block.forEach( (item, i, arr) => {
+				item.hidden = false;
+			});
 
-registration_form.addEventListener('submit', () => {
-	event.preventDefault();
+			username_block.textContent = anonym_user;
+		}
 
-	if (validate_registration()) {
-		registration.hidden = true;
-		back.hidden = true;
-		menu.hidden = false;
-		greeting.hidden = false;
+		// registration_form.addEventListener('submit', () => {
+		// 	event.preventDefault();
 
-		document.body.background = green_background;
+		// 	if (validate_registration()) {
+		// 		registration.hidden = true;
+		// 		back.hidden = true;
+		// 		menu.hidden = false;
+		// 		greeting.hidden = false;
 
-		let user = registration_form.querySelector('.login-input input').value;
-		authorize(user);
+		// 		document.body.background = green_background;
 
-		registration_form.reset();
-	}
-});
+		// 		let user = registration_form.querySelector('.login-input input').value;
+		// 		authorize(user);
 
-login_form.addEventListener('submit', () => {
-	event.preventDefault();
+		// 		registration_form.reset();
+		// 	}
+		// });
 
-	if(validate_login()) {
+		// login_form.addEventListener('submit', () => {
+		// 	event.preventDefault();
 
-		login.hidden = true;
-		back.hidden = true;
-		menu.hidden = false;
-		greeting.hidden = false;
+		// 	if(validate_login()) {
 
-		document.body.background = green_background;
+		// 		login.hidden = true;
+		// 		back.hidden = true;
+		// 		menu.hidden = false;
+		// 		greeting.hidden = false;
 
-		let user = login_form.querySelector('.login-input input').value;
-		authorize(user);
+		// 		document.body.background = green_background;
 
-		login_form.reset();
-	}
-});
+		// 		let user = login_form.querySelector('.login-input input').value;
+		// 		authorize(user);
 
-button_exit.addEventListener('click', () => {
-	event.preventDefault();
-	deauthorize();
-});
+		// 		login_form.reset();
+		// 	}
+		// });
+
+		// button_exit.addEventListener('click', () => {
+		// 	event.preventDefault();
+		// 	deauthorize();
+		// });
+	};
+
+})();

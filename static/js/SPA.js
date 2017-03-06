@@ -22,13 +22,19 @@ const button_leaders = document.querySelector('.leaderboard-button');
 const green_background = './img/back_green.jpg';
 const white_background = './img/back_white.jpg';
 
-registration.hidden = true;
-login.hidden = true;
-leaderboard.hidden = true;
-singleplayer.hidden = true;
-multiplayer.hidden = true;
-about.hidden = true;
-back.hidden = true;
+// registration.hidden = true;
+// login.hidden = true;
+// leaderboard.hidden = true;
+// singleplayer.hidden = true;
+// multiplayer.hidden = true;
+// about.hidden = true;
+// back.hidden = true;
+
+
+
+// menu.hidden = true;
+// greeting.hidden = true;
+
 
 button_registration.addEventListener('click', () => {
 	event.preventDefault();

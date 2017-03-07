@@ -25,6 +25,9 @@
 			});
 
 			this.username_block.textContent = username;
+
+			Main.pages.multi.noAuth.get().hidden = true;
+			Main.pages.multi.auth.get().hidden = false;
 		},
 
 		deauthorize: function() {
@@ -38,6 +41,9 @@
 			});
 
 			this.username_block.textContent = this.anonym_user;
+
+			Main.pages.multi.auth.get().hidden = true;
+			Main.pages.multi.noAuth.get().hidden = false;
 		}
 	};
 

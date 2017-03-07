@@ -18,7 +18,7 @@
 				'class': 'authorized'
 			});
 			this.noAuth = new BaseBlock('span', {
-				'class': 'no-aythorized'
+				'class': 'no-authorized'
 			});
 			this.auth.get().innerHTML = 'Добро пожаловать в мультиплеер!';
 			this.noAuth.get().innerHTML = 'Мультиплеер доступен только зарегистрированным пользователям';

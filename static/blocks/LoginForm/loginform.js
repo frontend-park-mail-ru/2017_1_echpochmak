@@ -34,9 +34,8 @@
 				event.preventDefault();
 
 				if (this.validate()) {
-					Main.pages['login'].get().hidden = true;
-					Main.pages['back'].get().hidden = true;
-					Main.pages['menu'].get().hidden = false;
+					Main.pages.login.hide();
+					Main.pages.menu.show();
 
 					document.body.background = Main.green_background;
 
@@ -45,7 +44,7 @@
 
 					this.get().reset();
 				}
-			})
+			});
 		}
 
 		validate() {

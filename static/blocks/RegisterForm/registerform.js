@@ -45,9 +45,8 @@
 				event.preventDefault();
 
 				if (this.validate()) {
-					Main.pages['register'].get().hidden = true;
-					Main.pages['back'].get().hidden = true;
-					Main.pages['menu'].get().hidden = false;
+					Main.pages.register.hide();
+					Main.pages.menu.show();
 
 					document.body.background = Main.green_background;
 

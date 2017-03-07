@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class LeaderBoard extends BaseBlock {
+	class LeaderBoard extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'leaderboard'
@@ -14,13 +14,14 @@
 				'class': 'list-header', 
 				'align': 'center'
 			});
+			this.header.get().innerHTML = 'Доска почета';
 
 			this.render();
 		}
 
 		render() {
-			this.get().appendChild(this.padd.get());
-			this.padd.get().appendChild(this.form.get());
+			this.get().appendChild(this.list.get());
+			this.list.get().appendChild(this.header.get());
 		}
 	}
 

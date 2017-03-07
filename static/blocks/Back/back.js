@@ -3,7 +3,7 @@
 	'use strict';
 
 	class Back extends BaseBlock {
-		constructor() {
+		constructor(page) {
 			super('div', {
 				'class': 'back',
 				'align': 'right'
@@ -18,7 +18,7 @@
 			this.text.get().innerHTML = 'Обратно в меню';
 
 			this.render();
-			this.makeListeners();
+			this.makeListeners(page);
 		}
 
 		render() {
@@ -27,19 +27,13 @@
 			this.get().appendChild(this.text.get());
 		}
 
-		makeListeners() {
+		makeListeners(page) {
 
 			this.link.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = false;
-				Main.pages['register'].get().hidden = true;
-				Main.pages['login'].get().hidden = true;
-				Main.pages['single'].get().hidden = true;
-				Main.pages['multi'].get().hidden = true;
-				Main.pages['about'].get().hidden = true;
-				Main.pages['leaderboard'].hidden = true;
-				Main.pages['back'].get().hidden = true;
+				Main.pages.menu.show();
+				page.hide();
 
 				document.body.background = Main.green_background;
 			})

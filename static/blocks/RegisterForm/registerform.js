@@ -51,8 +51,8 @@
 
 					document.body.background = Main.green_background;
 
-					// let user = registration_form.querySelector('.login-input input').value;
-					// authorize(user);
+					let user = this.login.input.get().value;
+					Authorize.authorize(user);
 
 					this.get().reset();
 				}

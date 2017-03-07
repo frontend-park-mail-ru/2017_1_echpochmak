@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class Register extends BaseBlock {
+	class Register extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'registration'

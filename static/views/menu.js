@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class Menu extends BaseBlock {
+	class Menu extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'menu'
@@ -42,6 +42,8 @@
 		}
 
 		render() {
+			this.get().removeChild(this.back.get());
+			
 			this.get().appendChild(this.padd.get());
 			this.padd.get().appendChild(this.bl1.get());
 			this.padd.get().appendChild(this.bl2.get());
@@ -57,33 +59,30 @@
 			this.singleButton.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = true;
-				Main.pages['single'].get().hidden = false;
-				Main.pages['back'].get().hidden = false;
+				Main.pages.menu.hide();
+				Main.pages.single.show();
 			})
 
 			this.multiButton.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = true;
-				Main.pages['multi'].get().hidden = false;
-				Main.pages['back'].get().hidden = false;
+				Main.pages.menu.hide();
+				Main.pages.multi.show();
+
 			})
 
 			this.aboutButton.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = true;
-				Main.pages['about'].get().hidden = false;
-				Main.pages['back'].get().hidden = false;
+				Main.pages.menu.hide();
+				Main.pages.about.show();
 			})
 
 			this.leaderButton.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = true;
-				Main.pages['leaderboard'].hidden = false;
-				Main.pages['back'].get().hidden = false;
+				Main.pages.menu.hide();
+				Main.pages.leader.show();
 			})
 		}
 	}

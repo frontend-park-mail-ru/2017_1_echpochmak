@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class MultiPlayer extends BaseBlock {
+	class MultiPlayer extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'multiplayer'

@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class About extends BaseBlock {
+	class About extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'about'

@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class Login extends BaseBlock {
+	class Login extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'login'

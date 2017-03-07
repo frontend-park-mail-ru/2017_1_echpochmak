@@ -59,9 +59,8 @@
 			this.loginButton.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = true;
-				Main.pages['login'].get().hidden = false;
-				Main.pages['back'].get().hidden = false;
+				Main.pages.menu.hide();
+				Main.pages.login.show();
 
 				document.body.background = Main.white_background;
 			})
@@ -69,9 +68,8 @@
 			this.registerButton.on('click', () => {
 				event.preventDefault();
 
-				Main.pages['menu'].get().hidden = true;
-				Main.pages['register'].get().hidden = false;
-				Main.pages['back'].get().hidden = false;
+				Main.pages.menu.hide();
+				Main.pages.register.show();
 
 				document.body.background = Main.white_background;
 			})

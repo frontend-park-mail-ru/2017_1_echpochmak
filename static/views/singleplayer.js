@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	class SinglePlayer extends BaseBlock {
+	class SinglePlayer extends BaseView {
 		constructor() {
 			super('div', {
 				'class': 'singleplayer'

@@ -78,6 +78,7 @@
 
 			this.exitButton.on('click', () => {
 				event.preventDefault();
+				Authorize.deauthorize();
 			})
 		}
 	}

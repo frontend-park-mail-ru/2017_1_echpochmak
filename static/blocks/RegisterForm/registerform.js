@@ -29,6 +29,7 @@
 			});
 
 			this.render();
+			this.makeListeners();
 		}
 
 		render() {
@@ -37,6 +38,68 @@
 			this.get().appendChild(this.pass.get());
 			this.get().appendChild(this.repeat.get());
 			this.get().appendChild(this.button.get());
+		}
+
+		makeListeners() {
+			this.on('submit', () => {
+				event.preventDefault();
+
+				if (this.validate()) {
+					Main.pages['register'].get().hidden = true;
+					Main.pages['back'].get().hidden = true;
+					Main.pages['menu'].get().hidden = false;
+
+					document.body.background = Main.green_background;
+
+					// let user = registration_form.querySelector('.login-input input').value;
+					// authorize(user);
+
+					this.get().reset();
+				}
+			})
+		}
+
+		validate() {
+			const regexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
+
+			const login = this.login.input.get();
+			const login_error = this.login.errorBlock.get();
+			const email = this.email.input.get();
+			const email_error = this.email.errorBlock.get();
+			const pass = this.pass.input.get();
+			const pass_error = this.pass.errorBlock.get();
+			const pass_repeat = this.repeat.input.get();
+			const pass_repeat_error = this.repeat.errorBlock.get();
+
+			login_error.textContent = "";
+			email_error.textContent = "";
+			pass_error.textContent = "";
+			pass_repeat_error.textContent = "";
+
+			let result = true;
+
+			if (!regexp.test(email.value)) {
+				email_error.textContent = "Введенный вами E-mail некорректен";
+				result = false;
+			} 
+			if (login.value.length > 15 || login.value.length < 5) {
+				login_error.textContent = "Ваш логин должен содержать от 5 до 15 символов";
+				result = false;
+			} 
+			if (pass.value.length < 5) {
+				pass_error.textContent = "Ваш пароль должен содержать не менее 5 символов";
+				result = false;
+			}
+			if (pass.value != pass_repeat.value) {
+				pass_repeat_error.textContent = "Пароли не совпадают";
+				result = false;
+			} 
+
+			if (!result) {
+				pass.value = pass_repeat.value = "";
+			}
+			
+			return result;
 		}
 	}
 

@@ -26,6 +26,8 @@
 		white_background: './img/back_white.jpg',
 	};
 
+	window.Main = Main;
+
 	Object.keys(Main.pages).forEach( page => {
 		document.querySelector('body').appendChild(Main.pages[page].get());
 		Main.pages[page].get().hidden = true;
@@ -34,6 +36,6 @@
 	Main.pages['leaderboard'].hidden = true;
 	Main.pages['menu'].get().hidden = false;
 
-	window.Main = Main;
+	Authorize.init();
 
 })();

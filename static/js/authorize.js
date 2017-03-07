@@ -2,12 +2,6 @@
 
 (function() {
 
-	// const anonym_user = 'Гость';
-	// const authorized_block = document.querySelectorAll('.authorized');
-	// const no_authorized_block = document.querySelectorAll('.no-authorized');
-	// // const username_block = Main.pages.menu.greeting.username.get();
-	// const username_block = document.querySelector('.username');
-
 	const Authorize = {
 
 		init: function() {

@@ -11,12 +11,12 @@
 				'class': 'padd',
 				'align': 'center'
 			});
-			this.bl1 = new BaseBlock('div', {
-				'class': 'bl',
+			this.line1 = new BaseBlock('div', {
+				'class': 'line',
 				'align': 'center'
 			});
-			this.bl2 = new BaseBlock('div', {
-				'class': 'bl',
+			this.line2 = new BaseBlock('div', {
+				'class': 'line',
 				'align': 'center'
 			});
 			this.singleButton = new MenuButton('Одиночная игра', {
@@ -45,12 +45,12 @@
 			this.get().removeChild(this.back.get());
 			
 			this.get().appendChild(this.padd.get());
-			this.padd.get().appendChild(this.bl1.get());
-			this.padd.get().appendChild(this.bl2.get());
-			this.bl1.get().appendChild(this.singleButton.get());
-			this.bl1.get().appendChild(this.multiButton.get());
-			this.bl2.get().appendChild(this.aboutButton.get());
-			this.bl2.get().appendChild(this.leaderButton.get());
+			this.padd.get().appendChild(this.line1.get());
+			this.padd.get().appendChild(this.line2.get());
+			this.line1.get().appendChild(this.singleButton.get());
+			this.line1.get().appendChild(this.multiButton.get());
+			this.line2.get().appendChild(this.aboutButton.get());
+			this.line2.get().appendChild(this.leaderButton.get());
 			this.get().appendChild(this.greeting.get());
 		}
 

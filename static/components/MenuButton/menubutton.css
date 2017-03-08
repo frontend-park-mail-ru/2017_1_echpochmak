@@ -1,0 +1,70 @@
+.btn-class:visited {
+	text-decoration: none;
+}
+
+.btn-class {
+	display: inline-block;
+	border:1px solid #64734D;
+	border-radius: 20px;
+	color: #705D07;
+	font-family: aAlbionicTitulInfl, cursive;
+	font-weight: bolder;
+	width: 290px;
+	height: 262px;
+	font-size: 30px;
+	padding: 20px 20px;
+	box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E;
+	-moz-box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E,0 2px 4px 0 #D4D4D4;
+	-webkit-box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E,0 2px 4px 0 #D4D4D4;
+	text-shadow: 0 1px 0 #FFFFFF;
+	background-color: #DBFCA9;
+	text-decoration: none;
+	margin-right: 5%;
+}
+
+.menu-button {
+	background-repeat:  no-repeat;
+	background-position: 20%;
+	margin-right: 0.5%;
+	margin-left: 0.5%;
+}
+
+.menu-button:hover, .menu-button:active {
+	background-repeat:  no-repeat;
+	text-decoration: none;
+	border:1px solid #93A871;
+	border-radius: 50px;
+	color: #3B1A1A;  
+}
+
+#ruby {
+	background-image: url(./img/ruby.png);
+}
+
+#ruby:hover, #ruby:active {
+	background-image: url(./img/ruby1.png);
+}
+
+#izum {
+	background-image: url(./img/izum.png);
+}
+
+#izum:hover, #izum:active {
+	background-image: url(./img/izum1.png);
+}
+
+#saph {
+	background-image: url(./img/saph.png);
+}
+
+#saph:hover, #saph:active {
+	background-image: url(./img/saph1.png);
+}
+
+#bril {
+	background-image: url(./img/bril.png);
+}
+
+#bril:hover, #bril:active {
+	background-image: url(./img/bril1.png);
+}

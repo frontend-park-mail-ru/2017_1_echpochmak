@@ -21,13 +21,6 @@
 	window.Main = Main;
 
 	Main.pages.menu.show();
-	// Object.keys(Main.pages).forEach( page => {
-	// 	document.querySelector('body').appendChild(Main.pages[page].get());
-	// 	Main.pages[page].get().hidden = true;
-	// });
-	// Main.pages['leaderboard'] = document.querySelector('.leaderboard');
-	// Main.pages['leaderboard'].hidden = true;
-	// Main.pages['menu'].get().hidden = false;
 
 	Authorize.init();
 

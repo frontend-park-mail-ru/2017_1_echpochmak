@@ -2,6 +2,9 @@
 
 (function () {
 
+	const http = new HTTP();
+	http.BaseURL = 'localhost:8082';
+
 	const Main =  {
 		
 		pages: {

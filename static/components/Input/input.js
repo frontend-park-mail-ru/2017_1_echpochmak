@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+
 	class Input extends BaseBlock {
 		constructor(labelName, className, attrs) {
 			super('div', {

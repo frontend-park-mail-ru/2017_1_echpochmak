@@ -2,6 +2,9 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+	const Button = window.Button;
+
 	class FormButton extends BaseBlock {
 		constructor(text = '', attrs = {}) {
 			super('div', {

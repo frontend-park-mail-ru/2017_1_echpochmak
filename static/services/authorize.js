@@ -2,6 +2,8 @@
 
 (function() {
 
+	const UserService = window.UserService;
+
 	class Authorize {
 		constructor() {
 			if (Authorize.__instance) {

@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+
 	class Button extends BaseBlock {
 		constructor(text = '', attrs = {}) {
 			attrs['type'] = 'submit';

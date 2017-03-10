@@ -1,6 +1,8 @@
 (function () {
 	'use strict';
 
+	const HTTP = window.HTTP;
+
 	class UserService {
 		constructor() {
 			this.http = new HTTP();

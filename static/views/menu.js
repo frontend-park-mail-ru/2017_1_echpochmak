@@ -2,6 +2,12 @@
 
 	'use strict';
 
+	const BaseView = window.BaseView;
+	const BaseBlock = window.BaseBlock;
+	const MenuButton = window.MenuButton;
+	const Greeting = window.Greeting;
+	// const Main = window.Main;
+
 	class Menu extends BaseView {
 		constructor() {
 			super('div', {

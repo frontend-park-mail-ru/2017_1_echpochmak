@@ -1,4 +1,4 @@
-describe('Тесты на разлогин текущего пользователя', function () {
+describe('Тесты на метод деавторизации', function () {
 
 	const http = new HTTP();
 

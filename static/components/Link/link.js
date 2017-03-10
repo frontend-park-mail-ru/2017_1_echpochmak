@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+
 	class Link extends BaseBlock {
 		constructor(text = '', attrs = {}) {
 			super('a', attrs);

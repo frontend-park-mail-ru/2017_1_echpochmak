@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+
 	class FormMessage extends BaseBlock {
 		constructor(text = '', attrs = {}) {
 			super('div', {

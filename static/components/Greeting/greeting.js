@@ -2,6 +2,10 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+	const Link = window.Link;
+	// const Main = window.Main;
+
 	class Greeting extends BaseBlock {
 		constructor(name) {
 			super('div', {

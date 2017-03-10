@@ -2,6 +2,10 @@
 
 	'use strict';
 
+	const BaseView = window.BaseView;
+	const BaseBlock = window.BaseBlock;
+	// const UserService = window.UserService;
+
 	class LeaderBoard extends BaseView {
 		constructor() {
 			super('div', {

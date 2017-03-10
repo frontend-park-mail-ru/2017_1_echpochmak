@@ -2,6 +2,10 @@
 
 	'use strict';
 
+	const BaseView = window.BaseView;
+	const BaseBlock = window.BaseBlock;
+	const LoginForm = window.LoginForm;
+
 	class Login extends BaseView {
 		constructor() {
 			super('div', {

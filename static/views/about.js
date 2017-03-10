@@ -2,6 +2,9 @@
 
 	'use strict';
 
+	const BaseView = window.BaseView;
+	const BaseBlock = window.BaseBlock;
+
 	class About extends BaseView {
 		constructor() {
 			super('div', {

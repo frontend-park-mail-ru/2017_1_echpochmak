@@ -1,4 +1,4 @@
-describe('Тесты на регистрацию', function () {
+describe('Тесты на метод регистрации', function () {
 
 	const http = new HTTP();
 

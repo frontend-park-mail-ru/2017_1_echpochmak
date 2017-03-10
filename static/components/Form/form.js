@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+
 	class Form extends BaseBlock {
 		constructor() {
 			super('form', {

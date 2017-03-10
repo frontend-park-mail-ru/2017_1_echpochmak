@@ -2,6 +2,12 @@
 
 	'use strict';
 
+	const Form = window.Form;
+	const Input = window.Input;
+	const FormButton = window.FormButton;
+	// const UserService = window.UserService;
+	// const Authorize = window.Authorize;
+
 	class RegisterForm extends Form {
 		constructor() {
 			super();

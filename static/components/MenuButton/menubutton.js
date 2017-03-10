@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const Link = window.Link;
+
 	class MenuButton extends Link {
 		constructor(text, attrs) {
 			super(text, attrs);

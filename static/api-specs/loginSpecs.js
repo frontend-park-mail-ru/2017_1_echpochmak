@@ -1,4 +1,4 @@
-describe('Тесты на логин', function () {
+describe('Тесты на метод авторизации', function () {
 
 	const http = new HTTP();
 
@@ -61,44 +61,6 @@ describe('Тесты на логин', function () {
 			const status = xhr.status;
 			expect(status).toBe(400);
 			done(true);
-		});
-	});
-
-	it('Метод POST /api/login у уже вошедшего того же пользователя вернет статус ???', function (done) {
-
-		const body = {
-			'login': 'login',
-			'password': 'password'
-		};
-
-		http.post('/api/login', body, xhr => {
-			http.post('/api/login', body, xhr => {
-				const status = xhr.status;
-				expect(status).toBe(409);
-				done(true);
-			});
-		});
-	});
-
-	it('Метод POST /api/login у уже вошедшего, другого существующего пользователя вернет статус ???', function (done) {
-
-		const body1 = {
-			'login': 'login',
-			'password': 'password'
-		};
-
-		const body2 = {
-			'mail': 'mail@mail.mail',
-			'login': 'login2',
-			'password': 'password'
-		}
-
-		http.post('/api/registration', body2, xhr => {
-			http.post('/api/login', body1, xhr => {
-				const status = xhr.status;
-				expect(status).toBe(409);
-				done(true);
-			});
 		});
 	});
 });

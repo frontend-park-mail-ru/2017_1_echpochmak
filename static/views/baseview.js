@@ -2,6 +2,9 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+	const Back = window.Back;
+
 	class BaseView extends BaseBlock {
 		constructor(tag, attrs) {
 			super(tag, attrs);

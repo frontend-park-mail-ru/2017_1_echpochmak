@@ -2,6 +2,9 @@
 
 	'use strict';
 
+	const BaseBlock = window.BaseBlock;
+	// const Main = window.Main;
+
 	class Back extends BaseBlock {
 		constructor(page) {
 			super('div', {

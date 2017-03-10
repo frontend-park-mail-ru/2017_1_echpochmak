@@ -6,7 +6,7 @@
 	const BaseBlock = window.BaseBlock;
 	const MenuButton = window.MenuButton;
 	const Greeting = window.Greeting;
-	const Main = window.Main;
+	// const Main = window.Main;
 
 	class Menu extends BaseView {
 		constructor() {

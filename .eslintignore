@@ -1,0 +1,7 @@
+api/
+public/coverage/
+public/api/
+node_modules/
+static/jasmine/
+*.tmpl.js
+dist/

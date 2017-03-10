@@ -9,7 +9,7 @@
 			});
 			this.greetingBlock = new BaseBlock('div', {
 				'align': 'right',
-				'id': 'divtxt'
+				'class': 'divtxt'
 			});
 			this.entryBy = new BaseBlock('h3', {
 				'class': 'txt'
@@ -21,13 +21,11 @@
 			this.username.get().innerHTML = name;
 			this.noAuth = new BaseBlock('div', {
 				'align': 'right',
-				'id': 'divbut',
-				'class': 'no-authorized'
+				'class': 'divbut no-authorized'
 			});
 			this.auth = new BaseBlock('div', {
 				'align': 'right',
-				'id': 'divbut',
-				'class': 'authorized'
+				'class': 'divbut authorized'
 			});
 			this.registerButton = new Link('Регистрация', {
 				'class': 'button registration-button'

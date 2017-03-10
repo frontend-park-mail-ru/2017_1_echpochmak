@@ -20,20 +20,16 @@
 				'align': 'center'
 			});
 			this.singleButton = new MenuButton('Одиночная игра', {
-				'id': 'ruby',
-				'class': 'single-button'
+				'class': 'ruby single-button'
 			});
 			this.multiButton = new MenuButton('Мультиплеер', {
-				'id': 'saph',
-				'class': 'multi-button'
+				'class': 'saph multi-button'
 			});
 			this.aboutButton = new MenuButton('Об игре', {
-				'id': 'izum',
-				'class': 'about-button'
+				'class': 'izum about-button'
 			});
 			this.leaderButton = new MenuButton('Лидеры', {
-				'id': 'bril',
-				'class': 'leaderboard-button'
+				'class': 'bril leaderboard-button'
 			});
 			this.greeting = new Greeting('Гость');
 

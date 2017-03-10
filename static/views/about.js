@@ -17,8 +17,7 @@
 			this.header.get().innerHTML = 'Gem-TD';
 			this.hr = new BaseBlock('hr');
 			this.cnt = new BaseBlock('div');
-			this.load_content();
-			this.cnt.get().innerHTML = this.about;
+			this.cnt.get().innerHTML = this.load_content();
 
 			this.render();
 		}
@@ -31,7 +30,7 @@
 		}
 
 		load_content() {
-			this.about = '<b>Жанр</b>: Tower Defense<br>' + 
+			return '<b>Жанр</b>: Tower Defense<br>' + 
 			'<b>Количество игроков</b>: 1-4<br>' + 
 			'<b>Особенности</b>: сложная, но интересная Tower Defence, у всех вышек есть способности, успех в немалой степени зависит от случайности.<br>' + 
 			'<b>Задача</b>: уничтожить все волны мобов<br>' +

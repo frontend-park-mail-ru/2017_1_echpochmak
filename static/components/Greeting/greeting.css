@@ -1,10 +1,10 @@
-#divtxt {
+.divtxt {
 	position: absolute;
 	top: 0;
 	right: 3%
 }
 
-#divbut {
+.divbut {
 	position: absolute;
 	top: 8%;
 	right: 3%;

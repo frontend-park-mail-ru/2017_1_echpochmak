@@ -37,34 +37,34 @@
 	color: #3B1A1A;  
 }
 
-#ruby {
+.ruby {
 	background-image: url(./img/ruby.png);
 }
 
-#ruby:hover, #ruby:active {
+.ruby:hover, .ruby:active {
 	background-image: url(./img/ruby1.png);
 }
 
-#izum {
+.izum {
 	background-image: url(./img/izum.png);
 }
 
-#izum:hover, #izum:active {
+.izum:hover, .izum:active {
 	background-image: url(./img/izum1.png);
 }
 
-#saph {
+.saph {
 	background-image: url(./img/saph.png);
 }
 
-#saph:hover, #saph:active {
+.saph:hover, .saph:active {
 	background-image: url(./img/saph1.png);
 }
 
-#bril {
+.bril {
 	background-image: url(./img/bril.png);
 }
 
-#bril:hover, #bril:active {
+.bril:hover, .bril:active {
 	background-image: url(./img/bril1.png);
 }

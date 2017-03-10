@@ -47,6 +47,7 @@
 				event.preventDefault();
 
 				const service = new UserService();
+				const auth = new Authorize();
 
 				if (this.validate()) {
 
@@ -56,6 +57,8 @@
 							Main.pages.menu.show();
 
 							document.body.background = Main.green_background;
+
+							auth.authorize();
 
 							this.get().reset();
 							this.message.clean();

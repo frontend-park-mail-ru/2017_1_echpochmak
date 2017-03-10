@@ -9,10 +9,10 @@
 	class Login extends BaseView {
 		constructor() {
 			super('div', {
-				'class': 'login'
+				class: 'login'
 			});
 			this.padd = new BaseBlock('div', {
-				'class': 'padd'
+				class: 'padd'
 			});
 			this.form = new LoginForm();
 

@@ -11,7 +11,7 @@
 		setAttrs(attrs = {}) {
 			Object.keys(attrs).forEach(name => {
 				this.el.setAttribute(name, attrs[name]);
-			})
+			});
 		}
 
 		get() {

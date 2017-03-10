@@ -7,8 +7,8 @@
 	class Form extends BaseBlock {
 		constructor() {
 			super('form', {
-				'class': 'form-horizontal',
-				'action': '#'
+				class: 'form-horizontal',
+				action: '#'
 			});
 		}
 	}

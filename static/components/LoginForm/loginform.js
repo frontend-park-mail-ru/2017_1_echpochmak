@@ -13,17 +13,17 @@
 			super();
 			this.message = new FormMessage();
 			this.login = new Input('Логин', 'login-input', {
-				'type': 'text',
-				'placeholder': 'Введите логин',
-				'required': 'true'
+				type: 'text',
+				placeholder: 'Введите логин',
+				required: 'true'
 			});
 			this.pass = new Input('Пароль', 'password-input', {
-				'type': 'password',
-				'placeholder': 'Введите пароль',
-				'required': 'true'
+				type: 'password',
+				placeholder: 'Введите пароль',
+				required: 'true'
 			});
 			this.button = new FormButton('Войти', {
-				'class': 'btn btn-default btn-lg'
+				class: 'btn btn-default btn-lg'
 			});
 
 			this.render();
@@ -58,9 +58,9 @@
 							this.get().reset();
 							this.message.clean();
 						} else {
-							this.message.showMessage("Неверный логин или пароль!");
+							this.message.showMessage('Неверный логин или пароль!');
 						}
-					})
+					});
 				}
 			});
 		}
@@ -69,7 +69,10 @@
 			const login = this.login.input.get().value;
 			const pass = this.pass.input.get().value;
 
-			this.data = {"login": login, "password": pass};
+			this.data = {
+				login: login, 
+				password: pass
+			};
 
 			return true;
 		}

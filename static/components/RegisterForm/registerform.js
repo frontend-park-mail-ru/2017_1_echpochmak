@@ -13,26 +13,26 @@
 			super();
 			this.message = new FormMessage();
 			this.email = new Input('E-Mail', 'email-input', {
-				'type': 'email',
-				'placeholder': 'Введите ваш E-Mail'
-			})
+				type: 'email',
+				placeholder: 'Введите ваш E-Mail'
+			});
 			this.login = new Input('Логин', 'login-input', {
-				'type': 'text',
-				'placeholder': 'Введите ваш логин',
-				'required': 'true'
+				type: 'text',
+				placeholder: 'Введите ваш логин',
+				required: 'true'
 			});
 			this.pass = new Input('Пароль', 'password-input', {
-				'type': 'password',
-				'placeholder': 'Введите ваш пароль',
-				'required': 'true'
+				type: 'password',
+				placeholder: 'Введите ваш пароль',
+				required: 'true'
 			});
 			this.repeat = new Input('Повторите пароль', 'password-input', {
-				'type': 'password',
-				'placeholder': 'Повторите ваш пароль',
-				'required': 'true'
+				type: 'password',
+				placeholder: 'Повторите ваш пароль',
+				required: 'true'
 			});
 			this.button = new FormButton('Зарегистрироваться', {
-				'class': 'btn btn-default btn-lg'
+				class: 'btn btn-default btn-lg'
 			});
 
 			this.render();
@@ -69,56 +69,56 @@
 							this.get().reset();
 							this.message.clean();
 						} else {
-							this.message.showMessage("Что-то пошло не так. Что именно, я смогу сказать только тогда, " +
-								"когда Варя настроит возвращаемый статус с сервера");
+							this.message.showMessage('Что-то пошло не так. Что именно, я смогу сказать только тогда, ' +
+								'когда Варя настроит возвращаемый статус с сервера');
 						}
-					})
+					});
 				}
-			})
+			});
 		}
 
 		validate() {
 			const regexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
 
 			const login = this.login.input.get();
-			const login_error = this.login.errorBlock.get();
+			const loginError = this.login.errorBlock.get();
 			const email = this.email.input.get();
-			const email_error = this.email.errorBlock.get();
+			const emailError = this.email.errorBlock.get();
 			const pass = this.pass.input.get();
-			const pass_error = this.pass.errorBlock.get();
-			const pass_repeat = this.repeat.input.get();
-			const pass_repeat_error = this.repeat.errorBlock.get();
+			const passError = this.pass.errorBlock.get();
+			const passRepeat = this.repeat.input.get();
+			const passRepeatError = this.repeat.errorBlock.get();
 
-			login_error.textContent = "";
-			email_error.textContent = "";
-			pass_error.textContent = "";
-			pass_repeat_error.textContent = "";
+			loginError.textContent = '';
+			emailError.textContent = '';
+			passError.textContent = '';
+			passRepeatError.textContent = '';
 
 			let result = true;
 
 			if (!regexp.test(email.value)) {
-				email_error.textContent = "Введенный вами E-mail некорректен";
-				result = false;
-			} 
-			if (login.value.length > 15 || login.value.length < 5) {
-				login_error.textContent = "Ваш логин должен содержать от 5 до 15 символов";
-				result = false;
-			} 
-			if (pass.value.length < 5) {
-				pass_error.textContent = "Ваш пароль должен содержать не менее 5 символов";
+				emailError.textContent = 'Введенный вами E-mail некорректен';
 				result = false;
 			}
-			if (pass.value != pass_repeat.value) {
-				pass_repeat_error.textContent = "Пароли не совпадают";
+			if (login.value.length > 15 || login.value.length < 5) {
+				loginError.textContent = 'Ваш логин должен содержать от 5 до 15 символов';
 				result = false;
-			} 
+			}
+			if (pass.value.length < 5) {
+				passError.textContent = 'Ваш пароль должен содержать не менее 5 символов';
+				result = false;
+			}
+			if (pass.value !== passRepeat.value) {
+				passRepeatError.textContent = 'Пароли не совпадают';
+				result = false;
+			}
 
 			if (!result) {
-				pass.value = pass_repeat.value = "";
+				pass.value = passRepeat.value = '';
 			} else {
-				this.data = {"email": email.value, "login": login.value, "password": pass.value};
+				this.data = {email: email.value, login: login.value, password: pass.value};
 			}
-			
+
 			return result;
 		}
 	}

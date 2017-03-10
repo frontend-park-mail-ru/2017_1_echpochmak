@@ -6,12 +6,12 @@
 	class UserService {
 		constructor() {
 			this.http = new HTTP();
-			
+
 			this.func = (callback, xhr) => {
-				if (typeof(callback) === 'function') {
+				if (typeof (callback) === 'function') {
 					callback.call(xhr, JSON.parse(xhr.responseText || ''));
 				}
-			}
+			};
 		}
 
 		register(mail, login, password, callback) {
@@ -30,19 +30,19 @@
 
 		logout(callback) {
 			this.http.get('/api/logout', null, xhr => {
-				this.func(callback, xhr)
+				this.func(callback, xhr);
 			});
 		}
 
 		getUsername(callback) {
 			this.http.get('/api/user', null, xhr => {
-				this.func(callback, xhr)
+				this.func(callback, xhr);
 			});
 		}
 
 		getUsersList(callback) {
 			this.http.get('/api/users', null, xhr => {
-				this.func(callback, xhr)
+				this.func(callback, xhr);
 			});
 		}
 	}

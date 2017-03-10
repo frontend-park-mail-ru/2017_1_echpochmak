@@ -5,14 +5,14 @@ describe('Тесты на метод получения логина текущ�
 	beforeEach(function (done) {
 
 		const body = {
-			'mail': 'abc@abc.ru',
-			'login': 'login',
-			'password': 'password'
+			mail: 'abc@abc.ru',
+			login: 'login',
+			password: 'password'
 		};
 
 		http.delete('/api/users', null, xhr => {
 			// Регистрация делает вход автоматически
-			http.post('/api/registration', body, xhr => {
+			http.post('/api/registration', body, xhr2 => {
 				done(true);
 			});
 		});
@@ -32,8 +32,8 @@ describe('Тесты на метод получения логина текущ�
 	it('Метод GET /api/user незалогиненного пользователя возвращает статус 409', function (done) {
 
 		http.get('/api/logout', null, xhr => {
-			http.get('/api/user', null, xhr => {
-				const status = xhr.status;
+			http.get('/api/user', null, xhr2 => {
+				const status = xhr2.status;
 				expect(status).toBe(409);
 				done(true);
 			});

@@ -5,13 +5,13 @@ describe('Тесты на метод удаления всех пользова�
 	beforeEach(function (done) {
 
 		const body = {
-			'mail': 'abc@abc.ru',
-			'login': 'login',
-			'password': 'password'
+			mail: 'abc@abc.ru',
+			login: 'login',
+			password: 'password'
 		};
 
 		http.delete('/api/users', null, xhr => {
-			http.post('/api/registration', body, xhr => {
+			http.post('/api/registration', body, xhr2 => {
 				done(true);
 			});
 		});
@@ -30,8 +30,8 @@ describe('Тесты на метод удаления всех пользова�
 	it('Список всех пользователей по методу GET /api/users после удаления пустой', function (done) {
 
 		http.delete('/api/users', null, xhr => {
-			http.get('/api/users', null, xhr => {
-				const responseText = xhr.responseText;
+			http.get('/api/users', null, xhr2 => {
+				const responseText = xhr2.responseText;
 				const parsed = JSON.parse(responseText);
 				expect(parsed.users.length).toBe(0);
 				done(true);

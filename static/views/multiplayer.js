@@ -8,20 +8,20 @@
 	class MultiPlayer extends BaseView {
 		constructor() {
 			super('div', {
-				'class': 'multiplayer'
+				class: 'multiplayer'
 			});
 			this.padd = new BaseBlock('div', {
-				'class': 'padd'
-			})
+				class: 'padd'
+			});
 			this.list = new BaseBlock('div', {
-				'class': 'list',
-				'align': 'center'
+				class: 'list',
+				align: 'center'
 			});
 			this.auth = new BaseBlock('span', {
-				'class': 'authorized'
+				class: 'authorized'
 			});
 			this.noAuth = new BaseBlock('span', {
-				'class': 'no-authorized'
+				class: 'no-authorized'
 			});
 			this.auth.get().innerHTML = 'Добро пожаловать в мультиплеер!';
 			this.noAuth.get().innerHTML = 'Мультиплеер доступен только зарегистрированным пользователям';

@@ -8,7 +8,7 @@
 		constructor(text = '', attrs = {}) {
 			super('a', attrs);
 			this.setAttrs({
-				'href': '#'
+				href: '#'
 			});
 			this.get().innerHTML = text;
 		}

@@ -9,10 +9,10 @@
 	class Register extends BaseView {
 		constructor() {
 			super('div', {
-				'class': 'registration'
+				class: 'registration'
 			});
 			this.padd = new BaseBlock('div', {
-				'class': 'padd'
+				class: 'padd'
 			});
 			this.form = new RegisterForm();
 

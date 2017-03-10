@@ -8,19 +8,19 @@
 	class About extends BaseView {
 		constructor() {
 			super('div', {
-				'class': 'about'
+				class: 'about'
 			});
 			this.list = new BaseBlock('div', {
-				'class': 'list'
+				class: 'list'
 			});
 			this.header = new BaseBlock('div', {
-				'class': 'list-header',
-				'align': 'center'
+				class: 'list-header',
+				align: 'center'
 			});
 			this.header.get().innerHTML = 'Gem-TD';
 			this.hr = new BaseBlock('hr');
 			this.cnt = new BaseBlock('div');
-			this.cnt.get().innerHTML = this.load_content();
+			this.cnt.get().innerHTML = this.loadContent();
 
 			this.render();
 		}
@@ -32,10 +32,10 @@
 			this.header.get().appendChild(this.hr.get());
 		}
 
-		load_content() {
-			return '<b>Жанр</b>: Tower Defense<br>' + 
-			'<b>Количество игроков</b>: 1-4<br>' + 
-			'<b>Особенности</b>: сложная, но интересная Tower Defence, у всех вышек есть способности, успех в немалой степени зависит от случайности.<br>' + 
+		loadContent() {
+			return '<b>Жанр</b>: Tower Defense<br>' +
+			'<b>Количество игроков</b>: 1-4<br>' +
+			'<b>Особенности</b>: сложная, но интересная Tower Defence, у всех вышек есть способности, успех в немалой степени зависит от случайности.<br>' +
 			'<b>Задача</b>: уничтожить все волны мобов<br>' +
 			'<b>Количество волн: </b>  <br>' +
 			'<b>Поражение</b>: пропустить некоторое количество мобов / боссов к кристаллу (количество зависит от типа и уровня хп пропущенных)<br>' +
@@ -52,7 +52,7 @@
 			'<li>Различные камни объединяются в спец. вышки</li> <br>' +
 			'<li>За каждый раунд после установки 5 гемов, оставить вы сможете лишь один из них, остальные будут превращены в скалы. Однако если в вашем наборе есть сочетание для спец. вышки, вы можете её сразу построить.</li>' +
 			'</ul><br>' +
-			
+
 			'<b>Факты о волнах:</b><br>' +
 			'<ul>' +
 			'<li>Наземные юниты будут ходить от стрелки к стрелке по кратчайшему пути, нарисованный путь не имеет значения</li>' +

@@ -51,7 +51,7 @@
 		post(address, body = null, callback = null) {
 			const xhr = new XMLHttpRequest();
 			xhr.withCredentials = true;
-			let url = `${this._baseUrl}${address}`;
+			const url = `${this._baseUrl}${address}`;
 			xhr.open('POST', url, true);
 
 			Object.keys(this._headers)
@@ -75,7 +75,7 @@
 		put(address, body = null, callback = null) {
 			const xhr = new XMLHttpRequest();
 			xhr.withCredentials = true;
-			let url = `${this._baseUrl}${address}`;
+			const url = `${this._baseUrl}${address}`;
 			xhr.open('PUT', url, true);
 
 			Object.keys(this._headers)
@@ -99,7 +99,7 @@
 		delete(address, body = null, callback = null) {
 			const xhr = new XMLHttpRequest();
 			xhr.withCredentials = true;
-			let url = `${this._baseUrl}${address}`;
+			const url = `${this._baseUrl}${address}`;
 			xhr.open('DELETE', url, true);
 
 			Object.keys(this._headers)
@@ -118,7 +118,7 @@
 				xhr.send(null);
 			}
 		}
-	};
+	}
 
 	window.HTTP = HTTP;
 

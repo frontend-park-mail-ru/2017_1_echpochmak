@@ -8,17 +8,17 @@
 	class SinglePlayer extends BaseView {
 		constructor() {
 			super('div', {
-				'class': 'singleplayer'
+				class: 'singleplayer'
 			});
 			this.padd = new BaseBlock('div', {
-				'class': 'padd'
-			})
+				class: 'padd'
+			});
 			this.list = new BaseBlock('div', {
-				'class': 'list',
-				'align': 'center'
+				class: 'list',
+				align: 'center'
 			});
 			this.cnt = new BaseBlock('span', {});
-			this.cnt.get().innerHTML = 'Добро пожаловать в одиночную игру!'
+			this.cnt.get().innerHTML = 'Добро пожаловать в одиночную игру!';
 
 			this.render();
 		}

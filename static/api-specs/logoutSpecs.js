@@ -5,14 +5,14 @@ describe('Тесты на метод деавторизации', function () {
 	beforeEach(function (done) {
 
 		const body = {
-			'mail': 'abc@abc.ru',
-			'login': 'login',
-			'password': 'password'
+			mail: 'abc@abc.ru',
+			login: 'login',
+			password: 'password'
 		};
 
 		http.delete('/api/users', null, xhr => {
 			// Регистрация делает вход автоматически
-			http.post('/api/registration', body, xhr => {
+			http.post('/api/registration', body, xhr2 => {
 				done(true);
 			});
 		});
@@ -32,8 +32,8 @@ describe('Тесты на метод деавторизации', function () {
 	it('Метод GET /api/logout у незалогиненного пользователя возвращает статус 409', function (done) {
 
 		http.get('/api/logout', null, xhr => {
-			http.get('/api/logout', null, xhr => {
-				const status = xhr.status;
+			http.get('/api/logout', null, xhr2 => {
+				const status = xhr2.status;
 				expect(status).toBe(409);
 				done(true);
 			});

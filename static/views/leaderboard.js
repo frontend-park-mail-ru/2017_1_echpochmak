@@ -9,11 +9,11 @@
 	class LeaderBoard extends BaseView {
 		constructor() {
 			super('div', {
-				'class': 'leaderboard'
+				class: 'leaderboard'
 			});
 			this.list = new BaseBlock('div', {
-				'class': 'list'
-			})
+				class: 'list'
+			});
 			this.render();
 		}
 
@@ -33,7 +33,7 @@
 			const service = new UserService();
 			service.getUsersList(xhr => {
 				this.list.get().innerHTML = this.template(xhr);
-			})
+			});
 		}
 	}
 

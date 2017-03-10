@@ -9,37 +9,37 @@
 	class Greeting extends BaseBlock {
 		constructor(name) {
 			super('div', {
-				'class': 'greeting'
+				class: 'greeting'
 			});
 			this.greetingBlock = new BaseBlock('div', {
-				'align': 'right',
-				'class': 'divtxt'
+				align: 'right',
+				class: 'divtxt'
 			});
 			this.entryBy = new BaseBlock('h3', {
-				'class': 'txt'
+				class: 'txt'
 			});
 			this.entryBy.get().innerHTML = 'Вы вошли как ';
 			this.username = new BaseBlock('h2', {
-				'class': 'txt username'
+				class: 'txt username'
 			});
 			this.username.get().innerHTML = name;
 			this.noAuth = new BaseBlock('div', {
-				'align': 'right',
-				'class': 'divbut no-authorized'
+				align: 'right',
+				class: 'divbut no-authorized'
 			});
 			this.auth = new BaseBlock('div', {
-				'align': 'right',
-				'class': 'divbut authorized'
+				align: 'right',
+				class: 'divbut authorized'
 			});
 			this.registerButton = new Link('Регистрация', {
-				'class': 'button registration-button'
+				class: 'button registration-button'
 			});
 			this.loginButton = new Link('Вход', {
-				'class': 'button login-button'
-			})
+				class: 'button login-button'
+			});
 			this.exitButton = new Link('Выйти', {
-				'class': 'button exit-button'
-			})
+				class: 'button exit-button'
+			});
 
 			this.render();
 			this.makeListeners();
@@ -65,7 +65,7 @@
 				Main.pages.login.show();
 
 				document.body.background = Main.white_background;
-			})
+			});
 
 			this.registerButton.on('click', () => {
 				event.preventDefault();
@@ -74,14 +74,14 @@
 				Main.pages.register.show();
 
 				document.body.background = Main.white_background;
-			})
+			});
 
 			this.exitButton.on('click', () => {
 				event.preventDefault();
 
-				const auth = new Authorize;
+				const auth = new Authorize();
 				auth.deauthorize();
-			})
+			});
 		}
 	}
 

@@ -8,15 +8,15 @@
 	class Back extends BaseBlock {
 		constructor(page) {
 			super('div', {
-				'class': 'back',
-				'align': 'right'
+				class: 'back',
+				align: 'right'
 			});
 			this.link = new Link('', {
-				'class': 'back-button'
+				class: 'back-button'
 			});
 			this.image = new BaseBlock('img', {
-				'src': './img/back.png'
-			})
+				src: './img/back.png'
+			});
 			this.text = new BaseBlock('p');
 			this.text.get().innerHTML = 'Обратно в меню';
 
@@ -39,7 +39,7 @@
 				page.hide();
 
 				document.body.background = Main.green_background;
-			})
+			});
 		}
 	}
 

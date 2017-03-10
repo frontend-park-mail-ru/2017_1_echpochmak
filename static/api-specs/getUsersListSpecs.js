@@ -29,6 +29,6 @@ describe('Тесты на метод получения списка всех п
 			const status = xhr.status;
 			expect(status).toBe(405);
 			done(true);
-		})
+		});
 	});
 });

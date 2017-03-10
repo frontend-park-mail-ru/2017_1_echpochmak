@@ -76,7 +76,9 @@
 
 			this.exitButton.on('click', () => {
 				event.preventDefault();
-				Authorize.deauthorize();
+
+				const auth = new Authorize;
+				auth.deauthorize();
 			})
 		}
 	}

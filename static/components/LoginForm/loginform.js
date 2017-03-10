@@ -5,6 +5,7 @@
 	class LoginForm extends Form {
 		constructor() {
 			super();
+			this.message = new FormMessage();
 			this.login = new Input('Логин', 'login-input', {
 				'type': 'text',
 				'placeholder': 'Введите логин',
@@ -24,6 +25,7 @@
 		}
 
 		render() {
+			this.get().appendChild(this.message.get());
 			this.get().appendChild(this.login.get());
 			this.get().appendChild(this.pass.get());
 			this.get().appendChild(this.button.get());
@@ -33,21 +35,36 @@
 			this.on('submit', () => {
 				event.preventDefault();
 
+				const service = new UserService();
+				const auth = new Authorize();
+
 				if (this.validate()) {
-					Main.pages.login.hide();
-					Main.pages.menu.show();
 
-					document.body.background = Main.green_background;
+					service.login(this.data.login, this.data.password, xhr => {
+						if (xhr.ok) {
+							Main.pages.login.hide();
+							Main.pages.menu.show();
 
-					let user = this.login.input.get().value;
-					Authorize.authorize(user);
+							document.body.background = Main.green_background;
 
-					this.get().reset();
+							auth.authorize();
+
+							this.get().reset();
+							this.message.clean();
+						} else {
+							this.message.showMessage("Неверный логин или пароль!");
+						}
+					})
 				}
 			});
 		}
 
 		validate() {
+			const login = this.login.input.get().value;
+			const pass = this.pass.input.get().value;
+
+			this.data = {"login": login, "password": pass};
+
 			return true;
 		}
 	}

@@ -3,7 +3,7 @@
 (function () {
 
 	const http = new HTTP();
-	http.BaseURL = 'localhost:8082';
+	http.BaseURL = 'http://localhost:8082';
 
 	const Main =  {
 		
@@ -23,8 +23,8 @@
 
 	window.Main = Main;
 
-	Main.pages.menu.show();
+	const auth = new Authorize;
 
-	Authorize.init();
+	Main.pages.menu.show();
 
 })();

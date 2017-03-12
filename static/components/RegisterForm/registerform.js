@@ -58,7 +58,7 @@
 				if (this.validate()) {
 
 					service.register(this.data.email, this.data.login, this.data.password, xhr => {
-						if (xhr.ok) {
+						if (xhr.status === 'ok') {
 							Main.pages.register.hide();
 							Main.pages.menu.show();
 
@@ -69,8 +69,7 @@
 							this.get().reset();
 							this.message.clean();
 						} else {
-							this.message.showMessage('Что-то пошло не так. Что именно, я смогу сказать только тогда, ' +
-								'когда Варя настроит возвращаемый статус с сервера');
+							this.message.showMessage('Что-то пошло не так');
 						}
 					});
 				}

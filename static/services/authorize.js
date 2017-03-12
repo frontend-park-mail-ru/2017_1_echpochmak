@@ -38,7 +38,7 @@
 
 		authorize() {
 			this.service.getUsername(xhr => {
-				if (xhr.login) {
+				if (xhr.status === 'ok') {
 					this.showForUser(xhr.login);
 				}
 			});

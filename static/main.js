@@ -19,7 +19,7 @@
 			}
 
 			const http = new HTTP();
-			http.BaseURL = 'https://gem-td-back.herokuapp.com/';
+			http.BaseURL = 'http://localhost:8082';
 
 			this.pages = {
 				menu: new Menu(),

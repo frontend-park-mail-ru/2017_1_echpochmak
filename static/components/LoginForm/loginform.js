@@ -47,7 +47,7 @@
 				if (this.validate()) {
 
 					service.login(this.data.login, this.data.password, xhr => {
-						if (xhr.ok) {
+						if (xhr.status === 'ok') {
 							Main.pages.login.hide();
 							Main.pages.menu.show();
 

@@ -25,7 +25,7 @@
 		}
 
 		show() {
-			document.querySelector('body').appendChild(this.get());
+			super.show();
 			this.update();
 		}
 

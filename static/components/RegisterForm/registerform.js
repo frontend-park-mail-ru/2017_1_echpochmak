@@ -49,6 +49,9 @@
 		}
 
 		makeListeners() {
+
+			const router = new Router();
+
 			this.on('submit', () => {
 				event.preventDefault();
 
@@ -59,10 +62,7 @@
 
 					service.register(this.data.email, this.data.login, this.data.password, xhr => {
 						if (xhr.status === 'ok') {
-							Main.pages.register.hide();
-							Main.pages.menu.show();
-
-							document.body.background = Main.green_background;
+							router.go('/');
 
 							auth.authorize();
 

@@ -11,6 +11,8 @@
 	const MultiPlayer = window.MultiPlayer;
 	const Authorize = window.Authorize;
 	const HTTP = window.HTTP;
+	const Router = window.Router;
+
 
 	class Main {
 		constructor() {
@@ -21,19 +23,17 @@
 			const http = new HTTP();
 			http.BaseURL = 'https://gem-td-back.herokuapp.com';
 
-			this.pages = {
-				menu: new Menu(),
-				login: new Login(),
-				register: new Register(),
-				about: new About(),
-				leader: new LeaderBoard(),
-				single: new SinglePlayer(),
-				multi: new MultiPlayer(),
-			};
-			this.green_background = './img/back_green.jpg';
-			this.white_background = './img/back_white.jpg';
+			const router = new Router();
 
-			this.pages.menu.show();
+			router.register('/', new Menu());
+			router.register('/login/', new Login());
+			router.register('/register/', new Register());
+			router.register('/about/', new About());
+			router.register('/leaders/', new LeaderBoard());
+			router.register('/game/', new SinglePlayer());
+			router.register('/multiplayer/', new MultiPlayer());
+
+			router.start();
 
 			Main.__instance = this;
 		}

@@ -58,22 +58,16 @@
 
 		makeListeners() {
 
+			const router = new Router();
+
 			this.loginButton.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.hide();
-				Main.pages.login.show();
-
-				document.body.background = Main.white_background;
+				router.go('/login/');
 			});
 
 			this.registerButton.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.hide();
-				Main.pages.register.show();
-
-				document.body.background = Main.white_background;
+				router.go('/register/');
 			});
 
 			this.exitButton.on('click', () => {

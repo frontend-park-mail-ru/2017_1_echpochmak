@@ -11,6 +11,8 @@
 			super('div', {
 				class: 'login'
 			});
+			this.background = this.white_background;
+			
 			this.padd = new BaseBlock('div', {
 				class: 'padd'
 			});

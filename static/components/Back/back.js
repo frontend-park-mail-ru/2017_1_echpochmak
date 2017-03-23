@@ -32,13 +32,11 @@
 
 		makeListeners(page) {
 
+			const router = new Router();
+
 			this.link.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.show();
-				page.hide();
-
-				document.body.background = Main.green_background;
+				router.go('/');
 			});
 		}
 	}

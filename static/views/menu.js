@@ -7,6 +7,7 @@
 	const MenuButton = window.MenuButton;
 	const Greeting = window.Greeting;
 	// const Main = window.Main;
+	const Router = window.Router;
 
 	class Menu extends BaseView {
 		constructor() {
@@ -58,34 +59,39 @@
 
 		makeListeners() {
 
+			const router = new Router();
+
 			this.singleButton.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.hide();
-				Main.pages.single.show();
+				router.go('/game/');
 			});
 
 			this.multiButton.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.hide();
-				Main.pages.multi.show();
-
+				router.go('/multiplayer/');
 			});
 
 			this.aboutButton.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.hide();
-				Main.pages.about.show();
+				router.go('/about/');
 			});
 
 			this.leaderButton.on('click', () => {
 				event.preventDefault();
-
-				Main.pages.menu.hide();
-				Main.pages.leader.show();
+				router.go('/leaders/');
 			});
+		}
+
+		loginSwitch(name) {
+			this.greeting.username.get().textContent = name;
+			this.greeting.noAuth.get().hidden = true;
+			this.greeting.auth.get().hidden = false;
+		}
+
+		unloginSwitch(name) {
+			this.greeting.username.get().textContent = name;
+			this.greeting.auth.get().hidden = true;
+			this.greeting.noAuth.get().hidden = false;
 		}
 	}
 

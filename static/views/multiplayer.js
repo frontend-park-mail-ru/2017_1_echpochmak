@@ -35,6 +35,16 @@
 			this.list.get().appendChild(this.noAuth.get());
 			this.list.get().appendChild(this.auth.get());
 		}
+
+		loginSwitch(name) {
+			this.noAuth.get().hidden = true;
+			this.auth.get().hidden = false;
+		}
+
+		unloginSwitch(name) {
+			this.auth.get().hidden = true;
+			this.noAuth.get().hidden = false;
+		}
 	}
 
 	window.MultiPlayer = MultiPlayer;

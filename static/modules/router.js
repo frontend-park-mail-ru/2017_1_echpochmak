@@ -28,13 +28,19 @@
 
 		start() {
 			window.onpopstate = () => {
-				this.go(window.location.pathname);
+				this.onroute(window.location.pathname);
 			}
 			
-			this.go(window.location.pathname);
+			this.onroute(window.location.pathname);
 		}
 
 		go(path) {
+			if (this.onroute(path)) {
+				window.history.pushState({ page: 1 }, 'Title 1', path);
+			}
+		}
+
+		onroute(path) {
 
 			let view = this._getViewByRoute(path);
 
@@ -45,8 +51,6 @@
 			if (this.currentView === view) {
 				return true;
 			}
-
-			window.history.pushState({ page: 1 }, 'Title 1', path);
 
 			if (this.currentView) {
 				this.currentView.hide();

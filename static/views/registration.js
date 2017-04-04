@@ -1,32 +1,27 @@
-(function () {
+'use strict';
 
-	'use strict';
+import BaseView from ./baseview.js
+import BaseBlock from ../components/BaseBlock/baseblock.js
+import RegisterForm from ../components/RegisterForm/registerform.js
 
-	const BaseView = window.BaseView;
-	const BaseBlock = window.BaseBlock;
-	const RegisterForm = window.RegisterForm;
+export default
+class Register extends BaseView {
+	constructor() {
+		super('div', {
+			class: 'registration'
+		});
+		this.background = this.white_background;
+		
+		this.padd = new BaseBlock('div', {
+			class: 'padd'
+		});
+		this.form = new RegisterForm();
 
-	class Register extends BaseView {
-		constructor() {
-			super('div', {
-				class: 'registration'
-			});
-			this.background = this.white_background;
-			
-			this.padd = new BaseBlock('div', {
-				class: 'padd'
-			});
-			this.form = new RegisterForm();
-
-			this.render();
-		}
-
-		render() {
-			this.get().appendChild(this.padd.get());
-			this.padd.get().appendChild(this.form.get());
-		}
+		this.render();
 	}
 
-	window.Register = Register;
-
-})();
+	render() {
+		this.get().appendChild(this.padd.get());
+		this.padd.get().appendChild(this.form.get());
+	}
+}

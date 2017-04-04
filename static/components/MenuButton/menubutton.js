@@ -1,16 +1,11 @@
-(function () {
+'use strict';
 
-	'use strict';
+import Link from '../Link/link.js'
 
-	const Link = window.Link;
-
-	class MenuButton extends Link {
-		constructor(text, attrs) {
-			super(text, attrs);
-			this.get().classList.add('btn-class', 'menu-button');
-		}
+export default
+class MenuButton extends Link {
+	constructor(text, attrs) {
+		super(text, attrs);
+		this.get().classList.add('btn-class', 'menu-button');
 	}
-
-	window.MenuButton = MenuButton;
-
-})();
+}

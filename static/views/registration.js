@@ -1,8 +1,8 @@
 'use strict';
 
-import BaseView from ./baseview.js
-import BaseBlock from ../components/BaseBlock/baseblock.js
-import RegisterForm from ../components/RegisterForm/registerform.js
+import BaseView from './baseview.js'
+import BaseBlock from '../components/BaseBlock/baseblock.js'
+import RegisterForm from '../components/RegisterForm/registerform.js'
 
 export default
 class Register extends BaseView {

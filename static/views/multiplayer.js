@@ -1,7 +1,7 @@
 'use strict';
 
-import BaseView from ./baseview.js
-import BaseBlock from ../components/BaseBlock/baseblock.js
+import BaseView from './baseview.js'
+import BaseBlock from '../components/BaseBlock/baseblock.js'
 
 export default
 class MultiPlayer extends BaseView {

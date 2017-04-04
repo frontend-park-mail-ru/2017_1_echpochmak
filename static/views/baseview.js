@@ -1,7 +1,7 @@
 'use strict';
 
-import BaseBlock from ../components/BaseBlock/baseblock.js
-import Back from ../components/Back/back.js
+import BaseBlock from '../components/BaseBlock/baseblock.js'
+import Back from '../components/Back/back.js'
 
 export default
 class BaseView extends BaseBlock {
@@ -32,7 +32,3 @@ class BaseView extends BaseBlock {
 
 	}
 }
-
-window.BaseView = BaseView;
-
-})();

@@ -1,8 +1,8 @@
 'use strict';
 
-import BaseView from ./baseview.js
-import BaseBlock from ../components/BaseBlock/baseblock.js
-import UserService from ../services/userservice.js
+import BaseView from './baseview.js'
+import BaseBlock from '../components/BaseBlock/baseblock.js'
+import UserService from '../services/userservice.js'
 
 export default
 class LeaderBoard extends BaseView {

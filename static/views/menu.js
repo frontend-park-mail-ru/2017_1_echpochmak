@@ -1,10 +1,10 @@
 'use strict';
 
-import BaseView from ./baseview.js
-import BaseBlock from ../components/BaseBlock/baseblock.js
-import MenuButton from ../components/MenuButton/menubutton.js
-import Greeting from ../components/Greeting/greeting.js
-import Router from ../modules/router.js
+import BaseView from './baseview.js'
+import BaseBlock from '../components/BaseBlock/baseblock.js'
+import MenuButton from '../components/MenuButton/menubutton.js'
+import Greeting from '../components/Greeting/greeting.js'
+import Router from '../modules/router.js'
 
 export default
 class Menu extends BaseView {

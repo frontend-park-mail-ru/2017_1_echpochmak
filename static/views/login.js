@@ -1,8 +1,8 @@
 'use strict';
 
-import BaseView from ./baseview.js
-import BaseBlock from ../components/BaseBlock/baseblock.js
-import LoginForm from ../components/LoginForm/loginform.js
+import BaseView from './baseview.js'
+import BaseBlock from '../components/BaseBlock/baseblock.js'
+import LoginForm from '../components/LoginForm/loginform.js'
 
 export default
 class Login extends BaseView {

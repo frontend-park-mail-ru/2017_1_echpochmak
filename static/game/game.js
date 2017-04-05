@@ -434,6 +434,7 @@
 					stroke: 'black',
 					strokeWidth: 0
 				});
+				// alert(variantStay);
 			};
 		};
 		if (currentNerTower){
@@ -609,7 +610,7 @@
 		enemies.push(new Konva.Rect(enemie))
 		var waveTimer = setInterval(function(){
 			draw()
-			enemies[0].setY(enemies[0].getY() + 10)
+			enemies[0].setY(enemies[0].getY() + 1)
 			if (enemies[0].getY() > mapY + mapSize * fieldSize){
 				clearInterval(waveTimer);
 				enemies = []

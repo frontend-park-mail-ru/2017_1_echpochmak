@@ -74,19 +74,22 @@ class SingleStrategy {
 		let currentNewTower;
 		let variantStay;
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			if ((field['field'].getX() + fieldSize / 2 == fieldsNewTower[i]['towerDraw'].getX()) && (field['field'].getY() + fieldSize / 2 == fieldsNewTower[i]['towerDraw'].getY())){
-				currentNewTower = fieldsNewTower[i];
-				variantStay = new Konva.Circle({
-					x: variantsX + variantsXSize * 0.1,
-					y: variantsY + variantsYSize * 0.5,
-					radius: variantsYSize / 2 - 7,
-					fill: circleRed['color'],
-					stroke: 'black',
-					strokeWidth: 0
-				});
+			if ((field['field'].getX() + fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + fieldSize / 2 == this.fieldsNewTower[i].draw.getY())) {
+				currentNewTower = this.fieldsNewTower[i];
+				// variantStay = new Konva.Circle({
+				// 	x: variantsX + variantsXSize * 0.1,
+				// 	y: variantsY + variantsYSize * 0.5,
+				// 	radius: variantsYSize / 2 - 7,
+				// 	fill: circleRed['color'],
+				// 	stroke: 'black',
+				// 	strokeWidth: 0
+				// });
+				variantStay = new CircleTower(
+					
+				)
 			};
 		};
-		if (currentNerTower){
+		if (currentNewTower){
 			towers[currentNerTower['towerKind']['name']].push(1);
 			field['tower'] = currentNerTower['towerDraw'];
 		}
@@ -131,5 +134,30 @@ class SingleStrategy {
 		}
 
 		draw();
+	}
+
+	findPath() {
+		let matrix = Array(mapSize);
+		for (let i = 0; i < mapSize; ++i) {
+			matrix[i] = Array(mapSize);
+		}
+
+		for (let i = 0; i < mapSize; ++i) {
+			for (let j = 0; j < mapSize; ++j) {
+				if (this.fields[i][j].tower && this.fields[i][j].tower !== 0) {
+					matrix[i][j] = 1;
+				} else {
+					matrix[i][j] = 0;
+				}
+			}
+		}
+
+		const grid = new PF.Grid(matrix);
+		const finder = new PF.BiAStarFinder({
+			allowDiagonal: true,
+			heuristic: PF.Heuristic.euclidean
+		});
+
+		const path = finder.findPath(start.x, stert.y, finish.x, finish.y, grid);
 	}
 }

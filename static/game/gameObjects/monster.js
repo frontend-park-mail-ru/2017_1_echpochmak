@@ -1,8 +1,8 @@
 class Monster {
-	constructor(name, x, y) {
+	constructor(name) {
 		this.draw = new Konva.RegularPolygon({
-			x: x,
-			y: y,
+			x: mapX,
+			y: mapY,
 			sides: 3,
 			radius: name.size,
 			fill: name.color,

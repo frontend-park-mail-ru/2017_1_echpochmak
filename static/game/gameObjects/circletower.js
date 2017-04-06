@@ -1,5 +1,7 @@
+import Setting from '../settings.js'
+export default
 class CircleTower {
-	constructor(name, x ,y radius) {
+	constructor(name, x, y, radius) {
 		this.draw = new Konva.Circle({
 			x: x,
 			y: y,

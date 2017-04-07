@@ -239,7 +239,7 @@ class SingleStrategy {
 		};
 	}
 
-	findPath() {
+	findPath(checkpoints) {
 		let matrix = Array(mapSize);
 		for (let i = 0; i < mapSize; ++i) {
 			matrix[i] = Array(mapSize);
@@ -255,12 +255,27 @@ class SingleStrategy {
 			}
 		}
 
-		const grid = new PF.Grid(matrix);
 		const finder = new PF.BiAStarFinder({
 			allowDiagonal: true,
 			heuristic: PF.Heuristic.euclidean
 		});
 
-		const path = finder.findPath(start.x, stert.y, finish.x, finish.y, grid);
+		let path = [];
+		curStart = start;
+		for (let i = 0; i < checkpoints.length; i++) {
+			if (i > 0) {
+				curStart = checkpoints[i-1];
+			}
+			
+			let subStart = curStart;
+			let subFinish = checkpoints[i];
+
+			const grid = new PF.Grid(matrix);
+			let subPath = finder.findPath(subStart[0], subStart[1], subFinish[0], subFinish[1], grid);
+
+			path = path.concat(subPath);
+		}
+
+		return(path);
 	}
 }

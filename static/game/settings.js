@@ -3,6 +3,7 @@ const Setting = {
 	// fieldSize: window.innerHeight * 0.9 / Setting.mapSize,
 	mapX: window.innerWidth * 0.2,	
 	mapY: window.innerHeight * 0.05,
+	variantRadius: 10,
 	bulletStep: 10,
 
 	circleRed: {
@@ -39,6 +40,18 @@ const Setting = {
 		name: 'circleSad',
 		color: '#0000FF',
 		power: 35
+	},
+
+	triangl: {
+		name: 'triangl',
+		size: 30,
+		color: '#00FF00',
+		healh: 100,
+	},
+
+	stone: {
+		name: 'stone',
+		color: 'black',
 	},
 
 	// circles: [

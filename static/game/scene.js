@@ -10,6 +10,8 @@ class Scene {
 		this.state = state;
 	}
 
+
+
 	render() {
 		let stage = new Konva.Stage({
 			container: 'konva',
@@ -23,7 +25,7 @@ class Scene {
 				// console.log(this.state.fields[i][j].field)
 				layer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
-					layer.add(this.state.fields[i][j].tower);
+					layer.add(this.state.fields[i][j].tower.draw);
 				};
 				
 			};
@@ -39,10 +41,10 @@ class Scene {
 		//	layer.add(this.state.variantElements[i]);
 		//}
 		for (let i = 0; i < this.state.variantsShow.length; i++){
-			layer.add(this.state.variantsShow[i]);
+			layer.add(this.state.variantsShow[i].draw);
 		}
 		for (let i = 0; i < this.state.enemies.length; i++){
-			layer.add(this.state.enemies[i]);
+			layer.add(this.state.enemies[i].draw);
 		}
 
 		// for (kindTowers in this.state.towers) {

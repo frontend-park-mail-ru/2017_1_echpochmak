@@ -16,12 +16,12 @@ class CircleTower {
 
 	fire() {
 		this.bulletes.push(new Konva.Circle({
-			x: this.draw.x,
-			y: this.draw.y,
+			x: this.draw.getX(),
+			y: this.draw.getY(),
 			radius: 5,
 			stroke: 'black',
 			strokeWidth: 0,
-			fill: this.draw.fill
+			fill: this.draw.getFill()
 		}));
 	}
 }

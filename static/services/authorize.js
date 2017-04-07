@@ -1,80 +1,51 @@
 'use strict';
 
-(function () {
+import UserService from './userservice.js'
+import Router from '../modules/router.js'
 
-	const UserService = window.UserService;
-
-	class Authorize {
-		constructor() {
-			if (Authorize.__instance) {
-				return Authorize.__instance;
-			}
-
-			this.service = new UserService();
-
-			this.anonym_user = 'Гость';
-			this.authorized_blocks = [
-				Main.pages.menu.greeting.auth.get(),
-				Main.pages.multi.auth.get()
-			];
-			this.no_authorized_blocks = [
-				Main.pages.menu.greeting.noAuth.get(),
-				Main.pages.multi.noAuth.get()
-			];
-			this.username_block = Main.pages.menu.greeting.username.get();
-
-			this.showForGuest();
-
-			this.service.getUsername(xhr => {
-				if (xhr.login) {
-					this.showForUser(xhr.login);
-				} else {
-					this.showForGuest();
-				}
-			});
-
-			Authorize.__instance = this;
+export default
+class Authorize {
+	constructor() {
+		if (Authorize.__instance) {
+			return Authorize.__instance;
 		}
 
-		authorize() {
-			this.service.getUsername(xhr => {
-				if (xhr.login) {
-					this.showForUser(xhr.login);
-				}
-			});
-		}
+		this.service = new UserService();
+		this.router = new Router();
+		this.anonymUser = 'Гость';
+		
+		this.showForGuest();
 
-		deauthorize() {
-			this.service.logout(xhr => {
+		this.service.getUsername(xhr => {
+			if (xhr.login) {
+				this.showForUser(xhr.login);
+			} else {
 				this.showForGuest();
-			});
-		}
+			}
+		});
 
-		showForUser(user) {
-			this.no_authorized_blocks.forEach((item, i, arr) => {
-				item.hidden = true;
-			});
-
-			this.authorized_blocks.forEach((item, i, arr) => {
-				item.hidden = false;
-			});
-
-			this.username_block.textContent = user;
-		}
-
-		showForGuest() {
-			this.authorized_blocks.forEach((item, i, arr) => {
-				item.hidden = true;
-			});
-
-			this.no_authorized_blocks.forEach((item, i, arr) => {
-				item.hidden = false;
-			});
-
-			this.username_block.textContent = this.anonym_user;
-		}
+		Authorize.__instance = this;
 	}
 
-	window.Authorize = Authorize;
+	authorize() {
+		this.service.getUsername(xhr => {
+			if (xhr.status === 'ok') {
+				this.showForUser(xhr.login);
+			}
+		});
+	}
 
-})();
+	deauthorize() {
+		this.service.logout(xhr => {
+			this.showForGuest();
+		});
+	}
+
+	showForUser(user) {
+		this.router.loginSwitch(user);
+	}
+
+	showForGuest() {
+		this.router.unloginSwitch(this.anonymUser);
+	}
+}

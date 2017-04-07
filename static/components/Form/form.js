@@ -1,18 +1,13 @@
-(function () {
+'use strict';
 
-	'use strict';
+import BaseBlock from '../BaseBlock/baseblock.js'
 
-	const BaseBlock = window.BaseBlock;
-
-	class Form extends BaseBlock {
-		constructor() {
-			super('form', {
-				class: 'form-horizontal',
-				action: '#'
-			});
-		}
+export default
+class Form extends BaseBlock {
+	constructor() {
+		super('form', {
+			class: 'form-horizontal',
+			action: '#'
+		});
 	}
-
-	window.Form = Form;
-
-})();
+}

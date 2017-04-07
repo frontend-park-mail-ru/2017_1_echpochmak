@@ -1,35 +1,45 @@
-(function () {
+'use strict';
 
-	'use strict';
+import BaseView from './baseview.js'
+import BaseBlock from '../components/BaseBlock/baseblock.js'
+import SingleStrategy from '../game/strategy.js'
 
-	const BaseView = window.BaseView;
-	const BaseBlock = window.BaseBlock;
+export default
+class SinglePlayer extends BaseView {
+	constructor() {
+		super('div', {
+			class: 'singleplayer'
+		});
+		this.padd = new BaseBlock('div', {
+			class: 'padd'
+		});
+		this.list = new BaseBlock('div', {
+			class: 'list',
+			align: 'center'
+		});
+		this.newGame = new BaseBlock('button', {
+			align: 'center'
+		});
+		this.newGame.get().innerHTML = 'Начать игру';
 
-	class SinglePlayer extends BaseView {
-		constructor() {
-			super('div', {
-				class: 'singleplayer'
-			});
-			this.padd = new BaseBlock('div', {
-				class: 'padd'
-			});
-			this.list = new BaseBlock('div', {
-				class: 'list',
-				align: 'center'
-			});
-			this.cnt = new BaseBlock('span', {});
-			this.cnt.get().innerHTML = 'Добро пожаловать в одиночную игру!';
-
-			this.render();
-		}
-
-		render() {
-			this.get().appendChild(this.padd.get());
-			this.padd.get().appendChild(this.list.get());
-			this.list.get().appendChild(this.cnt.get());
-		}
+		this.render();
+		this.makeListeners();
 	}
 
-	window.SinglePlayer = SinglePlayer;
+	makeListeners() {
+		this.newGame.on('click', () => {
+			this.get().removeChild(this.padd.get());
+			const konva = new BaseBlock('div', {
+				id: 'konva'
+			});
+			this.get().appendChild(konva.get());
+			const strategy = new SingleStrategy();
+		})
+	}
 
-})();
+	render() {
+		this.get().appendChild(this.padd.get());
+		this.padd.get().appendChild(this.list.get());
+		this.list.get().appendChild(this.newGame.get());
+	}
+}

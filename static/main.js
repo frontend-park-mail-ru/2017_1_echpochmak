@@ -1,46 +1,29 @@
 'use strict';
 
-(function () {
+import Menu from './views/menu.js'
+import Login from './views/login.js'
+import Register from './views/registration.js'
+import About from './views/about.js'
+import LeaderBoard from './views/leaderboard.js'
+import SinglePlayer from './views/singleplayer.js'
+import MultiPlayer from './views/multiplayer.js'
+import Authorize from './services/authorize.js'
+import HTTP from './modules/http.js'
+import Router from './modules/router.js'
 
-	const Menu = window.Menu;
-	const Login = window.Login;
-	const Register = window.Register;
-	const About = window.About;
-	const LeaderBoard = window.LeaderBoard;
-	const SinglePlayer = window.SinglePlayer;
-	const MultiPlayer = window.MultiPlayer;
-	const Authorize = window.Authorize;
-	const HTTP = window.HTTP;
+const http = new HTTP();
+const router = new Router();
 
-	class Main {
-		constructor() {
-			if (Main.__instance) {
-				return Main.__instance;
-			}
+http.BaseURL = 'https://gem-td-back.herokuapp.com';
 
-			const http = new HTTP();
-			http.BaseURL = 'https://gem-td-back.herokuapp.com/';
+router.register('/', new Menu());
+router.register('/login/', new Login());
+router.register('/register/', new Register());
+router.register('/about/', new About());
+router.register('/leaders/', new LeaderBoard());
+router.register('/game/', new SinglePlayer());
+router.register('/multiplayer/', new MultiPlayer());
 
-			this.pages = {
-				menu: new Menu(),
-				login: new Login(),
-				register: new Register(),
-				about: new About(),
-				leader: new LeaderBoard(),
-				single: new SinglePlayer(),
-				multi: new MultiPlayer(),
-			};
-			this.green_background = './img/back_green.jpg';
-			this.white_background = './img/back_white.jpg';
+router.start();
 
-			this.pages.menu.show();
-
-			Main.__instance = this;
-		}
-	}
-
-	window.Main = new Main();
-
-	const auth = new Authorize();
-
-})();
+const auth = new Authorize();

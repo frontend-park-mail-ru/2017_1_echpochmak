@@ -302,6 +302,8 @@ Setting.pentagons = [
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Back_back_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_router_js__ = __webpack_require__(1);
+
 
 
 
@@ -310,7 +312,13 @@ Setting.pentagons = [
 class BaseView extends __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblock_js__["a" /* default */] {
 	constructor(tag, attrs) {
 		super(tag, attrs);
-		this.back = new __WEBPACK_IMPORTED_MODULE_1__components_Back_back_js__["a" /* default */](this);
+		this.back = new __WEBPACK_IMPORTED_MODULE_1__components_Back_back_js__["a" /* default */]();
+
+		this.back.onclick(() => {
+			const router = new __WEBPACK_IMPORTED_MODULE_2__modules_router_js__["a" /* default */]();
+			event.preventDefault();
+			router.go('/');
+		})
 		this.get().appendChild(this.back.get());
 
 		this.green_background = './img/back_green.jpg';
@@ -895,6 +903,12 @@ class LeaderBoard extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
+
+
+
 
 
 
@@ -912,6 +926,31 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 			class: 'padd'
 		});
 		this.form = new __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__["a" /* default */]();
+
+		this.form.onsubmit(() => {
+
+			event.preventDefault();
+
+			const service = new __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__["a" /* default */]();
+			const auth = new __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__["a" /* default */]();
+			const router = new __WEBPACK_IMPORTED_MODULE_5__modules_router_js__["a" /* default */]();
+
+			if (this.form.validate()) {
+
+				service.login(this.form.data.login, this.form.data.password, xhr => {
+					if (xhr.status === 'ok') {
+						router.go('/');
+
+						auth.authorize();
+
+						this.form.get().reset();
+						this.form.message.clean();
+					} else {
+						this.form.message.showMessage('Неверный логин или пароль!');
+					}
+				});
+			}
+		})
 
 		this.render();
 	}
@@ -1097,6 +1136,12 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(4);
+
+
+
 
 
 
@@ -1114,6 +1159,30 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 			class: 'padd'
 		});
 		this.form = new __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__["a" /* default */]();
+		this.form.onsubmit(() => {
+
+			event.preventDefault();
+
+			const router = new __WEBPACK_IMPORTED_MODULE_3__modules_router_js__["a" /* default */]();
+			const service = new __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__["a" /* default */]();
+			const auth = new __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__["a" /* default */]();
+
+			if (this.form.validate()) {
+
+				service.register(this.form.data.email, this.form.data.login, this.form.data.password, xhr => {
+					if (xhr.status === 'ok') {
+						router.go('/');
+
+						auth.authorize();
+
+						this.form.get().reset();
+						this.form.message.clean();
+					} else {
+						this.form.message.showMessage('Что-то пошло не так');
+					}
+				});
+			}
+		})
 
 		this.render();
 	}
@@ -1198,7 +1267,7 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 
 
 class Back extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */] {
-	constructor(page) {
+	constructor() {
 		super('div', {
 			class: 'back',
 			align: 'right'
@@ -1213,23 +1282,18 @@ class Back extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 		this.text.get().innerHTML = 'Обратно в меню';
 
 		this.render();
-		this.makeListeners(page);
+	}
+
+	onclick(callback) {
+		this.link.on('click', () => {
+			callback();
+		})
 	}
 
 	render() {
 		this.get().appendChild(this.link.get());
 		this.link.get().appendChild(this.image.get());
 		this.get().appendChild(this.text.get());
-	}
-
-	makeListeners(page) {
-
-		const router = new __WEBPACK_IMPORTED_MODULE_2__modules_router_js__["a" /* default */]();
-
-		this.link.on('click', () => {
-			event.preventDefault();
-			router.go('/');
-		});
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Back;
@@ -1390,7 +1454,7 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 		});
 
 		this.render();
-		this.makeListeners();
+		// this.makeListeners();
 	}
 
 	render() {
@@ -1398,6 +1462,12 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 		this.get().appendChild(this.login.get());
 		this.get().appendChild(this.pass.get());
 		this.get().appendChild(this.button.get());
+	}
+
+	onsubmit(callback) {
+		this.on('submit', () => {
+			callback();
+		})
 	}
 
 	makeListeners() {
@@ -1514,7 +1584,7 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 		});
 
 		this.render();
-		this.makeListeners();
+		// this.makeListeners();
 	}
 
 	render() {
@@ -1526,32 +1596,10 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 		this.get().appendChild(this.button.get());
 	}
 
-	makeListeners() {
-
-		const router = new __WEBPACK_IMPORTED_MODULE_5__modules_router_js__["a" /* default */]();
-
+	onsubmit(callback) {
 		this.on('submit', () => {
-			event.preventDefault();
-
-			const service = new __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__["a" /* default */]();
-			const auth = new __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__["a" /* default */]();
-
-			if (this.validate()) {
-
-				service.register(this.data.email, this.data.login, this.data.password, xhr => {
-					if (xhr.status === 'ok') {
-						router.go('/');
-
-						auth.authorize();
-
-						this.get().reset();
-						this.message.clean();
-					} else {
-						this.message.showMessage('Что-то пошло не так');
-					}
-				});
-			}
-		});
+			callback();
+		})
 	}
 
 	validate() {
@@ -2093,7 +2141,7 @@ class SingleStrategy {
 		};
 	}
 
-	findPath() {
+	findPath(checkpoints) {
 		let matrix = Array(mapSize);
 		for (let i = 0; i < mapSize; ++i) {
 			matrix[i] = Array(mapSize);
@@ -2109,13 +2157,28 @@ class SingleStrategy {
 			}
 		}
 
-		const grid = new PF.Grid(matrix);
 		const finder = new PF.BiAStarFinder({
 			allowDiagonal: true,
 			heuristic: PF.Heuristic.euclidean
 		});
 
-		const path = finder.findPath(start.x, stert.y, finish.x, finish.y, grid);
+		let path = [];
+		curStart = start;
+		for (let i = 0; i < checkpoints.length; i++) {
+			if (i > 0) {
+				curStart = checkpoints[i-1];
+			}
+			
+			let subStart = curStart;
+			let subFinish = checkpoints[i];
+
+			const grid = new PF.Grid(matrix);
+			let subPath = finder.findPath(subStart[0], subStart[1], subFinish[0], subFinish[1], grid);
+
+			path = path.concat(subPath);
+		}
+
+		return(path);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SingleStrategy;

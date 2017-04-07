@@ -6,7 +6,7 @@ import Router from '../../modules/router.js'
 
 export default
 class Back extends BaseBlock {
-	constructor(page) {
+	constructor() {
 		super('div', {
 			class: 'back',
 			align: 'right'
@@ -21,22 +21,17 @@ class Back extends BaseBlock {
 		this.text.get().innerHTML = 'Обратно в меню';
 
 		this.render();
-		this.makeListeners(page);
+	}
+
+	onclick(callback) {
+		this.link.on('click', () => {
+			callback();
+		})
 	}
 
 	render() {
 		this.get().appendChild(this.link.get());
 		this.link.get().appendChild(this.image.get());
 		this.get().appendChild(this.text.get());
-	}
-
-	makeListeners(page) {
-
-		const router = new Router();
-
-		this.link.on('click', () => {
-			event.preventDefault();
-			router.go('/');
-		});
 	}
 }

@@ -37,7 +37,7 @@ class RegisterForm extends Form {
 		});
 
 		this.render();
-		this.makeListeners();
+		// this.makeListeners();
 	}
 
 	render() {
@@ -49,32 +49,10 @@ class RegisterForm extends Form {
 		this.get().appendChild(this.button.get());
 	}
 
-	makeListeners() {
-
-		const router = new Router();
-
+	onsubmit(callback) {
 		this.on('submit', () => {
-			event.preventDefault();
-
-			const service = new UserService();
-			const auth = new Authorize();
-
-			if (this.validate()) {
-
-				service.register(this.data.email, this.data.login, this.data.password, xhr => {
-					if (xhr.status === 'ok') {
-						router.go('/');
-
-						auth.authorize();
-
-						this.get().reset();
-						this.message.clean();
-					} else {
-						this.message.showMessage('Что-то пошло не так');
-					}
-				});
-			}
-		});
+			callback();
+		})
 	}
 
 	validate() {

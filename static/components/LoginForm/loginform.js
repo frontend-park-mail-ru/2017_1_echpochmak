@@ -28,7 +28,7 @@ class LoginForm extends Form {
 		});
 
 		this.render();
-		this.makeListeners();
+		// this.makeListeners();
 	}
 
 	render() {
@@ -36,6 +36,12 @@ class LoginForm extends Form {
 		this.get().appendChild(this.login.get());
 		this.get().appendChild(this.pass.get());
 		this.get().appendChild(this.button.get());
+	}
+
+	onsubmit(callback) {
+		this.on('submit', () => {
+			callback();
+		})
 	}
 
 	makeListeners() {

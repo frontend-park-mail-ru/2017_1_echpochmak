@@ -1,5 +1,7 @@
+import Setting from '../settings.js'
+export default
 class PentagonTower {
-	constructor(name, x ,y radius) {
+	constructor(name, x, y, radius) {
 		this.draw = new Konva.RegularPolygon({
 			x: x,
 			y: y,

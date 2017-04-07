@@ -1,5 +1,7 @@
+import Setting from '../settings.js'
+export default
 class StarTower {
-	constructor(name, x ,y radius) {
+	constructor(name, x, y, radius) {
 		this.draw = new Konva.Star({
 			x: x,
 			y: y,

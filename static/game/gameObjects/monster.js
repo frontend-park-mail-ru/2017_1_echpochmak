@@ -1,8 +1,10 @@
+import Setting from '../settings.js'
+export default
 class Monster {
-	constructor(name, x, y) {
+	constructor(name) {
 		this.draw = new Konva.RegularPolygon({
-			x: x,
-			y: y,
+			x: Setting.mapX,
+			y: Setting.mapY,
 			sides: 3,
 			radius: name.size,
 			fill: name.color,

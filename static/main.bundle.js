@@ -1919,7 +1919,7 @@ class Scene {
 
 
 
-var way = [[1,1], [2, 8], [7,4], [9,1], [9,9]];
+var way = [[0,0], [0, 9], [9,0], [9,9]];
 
 class SingleStrategy {
 	
@@ -1980,9 +1980,13 @@ class SingleStrategy {
 
 		this.state = {};
 
-		this.gameInterval = setInterval(() => {
+		// this.gameInterval = setInterval(() => {
+		// 	this.gameLoop.call(this);
+		// }, 17);
+
+		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
-		}, 17);
+		});
 	}
 
 	gameLoop() {
@@ -1996,6 +2000,10 @@ class SingleStrategy {
 		this.scene.setState(this.state);
 		this.scene.render();
 		// this.scene.testDraw();
+
+		requestAnimationFrame(() => {
+			this.gameLoop.call(this);
+		});
 	}
 
 	updateState() {
@@ -2014,7 +2022,7 @@ class SingleStrategy {
 	onClickField(field) {
 		this.generateTower(field);
 		field.field.setStroke('red');
-		//this.variantsShow = [];
+		this.variantsShow = [];
 	}
 
 	onClickStayVariant(field, currentNewTower){
@@ -2032,7 +2040,7 @@ class SingleStrategy {
 		this.towers[currentNewTower.kind.name]++;
 		this.fieldsWithTowers.push(field);
 		this.fieldsNewTower = [];
-		//variantsShow = [];
+		this.variantsShow = [];
 	}
 
 	onClickWaveButton(){
@@ -2061,6 +2069,8 @@ class SingleStrategy {
 	}
 
 	createVariants(field) {
+		this.variantsShow = [];
+
 		let currentNewTower;
 		let variantStay;
 		//this.variantsShow = [];

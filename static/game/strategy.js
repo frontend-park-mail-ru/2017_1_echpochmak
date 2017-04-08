@@ -6,7 +6,7 @@ import PentagonTower from './gameObjects/pentagontower.js'
 import StarTower from './gameObjects/startower.js'
 import VariantBlock from './variantBlock.js'
 
-var way = [[1,1], [2, 8], [7,4], [9,1], [9,9]];
+var way = [[0,0], [0, 9], [9,0], [9,9]];
 
 export default
 class SingleStrategy {
@@ -68,9 +68,13 @@ class SingleStrategy {
 
 		this.state = {};
 
-		this.gameInterval = setInterval(() => {
+		// this.gameInterval = setInterval(() => {
+		// 	this.gameLoop.call(this);
+		// }, 17);
+
+		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
-		}, 17);
+		});
 	}
 
 	gameLoop() {
@@ -84,6 +88,10 @@ class SingleStrategy {
 		this.scene.setState(this.state);
 		this.scene.render();
 		// this.scene.testDraw();
+
+		requestAnimationFrame(() => {
+			this.gameLoop.call(this);
+		});
 	}
 
 	updateState() {
@@ -102,7 +110,7 @@ class SingleStrategy {
 	onClickField(field) {
 		this.generateTower(field);
 		field.field.setStroke('red');
-		//this.variantsShow = [];
+		this.variantsShow = [];
 	}
 
 	onClickStayVariant(field, currentNewTower){
@@ -120,14 +128,14 @@ class SingleStrategy {
 		this.towers[currentNewTower.kind.name]++;
 		this.fieldsWithTowers.push(field);
 		this.fieldsNewTower = [];
-		//variantsShow = [];
+		this.variantsShow = [];
 	}
 
 	onClickWaveButton(){
 		this.newStones = 0;
 		this.variantRects.length = 4;
 		this.status = 'Wave';
-		//this.variantsShow = [];
+		this.variantsShow = [];
 	}
 
 	generateTower(field) {
@@ -149,6 +157,8 @@ class SingleStrategy {
 	}
 
 	createVariants(field) {
+		this.variantsShow = [];
+
 		let currentNewTower;
 		let variantStay;
 		//this.variantsShow = [];
@@ -267,7 +277,7 @@ class SingleStrategy {
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
 		}
-		if (this.enemies.length === 0){
+		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.numberEnemies = 0;
 			for (let i = 0; i < Setting.mapSize; i++){

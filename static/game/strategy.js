@@ -277,7 +277,7 @@ class SingleStrategy {
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
 		}
-		if (this.enemies.length === 0) {
+		if (this.enemies.length === 0){
 			this.status = 'playerStep';
 			this.numberEnemies = 0;
 			for (let i = 0; i < Setting.mapSize; i++){

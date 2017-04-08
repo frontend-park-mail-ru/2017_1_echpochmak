@@ -194,6 +194,9 @@ class Router {
 
 "use strict";
 const Setting = {
+
+	way: [[0,0], [0, 9], [9,0], [9,9]],
+
 	mapSize: 10,
 	// fieldSize: window.innerHeight * 0.9 / Setting.mapSize,
 	mapX: window.innerWidth * 0.2,	
@@ -250,15 +253,6 @@ const Setting = {
 		color: 'black',
 	},
 
-	// circles: [
-	// 	this.circleRed, 
-	// 	this.circleGreen, 
-	// 	this.circleYellow, 
-	// 	this.circleBlue, 
-	// 	this.circleSad, 
-	// 	this.circlePink
-	// ],
-
 	pentagonRPS: {
 		name: 'pentagonRPS',
 		power: 70,
@@ -276,12 +270,6 @@ const Setting = {
 		power: 70,
 		colors: ['#00FF00', '#FFFF00', '#FF0000'],
 	},
-
-	// pentagons: [
-	// 	this.pentagonRPS, 
-	// 	this.pentagonSBG, 
-	// 	this.pentagonGYR
-	// ],
 
 	star: {
 		name: 'star',
@@ -2047,7 +2035,7 @@ class SingleStrategy {
 		this.newStones = 0;
 		this.variantRects.length = 4;
 		this.status = 'Wave';
-		//this.variantsShow = [];
+		this.variantsShow = [];
 	}
 
 	generateTower(field) {

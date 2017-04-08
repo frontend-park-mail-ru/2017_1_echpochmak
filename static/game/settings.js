@@ -1,6 +1,8 @@
 const Setting = {
 
-	way: [[0,0], [0, 9], [9,0], [9,9]],
+	start: [0,0],
+	finish: [9,9],
+	checkpoints: [[0, 9], [9,0]],
 
 	mapSize: 10,
 	// fieldSize: window.innerHeight * 0.9 / Setting.mapSize,

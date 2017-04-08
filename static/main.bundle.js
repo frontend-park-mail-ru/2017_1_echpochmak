@@ -195,7 +195,9 @@ class Router {
 "use strict";
 const Setting = {
 
-	way: [[0,0], [0, 9], [9,0], [9,9]],
+	start: [0,0],
+	finish: [9,9],
+	checkpoints: [[0, 9], [9,0]],
 
 	mapSize: 10,
 	// fieldSize: window.innerHeight * 0.9 / Setting.mapSize,
@@ -1907,7 +1909,7 @@ class Scene {
 
 
 
-var way = [[0,0], [0, 9], [9,0], [9,9]];
+// var way = [[0,0], [0, 9], [9,0], [9,9]];
 
 class SingleStrategy {
 	
@@ -1925,7 +1927,8 @@ class SingleStrategy {
 		this.variantsShow = [];
 		this.enemies = [];
 		this.numberEnemies = 0;
-		
+		this.path = [];
+
 		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
 			this.fields[i] = Array(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize);
 		}
@@ -2138,6 +2141,11 @@ class SingleStrategy {
 	}
 
 	gameWave() {
+
+		if (this.path.length === 0) {
+			this.path = this.findPath(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].checkpoints);
+		}
+
 		if (this.numberEnemies < 20){
 			this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].triangl));
 			this.numberEnemies++;
@@ -2160,12 +2168,12 @@ class SingleStrategy {
 				this.fieldsWithTowers[i].tower.bulletes[j].setY(this.fieldsWithTowers[i].tower.bulletes[j].getY() + stepY);
 			};
 		};
-		if (this.enemies[0].numberTurns === way.length){
+		if (this.enemies[0].numberTurns === this.path.length){
 			this.enemies.splice(0, 1);
 		};
 		for (let i = 0; i < this.enemies.length; i++){
 			console.log(this.enemies[i].numberTurns)
-			let place = way[this.enemies[i].numberTurns];
+			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + place[0] * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2);
 			let distY = -this.enemies[i].draw.getY() + (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + place[1] * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2);
 			if (Math.abs(distX) < this.enemies[i].kind.size && Math.abs(distY) < this.enemies[i].kind.size){
@@ -2177,7 +2185,7 @@ class SingleStrategy {
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
 		}
-		if (this.enemies.length === 0){
+		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.numberEnemies = 0;
 			for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
@@ -2188,17 +2196,22 @@ class SingleStrategy {
 			for (let i = 0; i < this.fieldsWithTowers.length; i++){
 				this.fields[this.fieldsWithTowers[i].coordinates[0]][this.fieldsWithTowers[i].coordinates[1]].tower.bulletes = [];
 			}
+			this.path = [];
 		};
 	}
 
 	findPath(checkpoints) {
-		let matrix = Array(mapSize);
-		for (let i = 0; i < mapSize; ++i) {
-			matrix[i] = Array(mapSize);
+
+		// checkpoints = checkpoints.concat(Setting.finish);
+		checkpoints.push(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].finish);
+
+		let matrix = Array(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize);
+		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; ++i) {
+			matrix[i] = Array(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize);
 		}
 
-		for (let i = 0; i < mapSize; ++i) {
-			for (let j = 0; j < mapSize; ++j) {
+		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; ++i) {
+			for (let j = 0; j < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; ++j) {
 				if (this.fields[i][j].tower && this.fields[i][j].tower !== 0) {
 					matrix[i][j] = 1;
 				} else {
@@ -2213,7 +2226,7 @@ class SingleStrategy {
 		});
 
 		let path = [];
-		curStart = start;
+		let curStart = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].start;
 		for (let i = 0; i < checkpoints.length; i++) {
 			if (i > 0) {
 				curStart = checkpoints[i-1];

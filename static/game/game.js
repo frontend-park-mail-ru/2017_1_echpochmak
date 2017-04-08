@@ -12,7 +12,7 @@
 	var betweenVariants = 120;
 	var newStones = 0;
 	var isEndWave = false;
-	var bulletStep = 10;
+	var bulletStep = 100;
 	var fieldsNewTower = []
 
 	var variantsShow = []
@@ -603,14 +603,14 @@
 							}
 						}
 					}
-				}, 100/6)
+				}, 1000)
 			};
 		};
 
 		enemies.push(new Konva.Rect(enemie))
 		var waveTimer = setInterval(function(){
 			draw()
-			enemies[0].setY(enemies[0].getY() + 1)
+			enemies[0].setY(enemies[0].getY() + 10)
 			if (enemies[0].getY() > mapY + mapSize * fieldSize){
 				clearInterval(waveTimer);
 				enemies = []

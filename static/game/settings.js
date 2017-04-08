@@ -4,7 +4,8 @@ const Setting = {
 	mapX: window.innerWidth * 0.2,	
 	mapY: window.innerHeight * 0.05,
 	variantRadius: 10,
-	bulletStep: 10,
+	bulletStep: 20,
+	monsterStep: 10,
 
 	circleRed: {
 		name: 'circleRed',

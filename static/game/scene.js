@@ -26,16 +26,19 @@ class Scene {
 				layer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
 					layer.add(this.state.fields[i][j].tower.draw);
+					//console.log(this.state.fields[i][j])
 				};
 				
 			};
 		};
 		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
-			layer.add(this.state.fieldsNewTower[i].draw);
+			layer.add(this.state.fieldsNewTower[i].draw)
+			console.log(this.state.fieldsNewTower.length)
 		}
 
 		for (let i = 0; i < this.state.variantRects.length; i++){
 			layer.add(this.state.variantRects[i].draw);
+
 		};
 		//for (let i = 0; i < this.state.variantElements.length; i++){
 		//	layer.add(this.state.variantElements[i]);
@@ -47,21 +50,11 @@ class Scene {
 			layer.add(this.state.enemies[i].draw);
 		}
 
-		// for (kindTowers in this.state.towers) {
-		// 	for (let i = 0; i < this.state.towers[kindTowers].length; i++){
-		// 		for (let j = 0; j < this.state.towers[kindTowers][i]['bulletes'].length; j++) {
-		// 			layer.add(this.state.towers[kindTowers][i]['bulletes'][j])
-		// 		}
-		// 	}
-		// }
-
-		// for (let towerKind of Object.keys(this.state.towers)) {
-		// 	for (let i = 0; i < this.state.towers.towerKind.length; i++){
-		// 		for (let j = 0; j < this.state.towers.towerKind[i].bulletes.length; j++) {
-		// 			layer.add(this.state.towers.towerKind[i].bulletes[j])
-		// 		}
-		// 	}
-		// }
+		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
+			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
+				layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+			}
+		}
 
 		stage.add(layer);
 	}

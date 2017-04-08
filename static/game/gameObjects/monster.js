@@ -13,5 +13,6 @@ class Monster {
 		});
 		this.kind = name;
 		this.health = name.health;
+		this.numberTurns = 0;
 	}
 }

@@ -6,6 +6,8 @@ import PentagonTower from './gameObjects/pentagontower.js'
 import StarTower from './gameObjects/startower.js'
 import VariantBlock from './variantBlock.js'
 
+var way = [[1,1], [2, 8], [7,4], [9,1], [9,9]];
+
 export default
 class SingleStrategy {
 	
@@ -22,6 +24,7 @@ class SingleStrategy {
 		}
 		this.variantsShow = [];
 		this.enemies = [];
+		this.numberEnemies = 0;
 		
 		for (let i = 0; i < Setting.mapSize; i++){
 			this.fields[i] = Array(Setting.mapSize);
@@ -40,7 +43,7 @@ class SingleStrategy {
 						stroke: 'black',
 						strokeWidth: 2
 					}),
-					coordinates: [j, i]
+					coordinates: [i, j]
 				};
 
 			
@@ -104,13 +107,16 @@ class SingleStrategy {
 
 	onClickStayVariant(field, currentNewTower){
 		for (let i = 0; i < this.fieldsNewTower.length; i++){
-			let x = this.fieldsNewTower[i]['coordinates'][0];
-			let y = this.fieldsNewTower[i]['coordinates'][1];
-			console.log(Setting.mapX + x * Setting.fieldSize)
-			this.fields[x][y]['tower'] = new CircleTower(Setting.stone, Setting.mapX + x * Setting.fieldSize, Setting.mapY + y * Setting.fieldSize, Setting.fieldSize / 2 - 2);
-			console.log(this.fields[x][y]);
+			let xCoord = this.fieldsNewTower[i]['coordinates'][1];
+			let yCoord = this.fieldsNewTower[i]['coordinates'][0];
+			let xPixel = Setting.mapX + xCoord * (Setting.fieldSize + 2) + Setting.fieldSize / 2;
+			let yPixel = Setting.mapY + yCoord * (Setting.fieldSize + 2) + Setting.fieldSize / 2;
+			this.fields[yCoord][xCoord]['tower'] = new CircleTower(Setting.stone, xPixel, yPixel, Setting.fieldSize / 2 - 2);
+			//console.log(this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field)
+			this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field.setStroke('black');
+			//console.log(this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field)
 		}
-		field['tower'] = currentNewTower;
+		this.fields[field.coordinates[0]][field.coordinates[1]]['tower'] = currentNewTower;
 		this.towers[currentNewTower.kind.name]++;
 		this.fieldsWithTowers.push(field);
 		this.fieldsNewTower = [];
@@ -159,12 +165,12 @@ class SingleStrategy {
 		};
 		if (currentNewTower){
 			this.towers[currentNewTower.kind.name]++;
-			field['tower'] = currentNewTower;
+			this.fields[field.coordinates[0]][field.coordinates[1]]['tower'] = currentNewTower;
 		}
 		let variants = this.listVariants(field);
 		if (currentNewTower){
 			this.towers[currentNewTower.kind.name]--;
-			field['tower'] = 0
+			this.fields[field.coordinates[0]][field.coordinates[1]]['tower']['tower'] = 0
 		}
 		let alfa = 6.28 / (variants.length + 1);
 		let beta = alfa;
@@ -222,29 +228,56 @@ class SingleStrategy {
 	}
 
 	gameWave() {
-		this.enemies.push(new Monster(Setting.triangl));
+		if (this.numberEnemies < 20){
+			this.enemies.push(new Monster(Setting.triangl));
+			this.numberEnemies++;
+		};
 		for (let i = 0; i < this.fieldsWithTowers.length; i++){
 			if (this.status === 'Wave'){
 				this.fieldsWithTowers[i].tower.fire();
 			};
 			for (let j = 0; j < this.fieldsWithTowers[i].tower.bulletes.length; j++){
-				let distY = this.enemies[0].draw.getY() - this.fieldsWithTowers[i].tower.bulletes[j].draw.getY();
-				let distX = this.enemies[0].draw.getX() - this.fieldsWithTowers[i].tower.bulletes[j].draw.getX();
-				let stepX = bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
-				let stepY = Math.pow(bulletStep * bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
-				this.fieldsWithTowers[i].tower.bulletes[j].setX(this.towers[kindTowers][i].bulletes[j].getX() + stepX);
-				this.fieldsWithTowers[i].tower.bulletes[j].setY(this.towers[kindTowers][i].bulletes[j].getY() + stepY);
+				let distY = this.enemies[0].draw.getY() - this.fieldsWithTowers[i].tower.bulletes[j].getY();
+				let distX = this.enemies[0].draw.getX() - this.fieldsWithTowers[i].tower.bulletes[j].getX();
+				if (Math.abs(distX) < this.enemies[0].kind.size && Math.abs(distY) < this.enemies[0].kind.size){
+					this.fieldsWithTowers[i].tower.bulletes.splice(j, 1);
+					this.enemies[0].health - 10;
+					continue;
+				}
+				let stepX = Setting.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+				let stepY = Math.pow(Setting.bulletStep * Setting.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+				this.fieldsWithTowers[i].tower.bulletes[j].setX(this.fieldsWithTowers[i].tower.bulletes[j].getX() + stepX);
+				this.fieldsWithTowers[i].tower.bulletes[j].setY(this.fieldsWithTowers[i].tower.bulletes[j].getY() + stepY);
 			};
 		};
-		this.enemies[0].draw.setY(this.enemies[0].draw.getY() + 1);
-		if (this.enemies[0].draw.getY() > Setting.mapY + Setting.mapSize * Setting.fieldSize){
-			this.enemies = [];
+		if (this.enemies[0].numberTurns === way.length){
+			this.enemies.splice(0, 1);
+		};
+		for (let i = 0; i < this.enemies.length; i++){
+			console.log(this.enemies[i].numberTurns)
+			let place = way[this.enemies[i].numberTurns];
+			let distX = -this.enemies[i].draw.getX() + (Setting.mapX + place[0] * (Setting.fieldSize + 2) + Setting.fieldSize / 2);
+			let distY = -this.enemies[i].draw.getY() + (Setting.mapY + place[1] * (Setting.fieldSize + 2) + Setting.fieldSize / 2);
+			if (Math.abs(distX) < this.enemies[i].kind.size && Math.abs(distY) < this.enemies[i].kind.size){
+				this.enemies[i].numberTurns++;
+				continue;
+			};
+			let stepX = Setting.monsterStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+			let stepY = Math.pow(Setting.monsterStep * Setting.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
+			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
+		}
+		if (this.enemies.length === 0){
 			this.status = 'playerStep';
+			this.numberEnemies = 0;
 			for (let i = 0; i < Setting.mapSize; i++){
 				for (let j = 0; j < Setting.mapSize; j++){
 					this.fields[i][j]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
 				};
 			};
+			for (let i = 0; i < this.fieldsWithTowers.length; i++){
+				this.fields[this.fieldsWithTowers[i].coordinates[0]][this.fieldsWithTowers[i].coordinates[1]].tower.bulletes = [];
+			}
 		};
 	}
 

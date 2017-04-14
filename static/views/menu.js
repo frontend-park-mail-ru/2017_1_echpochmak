@@ -32,10 +32,10 @@ class Menu extends BaseView {
 			class: 'menu__multi-button menu__button_big'
 		});
 		this.aboutButton = new MenuButton('Об игре', {
-			class: 'menu__about-button'
+			class: 'menu__about-button menu__button_small'
 		});
 		this.leaderButton = new MenuButton('Лидеры', {
-			class: 'menu__leaderboard-button'
+			class: 'menu__leaderboard-button menu__button_small'
 		});
 		this.greeting = new Greeting('Гость');
 

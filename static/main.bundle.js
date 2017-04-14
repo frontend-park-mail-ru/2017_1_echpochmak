@@ -1017,10 +1017,10 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 			class: 'menu__multi-button menu__button_big'
 		});
 		this.aboutButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Об игре', {
-			class: 'menu__about-button'
+			class: 'menu__about-button menu__button_small'
 		});
 		this.leaderButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Лидеры', {
-			class: 'menu__leaderboard-button'
+			class: 'menu__leaderboard-button menu__button_small'
 		});
 		this.greeting = new __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__["a" /* default */]('Гость');
 

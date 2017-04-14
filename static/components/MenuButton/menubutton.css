@@ -9,8 +9,8 @@
 	color: #705D07;
 	font-family: aAlbionicTitulInfl, cursive;
 	font-weight: bolder;
-	width: 276px;
-	height: 250px;
+	/*width: 290px;*/
+	/*height: 262px;*/
 	font-size: 30px;
 	padding: 20px 20px;
 	box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E;
@@ -28,15 +28,22 @@
 .menu__button:hover, .menu__button:active {
 	background-repeat:  no-repeat;
 	text-decoration: none;
-	border:1px solid #93A871;
-	border-radius: 50px;
+	border-radius: 25px;
 	color: #3B1A1A;  
+	background-color: #D3FF91;
 }
 
 .menu__button_big {
-	background-color: #d3ff91;
+	background-color: #DBFCA9;
+	/*background-color: #D3FF91;*/
 	width: 305px;
 	height: 275px;
+}
+
+.menu__button_small {
+	background-color: #DBFCA9;
+	/*background-color: #D3FF91;*/
+	width: 305px;
 }
 
 .menu__single-button {
@@ -49,11 +56,11 @@
 }
 
 .menu__about-button {
-	background-image: url(./img/izum.png);
+	/*background-image: url(./img/izum.png);*/
 }
 
 .menu__about-button:hover, .menu__about-button:active {
-	background-image: url(./img/izum1.png);
+	/*background-image: url(./img/izum1.png);*/
 }
 
 .menu__multi-button {
@@ -65,9 +72,9 @@
 }
 
 .menu__leaderboard-button {
-	background-image: url(./img/bril.png);
+	/*background-image: url(./img/bril.png);*/
 }
 
 .menu__leaderboard-button:hover, .menu__leaderboard-button:active {
-	background-image: url(./img/bril1.png);
+	/*background-image: url(./img/bril1.png);*/
 }

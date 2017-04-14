@@ -13,12 +13,12 @@ class LoginForm extends Form {
 	constructor() {
 		super();
 		this.message = new FormMessage();
-		this.login = new Input('Логин', 'login-input', {
+		this.login = new Input('Логин', {
 			type: 'text',
 			placeholder: 'Введите логин',
 			required: 'true'
 		});
-		this.pass = new Input('Пароль', 'password-input', {
+		this.pass = new Input('Пароль', {
 			type: 'password',
 			placeholder: 'Введите пароль',
 			required: 'true'
@@ -28,7 +28,6 @@ class LoginForm extends Form {
 		});
 
 		this.render();
-		// this.makeListeners();
 	}
 
 	render() {
@@ -42,34 +41,6 @@ class LoginForm extends Form {
 		this.on('submit', () => {
 			callback();
 		})
-	}
-
-	makeListeners() {
-
-		const router = new Router();
-
-		this.on('submit', () => {
-			event.preventDefault();
-
-			const service = new UserService();
-			const auth = new Authorize();
-
-			if (this.validate()) {
-
-				service.login(this.data.login, this.data.password, xhr => {
-					if (xhr.status === 'ok') {
-						router.go('/');
-
-						auth.authorize();
-
-						this.get().reset();
-						this.message.clean();
-					} else {
-						this.message.showMessage('Неверный логин или пароль!');
-					}
-				});
-			}
-		});
 	}
 
 	validate() {

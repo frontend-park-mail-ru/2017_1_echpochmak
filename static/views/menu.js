@@ -5,6 +5,7 @@ import BaseBlock from '../components/BaseBlock/baseblock.js'
 import MenuButton from '../components/MenuButton/menubutton.js'
 import Greeting from '../components/Greeting/greeting.js'
 import Router from '../modules/router.js'
+import Authorize from '../services/authorize.js'
 
 export default
 class Menu extends BaseView {
@@ -25,16 +26,16 @@ class Menu extends BaseView {
 			align: 'center'
 		});
 		this.singleButton = new MenuButton('Одиночная игра', {
-			class: 'ruby single-button'
+			class: 'menu__single-button menu__button_big'
 		});
 		this.multiButton = new MenuButton('Мультиплеер', {
-			class: 'saph multi-button'
+			class: 'menu__multi-button menu__button_big'
 		});
 		this.aboutButton = new MenuButton('Об игре', {
-			class: 'izum about-button'
+			class: 'menu__about-button'
 		});
 		this.leaderButton = new MenuButton('Лидеры', {
-			class: 'bril leaderboard-button'
+			class: 'menu__leaderboard-button'
 		});
 		this.greeting = new Greeting('Гость');
 
@@ -58,6 +59,23 @@ class Menu extends BaseView {
 	makeListeners() {
 
 		const router = new Router();
+
+		this.greeting.loginButton.onclick(() => {
+			event.preventDefault();
+			router.go('/login/');
+		});
+
+		this.greeting.registerButton.onclick(() => {
+			event.preventDefault();
+			router.go('/register/');
+		});
+
+		this.greeting.exitButton.onclick(() => {
+			event.preventDefault();
+
+			const auth = new Authorize();
+			auth.deauthorize();
+		});
 
 		this.singleButton.on('click', () => {
 			event.preventDefault();

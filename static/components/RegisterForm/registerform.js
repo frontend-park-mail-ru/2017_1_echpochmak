@@ -13,21 +13,21 @@ class RegisterForm extends Form {
 	constructor() {
 		super();
 		this.message = new FormMessage();
-		this.email = new Input('E-Mail', 'email-input', {
-			type: 'email',
+		this.email = new Input('E-Mail', {
+			type: 'text',
 			placeholder: 'Введите ваш E-Mail'
 		});
-		this.login = new Input('Логин', 'login-input', {
+		this.login = new Input('Логин', {
 			type: 'text',
 			placeholder: 'Введите ваш логин',
 			required: 'true'
 		});
-		this.pass = new Input('Пароль', 'password-input', {
+		this.pass = new Input('Пароль', {
 			type: 'password',
 			placeholder: 'Введите ваш пароль',
 			required: 'true'
 		});
-		this.repeat = new Input('Повторите пароль', 'password-input', {
+		this.repeat = new Input('Повторите пароль', {
 			type: 'password',
 			placeholder: 'Повторите ваш пароль',
 			required: 'true'
@@ -37,7 +37,6 @@ class RegisterForm extends Form {
 		});
 
 		this.render();
-		// this.makeListeners();
 	}
 
 	render() {

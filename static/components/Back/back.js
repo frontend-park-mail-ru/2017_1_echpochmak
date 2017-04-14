@@ -12,9 +12,10 @@ class Back extends BaseBlock {
 			align: 'right'
 		});
 		this.link = new Link('', {
-			class: 'back-button'
+			class: 'back__button'
 		});
 		this.image = new BaseBlock('img', {
+			class: 'back__image',
 			src: './img/back.png'
 		});
 		this.text = new BaseBlock('p');

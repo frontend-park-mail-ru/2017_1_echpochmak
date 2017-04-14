@@ -11,4 +11,10 @@ class Link extends BaseBlock {
 		});
 		this.get().innerHTML = text;
 	}
+
+	onclick(callback) {
+		this.on('click', () => {
+			callback();
+		})
+	}
 }

@@ -5,12 +5,12 @@
 	padding-top: 1%;
 }
 
-.back a {
+.back__button {
 	display: inline-block;
 	margin-right: 4%;
 }
 
-.back img {
+.back__image {
 	max-width: 14%;
 	max-height: auto;
 }

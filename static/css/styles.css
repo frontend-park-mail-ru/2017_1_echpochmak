@@ -17,13 +17,13 @@ body {
 	border:1px solid #64734D;
 }
 
-.list-header {
+.list__header {
 	font-size: 30pt;
 	margin-bottom: 3%;
 	margin-top: -2%;
 }
 
-.list-header hr {
+.list__header hr {
 	color: #64734D;
 	background-color: #64734D;
 	opacity: 1;
@@ -31,7 +31,7 @@ body {
 	border: 0;
 }
 
-.list-sub-header {	
+.list__sub-header {	
 	font-size: 22pt;
 	margin-bottom: 2%;
 }

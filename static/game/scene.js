@@ -10,15 +10,13 @@ class Scene {
 		this.state = state;
 	}
 
-
-
 	render() {
 		let stage = new Konva.Stage({
 			container: 'konva',
 			width : window.innerWidth,
 			height : window.innerHeight
 		});
-		var layer = new Konva.Layer();
+		let layer = new Konva.Layer();
 
 		for (let i = 0; i < Setting.mapSize; i++){
 			for (let j = 0; j < Setting.mapSize; j++){
@@ -65,7 +63,7 @@ class Scene {
 			width : window.innerWidth,
 			height : window.innerHeight
 		});
-		var layer = new Konva.Layer();
+		let layer = new Konva.Layer();
 
 		let circle = new Konva.Circle({
 			x: Setting.mapX + 50,

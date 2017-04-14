@@ -13,7 +13,7 @@ class About extends BaseView {
 			class: 'list'
 		});
 		this.header = new BaseBlock('div', {
-			class: 'list-header',
+			class: 'list__header',
 			align: 'center'
 		});
 		this.header.get().innerHTML = 'Gem-TD';

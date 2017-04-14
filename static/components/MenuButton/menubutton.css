@@ -1,16 +1,14 @@
-.btn-class:visited {
+.menu__button:visited {
 	text-decoration: none;
 }
 
-.btn-class {
+.menu__button {
 	display: inline-block;
 	border:1px solid #64734D;
 	border-radius: 20px;
 	color: #705D07;
 	font-family: aAlbionicTitulInfl, cursive;
 	font-weight: bolder;
-	/*width: 290px;
-	height: 262px;*/
 	width: 276px;
 	height: 250px;
 	font-size: 30px;
@@ -21,17 +19,13 @@
 	text-shadow: 0 1px 0 #FFFFFF;
 	background-color: #DBFCA9;
 	text-decoration: none;
-	margin-right: 5%;
-}
-
-.menu-button {
 	background-repeat:  no-repeat;
 	background-position: 20%;
 	margin-right: 0.5%;
 	margin-left: 0.5%;
 }
 
-.menu-button:hover, .menu-button:active {
+.menu__button:hover, .menu__button:active {
 	background-repeat:  no-repeat;
 	text-decoration: none;
 	border:1px solid #93A871;
@@ -39,41 +33,41 @@
 	color: #3B1A1A;  
 }
 
-.ruby {
+.menu__button_big {
 	background-color: #d3ff91;
-	background-image: url(./img/ruby.png);
 	width: 305px;
 	height: 275px;
 }
 
-.ruby:hover, .ruby:active {
+.menu__single-button {
+	background-image: url(./img/ruby.png);
+}
+
+.menu__single-button:hover, .menu__single-button:active {
 	background-color: #d3ff91;
 	background-image: url(./img/ruby1.png);
 }
 
-.izum {
+.menu__about-button {
 	background-image: url(./img/izum.png);
 }
 
-.izum:hover, .izum:active {
+.menu__about-button:hover, .menu__about-button:active {
 	background-image: url(./img/izum1.png);
 }
 
-.saph {
-	background-color: #d3ff91;
+.menu__multi-button {
 	background-image: url(./img/saph.png);
-	width: 305px;
-	height: 275px;
 }
 
-.saph:hover, .saph:active {
+.menu__multi-button:hover, .menu__multi-button:active {
 	background-image: url(./img/saph1.png);
 }
 
-.bril {
+.menu__leaderboard-button {
 	background-image: url(./img/bril.png);
 }
 
-.bril:hover, .bril:active {
+.menu__leaderboard-button:hover, .menu__leaderboard-button:active {
 	background-image: url(./img/bril1.png);
 }

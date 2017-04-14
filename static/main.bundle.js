@@ -193,6 +193,67 @@ class Router {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_router_js__ = __webpack_require__(1);
+
+
+
+
+
+class Authorize {
+	constructor() {
+		if (Authorize.__instance) {
+			return Authorize.__instance;
+		}
+
+		this.service = new __WEBPACK_IMPORTED_MODULE_0__userservice_js__["a" /* default */]();
+		this.router = new __WEBPACK_IMPORTED_MODULE_1__modules_router_js__["a" /* default */]();
+		this.anonymUser = 'Гость';
+		
+		this.showForGuest();
+
+		this.service.getUsername(xhr => {
+			if (xhr.login) {
+				this.showForUser(xhr.login);
+			} else {
+				this.showForGuest();
+			}
+		});
+
+		Authorize.__instance = this;
+	}
+
+	authorize() {
+		this.service.getUsername(xhr => {
+			if (xhr.status === 'ok') {
+				this.showForUser(xhr.login);
+			}
+		});
+	}
+
+	deauthorize() {
+		this.service.logout(xhr => {
+			this.showForGuest();
+		});
+	}
+
+	showForUser(user) {
+		this.router.loginSwitch(user);
+	}
+
+	showForGuest() {
+		this.router.unloginSwitch(this.anonymUser);
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Authorize;
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 const Setting = {
 
 	start: [0,0],
@@ -300,7 +361,7 @@ Setting.pentagons = [
 /* harmony default export */ __webpack_exports__["a"] = (Setting);
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -348,67 +409,6 @@ class BaseView extends __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblo
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = BaseView;
-
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_router_js__ = __webpack_require__(1);
-
-
-
-
-
-class Authorize {
-	constructor() {
-		if (Authorize.__instance) {
-			return Authorize.__instance;
-		}
-
-		this.service = new __WEBPACK_IMPORTED_MODULE_0__userservice_js__["a" /* default */]();
-		this.router = new __WEBPACK_IMPORTED_MODULE_1__modules_router_js__["a" /* default */]();
-		this.anonymUser = 'Гость';
-		
-		this.showForGuest();
-
-		this.service.getUsername(xhr => {
-			if (xhr.login) {
-				this.showForUser(xhr.login);
-			} else {
-				this.showForGuest();
-			}
-		});
-
-		Authorize.__instance = this;
-	}
-
-	authorize() {
-		this.service.getUsername(xhr => {
-			if (xhr.status === 'ok') {
-				this.showForUser(xhr.login);
-			}
-		});
-	}
-
-	deauthorize() {
-		this.service.logout(xhr => {
-			this.showForGuest();
-		});
-	}
-
-	showForUser(user) {
-		this.router.loginSwitch(user);
-	}
-
-	showForGuest() {
-		this.router.unloginSwitch(this.anonymUser);
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Authorize;
 
 
 
@@ -486,6 +486,12 @@ class Link extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 			href: '#'
 		});
 		this.get().innerHTML = text;
+	}
+
+	onclick(callback) {
+		this.on('click', () => {
+			callback();
+		})
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Link;
@@ -700,7 +706,7 @@ class FormMessage extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__[
 			class: 'col-xs-4 col-sm-4 col-md-4 col-lg-4'
 		});
 		this.messageBlock = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'col-xs-5 col-sm-5 col-md-5 col-lg-5 form-message'
+			class: 'col-xs-5 col-sm-5 col-md-5 col-lg-5 form__message'
 		});
 
 		this.render();
@@ -734,13 +740,12 @@ class FormMessage extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__[
 
 
 class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */] {
-	constructor(labelName, className, attrs) {
+	constructor(labelName, attrs) {
 		super('div', {
-			class: 'col-xs-12 col-sm-12 col-md-12 col-lg-12 line'
+			class: 'col-xs-12 col-sm-12 col-md-12 col-lg-12 line form-input'
 		});
-		this.get().classList.add(className);
 		this.labelBlock = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('label', {
-			class: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label'
+			class: 'col-xs-4 col-sm-4 col-md-4 col-lg-4 control-label form-input__label'
 		});
 		this.labelBlock.get().innerHTML = labelName;
 		this.inputBlock = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
@@ -749,7 +754,7 @@ class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /*
 		this.input = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('input', attrs);
 		this.input.get().classList.add('form-control', 'input-lg');
 		this.errorBlock = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 error-message'
+			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 form-input__error-message'
 		});
 
 		this.render();
@@ -771,7 +776,7 @@ class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /*
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 
 
@@ -787,7 +792,7 @@ class About extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 			class: 'list'
 		});
 		this.header = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'list-header',
+			class: 'list__header',
 			align: 'center'
 		});
 		this.header.get().innerHTML = 'Gem-TD';
@@ -856,7 +861,7 @@ class About extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_userservice_js__ = __webpack_require__(5);
 
@@ -904,11 +909,11 @@ class LeaderBoard extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 
 
@@ -973,11 +978,13 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_router_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(2);
+
 
 
 
@@ -1004,16 +1011,16 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 			align: 'center'
 		});
 		this.singleButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Одиночная игра', {
-			class: 'ruby single-button'
+			class: 'menu__single-button menu__button_big'
 		});
 		this.multiButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Мультиплеер', {
-			class: 'saph multi-button'
+			class: 'menu__multi-button menu__button_big'
 		});
 		this.aboutButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Об игре', {
-			class: 'izum about-button'
+			class: 'menu__about-button'
 		});
 		this.leaderButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Лидеры', {
-			class: 'bril leaderboard-button'
+			class: 'menu__leaderboard-button'
 		});
 		this.greeting = new __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__["a" /* default */]('Гость');
 
@@ -1037,6 +1044,23 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 	makeListeners() {
 
 		const router = new __WEBPACK_IMPORTED_MODULE_4__modules_router_js__["a" /* default */]();
+
+		this.greeting.loginButton.onclick(() => {
+			event.preventDefault();
+			router.go('/login/');
+		});
+
+		this.greeting.registerButton.onclick(() => {
+			event.preventDefault();
+			router.go('/register/');
+		});
+
+		this.greeting.exitButton.onclick(() => {
+			event.preventDefault();
+
+			const auth = new __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__["a" /* default */]();
+			auth.deauthorize();
+		});
 
 		this.singleButton.on('click', () => {
 			event.preventDefault();
@@ -1080,7 +1104,7 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 
 
@@ -1137,12 +1161,12 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(2);
 
 
 
@@ -1205,7 +1229,7 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_strategy_js__ = __webpack_require__(30);
 
@@ -1277,9 +1301,10 @@ class Back extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 			align: 'right'
 		});
 		this.link = new __WEBPACK_IMPORTED_MODULE_1__Link_link_js__["a" /* default */]('', {
-			class: 'back-button'
+			class: 'back__button'
 		});
 		this.image = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('img', {
+			class: 'back__image',
 			src: './img/back.png'
 		});
 		this.text = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('p');
@@ -1332,7 +1357,7 @@ class Button extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Link_link_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1348,36 +1373,35 @@ class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a"
 		});
 		this.greetingBlock = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
 			align: 'right',
-			class: 'divtxt'
+			class: 'greeting__text-block'
 		});
 		this.entryBy = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('h3', {
-			class: 'txt'
+			class: 'greeting__text'
 		});
 		this.entryBy.get().innerHTML = 'Вы вошли как ';
 		this.username = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('h2', {
-			class: 'txt username'
+			class: 'greeting__text username'
 		});
 		this.username.get().innerHTML = name;
 		this.noAuth = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
 			align: 'right',
-			class: 'divbut no-authorized'
+			class: 'greeting__button-block no-authorized'
 		});
 		this.auth = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
 			align: 'right',
-			class: 'divbut authorized'
+			class: 'greeting__button-block authorized'
 		});
 		this.registerButton = new __WEBPACK_IMPORTED_MODULE_1__Link_link_js__["a" /* default */]('Регистрация', {
-			class: 'button registration-button'
+			class: 'greeting__button'
 		});
 		this.loginButton = new __WEBPACK_IMPORTED_MODULE_1__Link_link_js__["a" /* default */]('Вход', {
-			class: 'button login-button'
+			class: 'greeting__button'
 		});
 		this.exitButton = new __WEBPACK_IMPORTED_MODULE_1__Link_link_js__["a" /* default */]('Выйти', {
-			class: 'button exit-button'
+			class: 'greeting__button'
 		});
 
 		this.render();
-		this.makeListeners();
 	}
 
 	render() {
@@ -1389,28 +1413,6 @@ class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a"
 		this.noAuth.get().appendChild(this.registerButton.get());
 		this.noAuth.get().appendChild(this.loginButton.get());
 		this.auth.get().appendChild(this.exitButton.get());
-	}
-
-	makeListeners() {
-
-		const router = new __WEBPACK_IMPORTED_MODULE_3__modules_router_js__["a" /* default */]();
-
-		this.loginButton.on('click', () => {
-			event.preventDefault();
-			router.go('/login/');
-		});
-
-		this.registerButton.on('click', () => {
-			event.preventDefault();
-			router.go('/register/');
-		});
-
-		this.exitButton.on('click', () => {
-			event.preventDefault();
-
-			const auth = new __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__["a" /* default */]();
-			auth.deauthorize();
-		});
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Greeting;
@@ -1427,7 +1429,7 @@ class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__FormMessage_formmessage_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1443,12 +1445,12 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 	constructor() {
 		super();
 		this.message = new __WEBPACK_IMPORTED_MODULE_3__FormMessage_formmessage_js__["a" /* default */]();
-		this.login = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Логин', 'login-input', {
+		this.login = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Логин', {
 			type: 'text',
 			placeholder: 'Введите логин',
 			required: 'true'
 		});
-		this.pass = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Пароль', 'password-input', {
+		this.pass = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Пароль', {
 			type: 'password',
 			placeholder: 'Введите пароль',
 			required: 'true'
@@ -1458,7 +1460,6 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 		});
 
 		this.render();
-		// this.makeListeners();
 	}
 
 	render() {
@@ -1472,34 +1473,6 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 		this.on('submit', () => {
 			callback();
 		})
-	}
-
-	makeListeners() {
-
-		const router = new __WEBPACK_IMPORTED_MODULE_6__modules_router_js__["a" /* default */]();
-
-		this.on('submit', () => {
-			event.preventDefault();
-
-			const service = new __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__["a" /* default */]();
-			const auth = new __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__["a" /* default */]();
-
-			if (this.validate()) {
-
-				service.login(this.data.login, this.data.password, xhr => {
-					if (xhr.status === 'ok') {
-						router.go('/');
-
-						auth.authorize();
-
-						this.get().reset();
-						this.message.clean();
-					} else {
-						this.message.showMessage('Неверный логин или пароль!');
-					}
-				});
-			}
-		});
 	}
 
 	validate() {
@@ -1531,7 +1504,7 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 class MenuButton extends __WEBPACK_IMPORTED_MODULE_0__Link_link_js__["a" /* default */] {
 	constructor(text, attrs) {
 		super(text, attrs);
-		this.get().classList.add('btn-class', 'menu-button');
+		this.get().classList.add('menu__button');
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = MenuButton;
@@ -1547,7 +1520,7 @@ class MenuButton extends __WEBPACK_IMPORTED_MODULE_0__Link_link_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FormMessage_formmessage_js__ = __webpack_require__(10);
 
@@ -1564,21 +1537,21 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 	constructor() {
 		super();
 		this.message = new __WEBPACK_IMPORTED_MODULE_6__FormMessage_formmessage_js__["a" /* default */]();
-		this.email = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('E-Mail', 'email-input', {
-			type: 'email',
+		this.email = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('E-Mail', {
+			type: 'text',
 			placeholder: 'Введите ваш E-Mail'
 		});
-		this.login = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Логин', 'login-input', {
+		this.login = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Логин', {
 			type: 'text',
 			placeholder: 'Введите ваш логин',
 			required: 'true'
 		});
-		this.pass = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Пароль', 'password-input', {
+		this.pass = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Пароль', {
 			type: 'password',
 			placeholder: 'Введите ваш пароль',
 			required: 'true'
 		});
-		this.repeat = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Повторите пароль', 'password-input', {
+		this.repeat = new __WEBPACK_IMPORTED_MODULE_1__Input_input_js__["a" /* default */]('Повторите пароль', {
 			type: 'password',
 			placeholder: 'Повторите ваш пароль',
 			required: 'true'
@@ -1588,7 +1561,6 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 		});
 
 		this.render();
-		// this.makeListeners();
 	}
 
 	render() {
@@ -1660,7 +1632,7 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 
 class CircleTower {
 	constructor(name, x, y, radius) {
@@ -1695,7 +1667,7 @@ class CircleTower {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 
 class Monster {
 	constructor(name) {
@@ -1721,7 +1693,7 @@ class Monster {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 
 class PentagonTower {
 	constructor(name, x, y, radius) {
@@ -1761,7 +1733,7 @@ class PentagonTower {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 
 class StarTower {
 	constructor(name, x, y, radius) {
@@ -1803,7 +1775,7 @@ class StarTower {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 
 
 class Scene {
@@ -1815,15 +1787,13 @@ class Scene {
 		this.state = state;
 	}
 
-
-
 	render() {
 		let stage = new Konva.Stage({
 			container: 'konva',
 			width : window.innerWidth,
 			height : window.innerHeight
 		});
-		var layer = new Konva.Layer();
+		let layer = new Konva.Layer();
 
 		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
 			for (let j = 0; j < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; j++){
@@ -1870,7 +1840,7 @@ class Scene {
 			width : window.innerWidth,
 			height : window.innerHeight
 		});
-		var layer = new Konva.Layer();
+		let layer = new Konva.Layer();
 
 		let circle = new Konva.Circle({
 			x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + 50,
@@ -1894,7 +1864,7 @@ class Scene {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scene_js__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__ = __webpack_require__(25);
@@ -2253,7 +2223,7 @@ class SingleStrategy {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
 
 
 class VariantBlock {
@@ -2285,7 +2255,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_leaderboard_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_singleplayer_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_multiplayer_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_http_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_router_js__ = __webpack_require__(1);
 

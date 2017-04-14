@@ -1,8 +1,8 @@
-.error-message {
+.form-input__error-message {
 	color: red;
 	font-size: 15px;
 }
 
-.control-label {
+.form-input__label {
 	font-size: 20pt;
 }

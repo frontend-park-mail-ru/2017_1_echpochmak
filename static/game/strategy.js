@@ -302,7 +302,6 @@ class SingleStrategy {
 
 	findPath(checkpoints) {
 
-		// checkpoints = checkpoints.concat(Setting.finish);
 		checkpoints.push(this.settings.finish);
 
 		let matrix = Array(this.settings.mapSize);

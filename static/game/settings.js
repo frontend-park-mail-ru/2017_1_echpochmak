@@ -110,7 +110,8 @@ class Settings {
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.fieldSize = window.innerHeight * 0.9 / this.mapSize;
+		// this.fieldSize = window.innerHeight * 0.9 / this.mapSize;
+		this.fieldSize = this.gameFieldElement.offsetHeight * 0.9 / this.mapSize;
 
 		Settings.__instance = this;
 	}

@@ -60,39 +60,39 @@ class Menu extends BaseView {
 
 		const router = new Router();
 
-		this.greeting.loginButton.onclick(() => {
+		this.greeting.loginButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/login/');
 		});
 
-		this.greeting.registerButton.onclick(() => {
+		this.greeting.registerButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/register/');
 		});
 
-		this.greeting.exitButton.onclick(() => {
+		this.greeting.exitButton.on('click', (event) => {
 			event.preventDefault();
 
 			const auth = new Authorize();
 			auth.deauthorize();
 		});
 
-		this.singleButton.on('click', () => {
+		this.singleButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/game/');
 		});
 
-		this.multiButton.on('click', () => {
+		this.multiButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/multiplayer/');
 		});
 
-		this.aboutButton.on('click', () => {
+		this.aboutButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/about/');
 		});
 
-		this.leaderButton.on('click', () => {
+		this.leaderButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/leaders/');
 		});

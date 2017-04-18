@@ -187,7 +187,7 @@ class SingleStrategy {
 		let beta = alfa;
 		let variantX = field['field'].getX() + Setting.fieldSize / 2 - Setting.fieldSize;
 		let variantY = field['field'].getY() + Setting.fieldSize / 2;
-		for (var i = 0; i < variants.length; i++){
+		for (let i = 0; i < variants.length; i++){
 			let variant = new PentagonTower(
 				variants[i],
 				variantX,

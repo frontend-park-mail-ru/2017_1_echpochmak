@@ -489,7 +489,7 @@ class Link extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 	}
 
 	onclick(callback) {
-		this.on('click', () => {
+		this.on('click', (event) => {
 			callback();
 		})
 	}
@@ -936,7 +936,7 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 		});
 		this.form = new __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__["a" /* default */]();
 
-		this.form.onsubmit(() => {
+		this.form.onsubmit((event) => {
 
 			event.preventDefault();
 
@@ -1045,39 +1045,39 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 
 		const router = new __WEBPACK_IMPORTED_MODULE_4__modules_router_js__["a" /* default */]();
 
-		this.greeting.loginButton.onclick(() => {
+		this.greeting.loginButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/login/');
 		});
 
-		this.greeting.registerButton.onclick(() => {
+		this.greeting.registerButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/register/');
 		});
 
-		this.greeting.exitButton.onclick(() => {
+		this.greeting.exitButton.on('click', (event) => {
 			event.preventDefault();
 
 			const auth = new __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__["a" /* default */]();
 			auth.deauthorize();
 		});
 
-		this.singleButton.on('click', () => {
+		this.singleButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/game/');
 		});
 
-		this.multiButton.on('click', () => {
+		this.multiButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/multiplayer/');
 		});
 
-		this.aboutButton.on('click', () => {
+		this.aboutButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/about/');
 		});
 
-		this.leaderButton.on('click', () => {
+		this.leaderButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/leaders/');
 		});
@@ -1187,7 +1187,7 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 			class: 'padd'
 		});
 		this.form = new __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__["a" /* default */]();
-		this.form.onsubmit(() => {
+		this.form.onsubmit((event) => {
 
 			event.preventDefault();
 
@@ -2059,7 +2059,7 @@ class SingleStrategy {
 		let beta = alfa;
 		let variantX = field['field'].getX() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize;
 		let variantY = field['field'].getY() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-		for (var i = 0; i < variants.length; i++){
+		for (let i = 0; i < variants.length; i++){
 			let variant = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
 				variants[i],
 				variantX,

@@ -1,4 +1,4 @@
-import Setting from '../settings.js'
+import Settings from '../settings.js'
 export default
 class StarTower {
 	constructor(name, x, y, radius) {

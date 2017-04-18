@@ -1,9 +1,10 @@
-import Setting from './settings.js'
+import Settings from './settings.js'
 
 export default
 class Scene {
 	constructor() {
 		this.state = {};
+		this.settings = new Settings;
 	}
 
 	setState(state) {
@@ -18,8 +19,8 @@ class Scene {
 		});
 		let layer = new Konva.Layer();
 
-		for (let i = 0; i < Setting.mapSize; i++){
-			for (let j = 0; j < Setting.mapSize; j++){
+		for (let i = 0; i < this.settings.mapSize; i++){
+			for (let j = 0; j < this.settings.mapSize; j++){
 				// console.log(this.state.fields[i][j].field)
 				layer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
@@ -66,8 +67,8 @@ class Scene {
 		let layer = new Konva.Layer();
 
 		let circle = new Konva.Circle({
-			x: Setting.mapX + 50,
-			y: Setting.mapY + 50,
+			x: this.settings.mapX + 50,
+			y: this.settings.mapY + 50,
 			radius: 50,
 			stroke: 'black',
 			strokeWidth: 0,

@@ -1,4 +1,4 @@
-import Setting from './settings.js'
+import Settings from './settings.js'
 import Scene from './scene.js'
 import Monster from './gameObjects/monster.js'
 import CircleTower from './gameObjects/circletower.js'
@@ -6,17 +6,16 @@ import PentagonTower from './gameObjects/pentagontower.js'
 import StarTower from './gameObjects/startower.js'
 import VariantBlock from './variantBlock.js'
 
-// var way = [[0,0], [0, 9], [9,0], [9,9]];
-
 export default
 class SingleStrategy {
 	
 	constructor() {
 
+		this.settings = new Settings();
 		this.scene = new Scene();
 
 		this.status = 'playerStep';
-		this.fields = Array(Setting.mapSize);
+		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
 		this.fieldsWithTowers = [];
 		for (let i = 0; i < 4; i++){
@@ -27,19 +26,19 @@ class SingleStrategy {
 		this.numberEnemies = 0;
 		this.path = [];
 
-		for (let i = 0; i < Setting.mapSize; i++){
-			this.fields[i] = Array(Setting.mapSize);
+		for (let i = 0; i < this.settings.mapSize; i++){
+			this.fields[i] = Array(this.settings.mapSize);
 		}
 		
-		for (let i = 0; i < Setting.mapSize; i++){
-			for (let j = 0; j < Setting.mapSize; j++){
+		for (let i = 0; i < this.settings.mapSize; i++){
+			for (let j = 0; j < this.settings.mapSize; j++){
 				this.fields[i][j] = {
 					tower: 0,
 					field: new Konva.Rect({
-						x: Setting.mapX + j * Setting.fieldSize + j * 2,
-						y: Setting.mapY + i * Setting.fieldSize + i * 2,
-						width: Setting.fieldSize,
-						height: Setting.fieldSize,
+						x: this.settings.mapX + j * this.settings.fieldSize + j * 2,
+						y: this.settings.mapY + i * this.settings.fieldSize + i * 2,
+						width: this.settings.fieldSize,
+						height: this.settings.fieldSize,
 						fill: 'grey',
 						stroke: 'black',
 						strokeWidth: 2
@@ -118,9 +117,9 @@ class SingleStrategy {
 		for (let i = 0; i < this.fieldsNewTower.length; i++){
 			let xCoord = this.fieldsNewTower[i]['coordinates'][1];
 			let yCoord = this.fieldsNewTower[i]['coordinates'][0];
-			let xPixel = Setting.mapX + xCoord * (Setting.fieldSize + 2) + Setting.fieldSize / 2;
-			let yPixel = Setting.mapY + yCoord * (Setting.fieldSize + 2) + Setting.fieldSize / 2;
-			this.fields[yCoord][xCoord]['tower'] = new CircleTower(Setting.stone, xPixel, yPixel, Setting.fieldSize / 2 - 2);
+			let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+			let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+			this.fields[yCoord][xCoord]['tower'] = new CircleTower(this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
 			//console.log(this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field)
 			this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field.setStroke('black');
 			//console.log(this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field)
@@ -141,13 +140,16 @@ class SingleStrategy {
 
 	generateTower(field) {
 
-		let circlePro = Setting.circles[Math.floor(Math.random() * Setting.circles.length)]
+		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
 		
+		console.log(circlePro);
+		console.log(this.settings.circles);
+
 		let circle = new CircleTower(
 			circlePro, 
-			field['field'].getX() + Setting.fieldSize / 2,
-			field['field'].getY() + Setting.fieldSize / 2,
-			Setting.fieldSize / 2 - 2
+			field['field'].getX() + this.settings.fieldSize / 2,
+			field['field'].getY() + this.settings.fieldSize / 2,
+			this.settings.fieldSize / 2 - 2
 		);
 
 		field['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, field)});
@@ -164,13 +166,13 @@ class SingleStrategy {
 		let variantStay;
 		//this.variantsShow = [];
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			if ((field['field'].getX() + Setting.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + Setting.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
+			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
 				currentNewTower = this.fieldsNewTower[i];
 				variantStay = new CircleTower(
 					currentNewTower['kind'],
-					Setting.variantX,
-					Setting.variantY,
-					Setting.variantRadius
+					this.settings.variantX,
+					this.settings.variantY,
+					this.settings.variantRadius
 				);
 			};
 		};
@@ -185,17 +187,17 @@ class SingleStrategy {
 		}
 		let alfa = 6.28 / (variants.length + 1);
 		let beta = alfa;
-		let variantX = field['field'].getX() + Setting.fieldSize / 2 - Setting.fieldSize;
-		let variantY = field['field'].getY() + Setting.fieldSize / 2;
+		let variantX = field['field'].getX() + this.settings.fieldSize / 2 - this.settings.fieldSize;
+		let variantY = field['field'].getY() + this.settings.fieldSize / 2;
 		for (let i = 0; i < variants.length; i++){
 			let variant = new PentagonTower(
 				variants[i],
 				variantX,
 				variantY,
-				Setting.variantRadius
+				this.settings.variantRadius
 			);
-			variantX = field['field'].getX() + Setting.fieldSize / 2 - Math.cos(beta) * Setting.fieldSize;
-			variantY = field['field'].getY()  + Setting.fieldSize / 2 - Math.sin(beta) * Setting.fieldSize;
+			variantX = field['field'].getX() + this.settings.fieldSize / 2 - Math.cos(beta) * this.settings.fieldSize;
+			variantY = field['field'].getY()  + this.settings.fieldSize / 2 - Math.sin(beta) * this.settings.fieldSize;
 			beta = beta + alfa;
 			this.variantsShow.push(variant);
 		}
@@ -204,7 +206,7 @@ class SingleStrategy {
 				currentNewTower.kind,
 				variantX,
 				variantY,
-				Setting.variantRadius
+				this.settings.variantRadius
 			);
 			variantStay.draw.addEventListener('mousedown', () => {this.onClickStayVariant.call(this, field, currentNewTower)});
 			this.variantsShow.push(variantStay);
@@ -213,22 +215,22 @@ class SingleStrategy {
 
 	listVariants(field) {
 		let variants = [];
-		if (((this.towers['circleRed'] > 0) && (this.towers['circlePink'] > 0) && (this.towers['circleSad'] > 0)) && ((field.tower.kind == Setting.circleRed) || (field.tower.kind == Setting.circlePink) || (field.tower.kind == Setting.circleSad))){
-		variants.push(Setting.pentagonRPS);
+		if (((this.towers['circleRed'] > 0) && (this.towers['circlePink'] > 0) && (this.towers['circleSad'] > 0)) && ((field.tower.kind == this.settings.circleRed) || (field.tower.kind == this.settings.circlePink) || (field.tower.kind == this.settings.circleSad))){
+		variants.push(this.settings.pentagonRPS);
 		};
-		if (((this.towers['circleSad'] > 0) && (this.towers['circleBlue'] > 0) && (this.towers['circleGreen'] > 0)) && ((field.tower.kind == Setting.circleSad) || (field.tower.kind == Setting.circleBlue) || (field.tower.kind == Setting.circleGreen))){
-			variants.push(Setting.pentagonSBG);
+		if (((this.towers['circleSad'] > 0) && (this.towers['circleBlue'] > 0) && (this.towers['circleGreen'] > 0)) && ((field.tower.kind == this.settings.circleSad) || (field.tower.kind == this.settings.circleBlue) || (field.tower.kind == this.settings.circleGreen))){
+			variants.push(this.settings.pentagonSBG);
 		};
-		if (((this.towers['circleGreen'] > 0) && (this.towers['circleYellow'] > 0) && (this.towers['circleRed'] > 0)) && ((field.tower.kind == Setting.circleGreen) || (field.tower.kind == Setting.circleYellow) || (field.tower.kind == Setting.circleRed))){
-			variants.push(Setting.pentagonGYR);
+		if (((this.towers['circleGreen'] > 0) && (this.towers['circleYellow'] > 0) && (this.towers['circleRed'] > 0)) && ((field.tower.kind == this.settings.circleGreen) || (field.tower.kind == this.settings.circleYellow) || (field.tower.kind == this.settings.circleRed))){
+			variants.push(this.settings.pentagonGYR);
 		};
 		return variants;
 	}
 
 	playerStep() {
 		if (this.newStones >= 5){
-			for (let i = 0; i < Setting.mapSize; i++){
-				for (let j = 0; j < Setting.mapSize; j++){
+			for (let i = 0; i < this.settings.mapSize; i++){
+				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
 				}
 			}
@@ -241,11 +243,11 @@ class SingleStrategy {
 	gameWave() {
 
 		if (this.path.length === 0) {
-			this.path = this.findPath(Setting.checkpoints);
+			this.path = this.findPath(this.settings.checkpoints);
 		}
 
 		if (this.numberEnemies < 20){
-			this.enemies.push(new Monster(Setting.triangl));
+			this.enemies.push(new Monster(this.settings.triangl));
 			this.numberEnemies++;
 		};
 		for (let i = 0; i < this.fieldsWithTowers.length; i++){
@@ -260,8 +262,8 @@ class SingleStrategy {
 					this.enemies[0].health - 10;
 					continue;
 				}
-				let stepX = Setting.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
-				let stepY = Math.pow(Setting.bulletStep * Setting.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+				let stepX = this.settings.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+				let stepY = Math.pow(this.settings.bulletStep * this.settings.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 				this.fieldsWithTowers[i].tower.bulletes[j].setX(this.fieldsWithTowers[i].tower.bulletes[j].getX() + stepX);
 				this.fieldsWithTowers[i].tower.bulletes[j].setY(this.fieldsWithTowers[i].tower.bulletes[j].getY() + stepY);
 			};
@@ -272,22 +274,22 @@ class SingleStrategy {
 		for (let i = 0; i < this.enemies.length; i++){
 			console.log(this.enemies[i].numberTurns)
 			let place = this.path[this.enemies[i].numberTurns];
-			let distX = -this.enemies[i].draw.getX() + (Setting.mapX + place[0] * (Setting.fieldSize + 2) + Setting.fieldSize / 2);
-			let distY = -this.enemies[i].draw.getY() + (Setting.mapY + place[1] * (Setting.fieldSize + 2) + Setting.fieldSize / 2);
+			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
+			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
 			if (Math.abs(distX) < this.enemies[i].kind.size && Math.abs(distY) < this.enemies[i].kind.size){
 				this.enemies[i].numberTurns++;
 				continue;
 			};
-			let stepX = Setting.monsterStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
-			let stepY = Math.pow(Setting.monsterStep * Setting.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+			let stepX = this.settings.monsterStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+			let stepY = Math.pow(this.settings.monsterStep * this.settings.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
 		}
 		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.numberEnemies = 0;
-			for (let i = 0; i < Setting.mapSize; i++){
-				for (let j = 0; j < Setting.mapSize; j++){
+			for (let i = 0; i < this.settings.mapSize; i++){
+				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
 				};
 			};
@@ -301,15 +303,15 @@ class SingleStrategy {
 	findPath(checkpoints) {
 
 		// checkpoints = checkpoints.concat(Setting.finish);
-		checkpoints.push(Setting.finish);
+		checkpoints.push(this.settings.finish);
 
-		let matrix = Array(Setting.mapSize);
-		for (let i = 0; i < Setting.mapSize; ++i) {
-			matrix[i] = Array(Setting.mapSize);
+		let matrix = Array(this.settings.mapSize);
+		for (let i = 0; i < this.settings.mapSize; ++i) {
+			matrix[i] = Array(this.settings.mapSize);
 		}
 
-		for (let i = 0; i < Setting.mapSize; ++i) {
-			for (let j = 0; j < Setting.mapSize; ++j) {
+		for (let i = 0; i < this.settings.mapSize; ++i) {
+			for (let j = 0; j < this.settings.mapSize; ++j) {
 				if (this.fields[i][j].tower && this.fields[i][j].tower !== 0) {
 					matrix[i][j] = 1;
 				} else {
@@ -324,7 +326,7 @@ class SingleStrategy {
 		});
 
 		let path = [];
-		let curStart = Setting.start;
+		let curStart = this.settings.start;
 		for (let i = 0; i < checkpoints.length; i++) {
 			if (i > 0) {
 				curStart = checkpoints[i-1];

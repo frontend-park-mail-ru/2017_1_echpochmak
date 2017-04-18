@@ -22,17 +22,29 @@ class SinglePlayer extends BaseView {
 		});
 		this.newGame.get().innerHTML = 'Начать игру';
 
+		this.leftBar = new BaseBlock('div', {
+			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 left-bar'
+		});
+		this.gameField = new BaseBlock('div', {
+			class: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 game-field',
+			id: 'konva'
+		});
+		// this.hints = new BaseBlock('div', {
+		// 	class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field'
+		// })
+
 		this.render();
 		this.makeListeners();
 	}
 
 	makeListeners() {
-		this.newGame.on('click', () => {
+		this.newGame.on('click', (event) => {
+			event.preventDefault();
+
 			this.get().removeChild(this.padd.get());
-			const konva = new BaseBlock('div', {
-				id: 'konva'
-			});
-			this.get().appendChild(konva.get());
+			this.get().appendChild(this.leftBar.get());
+			this.get().appendChild(this.gameField.get());
+			// this.get().appendChild()
 			const strategy = new SingleStrategy();
 		})
 	}

@@ -68,10 +68,6 @@ class SingleStrategy {
 
 		this.state = {};
 
-		// this.gameInterval = setInterval(() => {
-		// 	this.gameLoop.call(this);
-		// }, 17);
-
 		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
 		});
@@ -87,7 +83,6 @@ class SingleStrategy {
 		this.updateState();
 		this.scene.setState(this.state);
 		this.scene.render();
-		// this.scene.testDraw();
 
 		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
@@ -141,9 +136,6 @@ class SingleStrategy {
 	generateTower(field) {
 
 		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
-		
-		console.log(circlePro);
-		console.log(this.settings.circles);
 
 		let circle = new CircleTower(
 			circlePro, 
@@ -157,6 +149,17 @@ class SingleStrategy {
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
+
+		if (this.newStones >= 5) {
+			for (let i = 0; i < this.settings.mapSize; i++){
+				for (let j = 0; j < this.settings.mapSize; j++){
+					this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+				}
+			}
+			let waveButton = new VariantBlock(4);
+			waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
+			this.variantRects.push(waveButton);
+		}
 	}
 
 	createVariants(field) {
@@ -228,16 +231,16 @@ class SingleStrategy {
 	}
 
 	playerStep() {
-		if (this.newStones >= 5){
-			for (let i = 0; i < this.settings.mapSize; i++){
-				for (let j = 0; j < this.settings.mapSize; j++){
-					this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
-				}
-			}
-			let waveButton = new VariantBlock(4);
-			waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
-			this.variantRects.push(waveButton);
-		}
+		// if (this.newStones >= 5){
+		// 	for (let i = 0; i < this.settings.mapSize; i++){
+		// 		for (let j = 0; j < this.settings.mapSize; j++){
+		// 			this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+		// 		}
+		// 	}
+		// 	let waveButton = new VariantBlock(4);
+		// 	waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
+		// 	this.variantRects.push(waveButton);
+		// }
 	}
 
 	gameWave() {
@@ -272,7 +275,7 @@ class SingleStrategy {
 			this.enemies.splice(0, 1);
 		};
 		for (let i = 0; i < this.enemies.length; i++){
-			console.log(this.enemies[i].numberTurns)
+			// console.log(this.enemies[i].numberTurns)
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
 			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);

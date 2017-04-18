@@ -269,8 +269,9 @@ class Settings {
 		this.checkpoints = [[0,9], [9,0]];
 
 		this.mapSize = 10;
-		this.mapX = window.innerWidth * 0.2;	
+		this.mapX = window.innerWidth * 0.2;
 		this.mapY = window.innerHeight * 0.05;
+		// this.mapX
 		this.variantRadius = 10;
 		this.bulletStep = 20;
 		this.monsterStep = 10;
@@ -365,7 +366,8 @@ class Settings {
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.fieldSize = window.innerHeight * 0.9 / this.mapSize;
+		// this.fieldSize = window.innerHeight * 0.9 / this.mapSize;
+		this.fieldSize = this.gameFieldElement.offsetHeight * 0.9 / this.mapSize;
 
 		Settings.__instance = this;
 	}
@@ -1379,7 +1381,7 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 		});
 		this.gameField = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 game-field',
-			id: 'konva'
+			id: 'game-field'
 		});
 		// this.hints = new BaseBlock('div', {
 		// 	class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field'
@@ -1393,6 +1395,7 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 		this.newGame.on('click', (event) => {
 			event.preventDefault();
 
+			this.get().removeChild(this.back.get());
 			this.get().removeChild(this.padd.get());
 			this.get().appendChild(this.leftBar.get());
 			this.get().appendChild(this.gameField.get());
@@ -1914,6 +1917,14 @@ class Scene {
 	constructor() {
 		this.state = {};
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
+
+		this.stage = new Konva.Stage({
+			container: this.settings.gameFieldId,
+			width : this.settings.gameFieldElement.offsetWidth,
+			height : this.settings.gameFieldElement.offsetHeight
+		});
+
+		this.layer = new Konva.Layer();
 	}
 
 	setState(state) {
@@ -1921,72 +1932,48 @@ class Scene {
 	}
 
 	render() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		let layer = new Konva.Layer();
+
+		let length = this.layer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.layer.children[0].remove();
+		}
+
+		console.log(this.layer.children.length);
 
 		for (let i = 0; i < this.settings.mapSize; i++){
 			for (let j = 0; j < this.settings.mapSize; j++){
-				// console.log(this.state.fields[i][j].field)
-				layer.add(this.state.fields[i][j].field);
+				this.layer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
-					layer.add(this.state.fields[i][j].tower.draw);
-					//console.log(this.state.fields[i][j])
+					this.layer.add(this.state.fields[i][j].tower.draw);
 				};
 				
 			};
 		};
 		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
-			layer.add(this.state.fieldsNewTower[i].draw)
-			console.log(this.state.fieldsNewTower.length)
+			this.layer.add(this.state.fieldsNewTower[i].draw)
 		}
 
 		for (let i = 0; i < this.state.variantRects.length; i++){
-			layer.add(this.state.variantRects[i].draw);
+			this.layer.add(this.state.variantRects[i].draw);
 
 		};
 		//for (let i = 0; i < this.state.variantElements.length; i++){
-		//	layer.add(this.state.variantElements[i]);
+		//	this.layer.add(this.state.variantElements[i]);
 		//}
 		for (let i = 0; i < this.state.variantsShow.length; i++){
-			layer.add(this.state.variantsShow[i].draw);
+			this.layer.add(this.state.variantsShow[i].draw);
 		}
 		for (let i = 0; i < this.state.enemies.length; i++){
-			layer.add(this.state.enemies[i].draw);
+			this.layer.add(this.state.enemies[i].draw);
 		}
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+				this.layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
 			}
 		}
 
-		stage.add(layer);
-	}
-
-	testDraw() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		let layer = new Konva.Layer();
-
-		let circle = new Konva.Circle({
-			x: this.settings.mapX + 50,
-			y: this.settings.mapY + 50,
-			radius: 50,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: 'red'
-		});
-
-		layer.add(circle);
-
-		stage.add(layer);
+		this.stage.add(this.layer);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Scene;
@@ -2073,10 +2060,6 @@ class SingleStrategy {
 
 		this.state = {};
 
-		// this.gameInterval = setInterval(() => {
-		// 	this.gameLoop.call(this);
-		// }, 17);
-
 		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
 		});
@@ -2092,7 +2075,6 @@ class SingleStrategy {
 		this.updateState();
 		this.scene.setState(this.state);
 		this.scene.render();
-		// this.scene.testDraw();
 
 		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
@@ -2146,9 +2128,6 @@ class SingleStrategy {
 	generateTower(field) {
 
 		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
-		
-		console.log(circlePro);
-		console.log(this.settings.circles);
 
 		let circle = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](
 			circlePro, 
@@ -2162,6 +2141,17 @@ class SingleStrategy {
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
+
+		if (this.newStones >= 5) {
+			for (let i = 0; i < this.settings.mapSize; i++){
+				for (let j = 0; j < this.settings.mapSize; j++){
+					this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+				}
+			}
+			let waveButton = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](4);
+			waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
+			this.variantRects.push(waveButton);
+		}
 	}
 
 	createVariants(field) {
@@ -2233,16 +2223,16 @@ class SingleStrategy {
 	}
 
 	playerStep() {
-		if (this.newStones >= 5){
-			for (let i = 0; i < this.settings.mapSize; i++){
-				for (let j = 0; j < this.settings.mapSize; j++){
-					this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
-				}
-			}
-			let waveButton = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](4);
-			waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
-			this.variantRects.push(waveButton);
-		}
+		// if (this.newStones >= 5){
+		// 	for (let i = 0; i < this.settings.mapSize; i++){
+		// 		for (let j = 0; j < this.settings.mapSize; j++){
+		// 			this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+		// 		}
+		// 	}
+		// 	let waveButton = new VariantBlock(4);
+		// 	waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
+		// 	this.variantRects.push(waveButton);
+		// }
 	}
 
 	gameWave() {
@@ -2277,7 +2267,7 @@ class SingleStrategy {
 			this.enemies.splice(0, 1);
 		};
 		for (let i = 0; i < this.enemies.length; i++){
-			console.log(this.enemies[i].numberTurns)
+			// console.log(this.enemies[i].numberTurns)
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
 			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
@@ -2307,7 +2297,6 @@ class SingleStrategy {
 
 	findPath(checkpoints) {
 
-		// checkpoints = checkpoints.concat(Setting.finish);
 		checkpoints.push(this.settings.finish);
 
 		let matrix = Array(this.settings.mapSize);

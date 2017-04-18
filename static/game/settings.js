@@ -14,8 +14,9 @@ class Settings {
 		this.checkpoints = [[0,9], [9,0]];
 
 		this.mapSize = 10;
-		this.mapX = window.innerWidth * 0.2;	
+		this.mapX = window.innerWidth * 0.2;
 		this.mapY = window.innerHeight * 0.05;
+		// this.mapX
 		this.variantRadius = 10;
 		this.bulletStep = 20;
 		this.monsterStep = 10;

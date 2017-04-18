@@ -27,7 +27,7 @@ class SinglePlayer extends BaseView {
 		});
 		this.gameField = new BaseBlock('div', {
 			class: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 game-field',
-			id: 'konva'
+			id: 'game-field'
 		});
 		// this.hints = new BaseBlock('div', {
 		// 	class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field'
@@ -41,6 +41,7 @@ class SinglePlayer extends BaseView {
 		this.newGame.on('click', (event) => {
 			event.preventDefault();
 
+			this.get().removeChild(this.back.get());
 			this.get().removeChild(this.padd.get());
 			this.get().appendChild(this.leftBar.get());
 			this.get().appendChild(this.gameField.get());

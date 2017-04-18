@@ -5,6 +5,14 @@ class Scene {
 	constructor() {
 		this.state = {};
 		this.settings = new Settings;
+
+		this.stage = new Konva.Stage({
+			container: this.settings.gameFieldId,
+			width : this.settings.gameFieldElement.offsetWidth,
+			height : this.settings.gameFieldElement.offsetHeight
+		});
+
+		this.layer = new Konva.Layer();
 	}
 
 	setState(state) {
@@ -12,71 +20,47 @@ class Scene {
 	}
 
 	render() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		let layer = new Konva.Layer();
+
+		let length = this.layer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.layer.children[0].remove();
+		}
+
+		console.log(this.layer.children.length);
 
 		for (let i = 0; i < this.settings.mapSize; i++){
 			for (let j = 0; j < this.settings.mapSize; j++){
-				// console.log(this.state.fields[i][j].field)
-				layer.add(this.state.fields[i][j].field);
+				this.layer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
-					layer.add(this.state.fields[i][j].tower.draw);
-					//console.log(this.state.fields[i][j])
+					this.layer.add(this.state.fields[i][j].tower.draw);
 				};
 				
 			};
 		};
 		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
-			layer.add(this.state.fieldsNewTower[i].draw)
-			console.log(this.state.fieldsNewTower.length)
+			this.layer.add(this.state.fieldsNewTower[i].draw)
 		}
 
 		for (let i = 0; i < this.state.variantRects.length; i++){
-			layer.add(this.state.variantRects[i].draw);
+			this.layer.add(this.state.variantRects[i].draw);
 
 		};
 		//for (let i = 0; i < this.state.variantElements.length; i++){
-		//	layer.add(this.state.variantElements[i]);
+		//	this.layer.add(this.state.variantElements[i]);
 		//}
 		for (let i = 0; i < this.state.variantsShow.length; i++){
-			layer.add(this.state.variantsShow[i].draw);
+			this.layer.add(this.state.variantsShow[i].draw);
 		}
 		for (let i = 0; i < this.state.enemies.length; i++){
-			layer.add(this.state.enemies[i].draw);
+			this.layer.add(this.state.enemies[i].draw);
 		}
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+				this.layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
 			}
 		}
 
-		stage.add(layer);
-	}
-
-	testDraw() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		let layer = new Konva.Layer();
-
-		let circle = new Konva.Circle({
-			x: this.settings.mapX + 50,
-			y: this.settings.mapY + 50,
-			radius: 50,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: 'red'
-		});
-
-		layer.add(circle);
-
-		stage.add(layer);
+		this.stage.add(this.layer);
 	}
 }

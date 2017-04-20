@@ -9,14 +9,21 @@ class Settings {
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
 
-		this.start = [0,0];
-		this.finish = [9,9];
-		this.checkpoints = [[0,9], [9,0]];
+		this.gameFieldElement = document.getElementById(this.gameFieldId);
+		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.mapSize = 10;
-		this.mapX = window.innerWidth * 0.2;
-		this.mapY = window.innerHeight * 0.05;
-		// this.mapX
+		this.mapSize = 20;
+
+		this.start = [0,0];
+		this.finish = [this.mapSize - 1, this.mapSize - 1];
+		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
+
+		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
+		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
+
+		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
+		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
+
 		this.variantRadius = 10;
 		this.bulletStep = 20;
 		this.monsterStep = 10;
@@ -107,12 +114,6 @@ class Settings {
 			this.pentagonSBG, 
 			this.pentagonGYR
 		];
-
-		this.gameFieldElement = document.getElementById(this.gameFieldId);
-		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
-
-		// this.fieldSize = window.innerHeight * 0.9 / this.mapSize;
-		this.fieldSize = this.gameFieldElement.offsetHeight * 0.9 / this.mapSize;
 
 		Settings.__instance = this;
 	}

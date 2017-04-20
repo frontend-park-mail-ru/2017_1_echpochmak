@@ -26,12 +26,13 @@ class SinglePlayer extends BaseView {
 			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 left-bar'
 		});
 		this.gameField = new BaseBlock('div', {
-			class: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 game-field',
+			class: 'col-xs-6 col-sm-6 col-md-6 col-lg-6 game-field',
 			id: 'game-field'
 		});
-		// this.hints = new BaseBlock('div', {
-		// 	class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field'
-		// })
+		this.hints = new BaseBlock('div', {
+			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field',
+			id: 'hints-field'
+		})
 
 		this.render();
 		this.makeListeners();
@@ -45,7 +46,7 @@ class SinglePlayer extends BaseView {
 			this.get().removeChild(this.padd.get());
 			this.get().appendChild(this.leftBar.get());
 			this.get().appendChild(this.gameField.get());
-			// this.get().appendChild()
+			this.get().appendChild(this.hints.get());
 			const strategy = new SingleStrategy();
 		})
 	}

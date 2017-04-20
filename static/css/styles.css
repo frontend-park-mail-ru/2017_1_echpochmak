@@ -56,8 +56,15 @@ body {
 
 .left-bar {
 	height: 100vh;
+	padding: 0px;
 }
 
 .game-field {
 	height: 100vh;
+	padding: 0px;
+}
+
+.hints-field {
+	height: 100vh;
+	padding: 0px;
 }

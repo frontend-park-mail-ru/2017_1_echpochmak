@@ -264,14 +264,21 @@ class Settings {
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
 
-		this.start = [0,0];
-		this.finish = [9,9];
-		this.checkpoints = [[0,9], [9,0]];
+		this.gameFieldElement = document.getElementById(this.gameFieldId);
+		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.mapSize = 10;
-		this.mapX = window.innerWidth * 0.2;
-		this.mapY = window.innerHeight * 0.05;
-		// this.mapX
+		this.mapSize = 20;
+
+		this.start = [0,0];
+		this.finish = [this.mapSize - 1, this.mapSize - 1];
+		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
+
+		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
+		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
+
+		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
+		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
+
 		this.variantRadius = 10;
 		this.bulletStep = 20;
 		this.monsterStep = 10;
@@ -362,12 +369,6 @@ class Settings {
 			this.pentagonSBG, 
 			this.pentagonGYR
 		];
-
-		this.gameFieldElement = document.getElementById(this.gameFieldId);
-		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
-
-		// this.fieldSize = window.innerHeight * 0.9 / this.mapSize;
-		this.fieldSize = this.gameFieldElement.offsetHeight * 0.9 / this.mapSize;
 
 		Settings.__instance = this;
 	}
@@ -1380,12 +1381,13 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 left-bar'
 		});
 		this.gameField = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 game-field',
+			class: 'col-xs-6 col-sm-6 col-md-6 col-lg-6 game-field',
 			id: 'game-field'
 		});
-		// this.hints = new BaseBlock('div', {
-		// 	class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field'
-		// })
+		this.hints = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field',
+			id: 'hints-field'
+		})
 
 		this.render();
 		this.makeListeners();
@@ -1399,7 +1401,7 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 			this.get().removeChild(this.padd.get());
 			this.get().appendChild(this.leftBar.get());
 			this.get().appendChild(this.gameField.get());
-			// this.get().appendChild()
+			this.get().appendChild(this.hints.get());
 			const strategy = new __WEBPACK_IMPORTED_MODULE_2__game_strategy_js__["a" /* default */]();
 		})
 	}
@@ -1918,13 +1920,21 @@ class Scene {
 		this.state = {};
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
 
-		this.stage = new Konva.Stage({
+		this.gameStage = new Konva.Stage({
 			container: this.settings.gameFieldId,
 			width : this.settings.gameFieldElement.offsetWidth,
 			height : this.settings.gameFieldElement.offsetHeight
 		});
 
-		this.layer = new Konva.Layer();
+		this.gameLayer = new Konva.Layer();
+
+		this.hintsStage = new Konva.Stage({
+			container: this.settings.hintsFieldId,
+			width : this.settings.hintsFieldElement.offsetWidth,
+			height : this.settings.hintsFieldElement.offsetHeight
+		})
+
+		this.hintsLayer = new Konva.Layer();
 	}
 
 	setState(state) {
@@ -1933,47 +1943,51 @@ class Scene {
 
 	render() {
 
-		let length = this.layer.children.length;
+		let length = this.gameLayer.children.length;
 		for (let i = 0; i < length; i++) {
-			this.layer.children[0].remove();
+			this.gameLayer.children[0].remove();
 		}
-
-		console.log(this.layer.children.length);
+		
+		length = this.hintsLayer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.hintsLayer.children[0].remove();
+		}
 
 		for (let i = 0; i < this.settings.mapSize; i++){
 			for (let j = 0; j < this.settings.mapSize; j++){
-				this.layer.add(this.state.fields[i][j].field);
+				this.gameLayer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
-					this.layer.add(this.state.fields[i][j].tower.draw);
-				};
+					this.gameLayer.add(this.state.fields[i][j].tower.draw);
+				}
 				
-			};
-		};
+			}
+		}
 		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
-			this.layer.add(this.state.fieldsNewTower[i].draw)
+			this.gameLayer.add(this.state.fieldsNewTower[i].draw)
 		}
 
 		for (let i = 0; i < this.state.variantRects.length; i++){
-			this.layer.add(this.state.variantRects[i].draw);
+			this.hintsLayer.add(this.state.variantRects[i].draw);
+		}
 
-		};
 		//for (let i = 0; i < this.state.variantElements.length; i++){
 		//	this.layer.add(this.state.variantElements[i]);
 		//}
 		for (let i = 0; i < this.state.variantsShow.length; i++){
-			this.layer.add(this.state.variantsShow[i].draw);
+			this.gameLayer.add(this.state.variantsShow[i].draw);
 		}
 		for (let i = 0; i < this.state.enemies.length; i++){
-			this.layer.add(this.state.enemies[i].draw);
+			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				this.layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+				this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
 			}
 		}
 
-		this.stage.add(this.layer);
+		this.gameStage.add(this.gameLayer);
+		this.hintsStage.add(this.hintsLayer);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Scene;
@@ -2353,11 +2367,15 @@ class SingleStrategy {
 class VariantBlock {
 	constructor(number) {
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
+
+		let width = this.settings.hintsFieldElement.offsetWidth;
+		let height = this.settings.hintsFieldElement.offsetHeight;
+
 		this.draw = new Konva.Rect({
-				x: window.innerWidth * 0.72,
-				y: this.settings.mapY + number * 120,
-				width: window.innerWidth * 0.25,
-				height: window.innerHeight * 0.1,
+				x: width * 0.05,
+				y: this.settings.mapY + number * height * 0.15,
+				width: width * 0.9,
+				height: height * 0.1,
 				fill: 'grey',
 				stroke: 'black',
 				strokeWidth: 2

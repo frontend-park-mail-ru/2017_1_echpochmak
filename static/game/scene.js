@@ -38,11 +38,14 @@ class Scene {
 
 		for (let i = 0; i < this.state.variantRects.length; i++){
 			layer.add(this.state.variantRects[i].draw);
+			if (this.state.variantRects[i].text) {
+				layer.add(this.state.variantRects[i].text);
+			}
 
 		};
-		//for (let i = 0; i < this.state.variantElements.length; i++){
-		//	layer.add(this.state.variantElements[i]);
-		//}
+		for (let i = 0; i < this.state.variantElements.length; i++){
+			layer.add(this.state.variantElements[i].draw);
+		}
 		for (let i = 0; i < this.state.variantsShow.length; i++){
 			layer.add(this.state.variantsShow[i].draw);
 		}
@@ -52,7 +55,10 @@ class Scene {
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
+					layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+				}
+				
 			}
 		}
 

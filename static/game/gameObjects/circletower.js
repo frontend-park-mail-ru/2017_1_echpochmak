@@ -12,13 +12,17 @@ class CircleTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
+		//for (let i = 0; i < Setting.numberMonstersInWave; i++){
+		//	this.bulletes.push(Array(numberMonstersInWave));
+		//}
 	}
 
-	fire() {
-		this.bulletes.push(new Konva.Circle({
+	fire(enemie) {
+		this.bulletes[enemie].push(new Konva.Circle({
 			x: this.draw.getX(),
 			y: this.draw.getY(),
-			radius: 5,
+			radius: Setting.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
 			fill: this.draw.getFill()

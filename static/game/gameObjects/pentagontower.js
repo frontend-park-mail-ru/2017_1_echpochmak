@@ -17,16 +17,17 @@ class PentagonTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
-	fire() {
-		this.bulletes.push(new Konva.Circle({
-			x: this.draw.x,
-			y: this.draw.y,
-			radius: 5,
+	fire(enemie) {
+		this.bulletes[enemie].push(new Konva.Circle({
+			x: this.draw.getX(),
+			y: this.draw.getY(),
+			radius: Setting.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
-			fill: 'black'
+			fill: this.kind.colors[0],
 		}));
 	}
 }

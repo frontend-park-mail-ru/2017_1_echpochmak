@@ -19,6 +19,7 @@ class StarTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
 	fire() {

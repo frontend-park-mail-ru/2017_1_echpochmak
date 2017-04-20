@@ -1,4 +1,5 @@
 import Settings from '../settings.js'
+
 export default
 class StarTower {
 	constructor(name, x, y, radius) {
@@ -19,6 +20,7 @@ class StarTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
 	fire() {

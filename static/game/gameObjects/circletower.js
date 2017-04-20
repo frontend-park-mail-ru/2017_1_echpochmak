@@ -1,4 +1,5 @@
 import Settings from '../settings.js'
+
 export default
 class CircleTower {
 	constructor(name, x, y, radius) {
@@ -12,13 +13,14 @@ class CircleTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
-	fire() {
-		this.bulletes.push(new Konva.Circle({
+	fire(enemie) {
+		this.bulletes[enemie].push(new Konva.Circle({
 			x: this.draw.getX(),
 			y: this.draw.getY(),
-			radius: 5,
+			radius: Setting.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
 			fill: this.draw.getFill()

@@ -1,4 +1,5 @@
 import Settings from '../settings.js'
+
 export default
 class Monster {
 	constructor(name) {

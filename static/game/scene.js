@@ -52,23 +52,30 @@ class Scene {
 			this.gameLayer.add(this.state.fieldsNewTower[i].draw)
 		}
 
-		for (let i = 0; i < this.state.variantRects.length; i++){
-			this.hintsLayer.add(this.state.variantRects[i].draw);
+		for (let i = 0; i < this.state.variantRects.length; i++) {
+			hintsLayer.add(this.state.variantRects[i].draw);
+			if (this.state.variantRects[i].text) {
+				hintsLayer.add(this.state.variantRects[i].text);
+			}
 		}
 
-		//for (let i = 0; i < this.state.variantElements.length; i++){
-		//	this.layer.add(this.state.variantElements[i]);
-		//}
+		for (let i = 0; i < this.state.variantElements.length; i++){
+			hintsLayer.add(this.state.variantElements[i].draw);
+		}
+
 		for (let i = 0; i < this.state.variantsShow.length; i++){
 			this.gameLayer.add(this.state.variantsShow[i].draw);
 		}
+
 		for (let i = 0; i < this.state.enemies.length; i++){
 			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
+					gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+				}
 			}
 		}
 

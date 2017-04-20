@@ -2,20 +2,42 @@ import Settings from './settings.js'
 
 export default
 class VariantBlock {
-	constructor(number) {
+	constructor(number, text) {
 		this.settings = new Settings;
 
-		let width = this.settings.hintsFieldElement.offsetWidth;
-		let height = this.settings.hintsFieldElement.offsetHeight;
+		if (text) {
+			this.text = new Konva.Text({
+				x: this.settings.variantsX,
+				y: this.settings.variantsY + number * this.settings.betweenVariants,
+				width: this.settings.variantsXSize,
+				text: text,
+				fontSize: 18,
+				fill: 'red',
+				padding: 15,
+				align: 'center',
+			});
 
 		this.draw = new Konva.Rect({
-				x: width * 0.05,
-				y: this.settings.mapY + number * height * 0.15,
-				width: width * 0.9,
-				height: height * 0.1,
-				fill: 'grey',
-				stroke: 'black',
-				strokeWidth: 2
-			});
+			x: this.settings.variantsX,
+			y: this.settings.variantsY + number * this.settings.betweenVariants,
+			width: this.settings.variantsXSize,
+			height: (text ? this.text.getHeight() : this.settings.variantsYSize),
+			fill: 'grey',
+			stroke: 'black',
+			strokeWidth: 2
+		});
+
+		// let width = this.settings.hintsFieldElement.offsetWidth;
+		// let height = this.settings.hintsFieldElement.offsetHeight;
+
+		// this.draw = new Konva.Rect({
+		// 		x: width * 0.05,
+		// 		y: this.settings.mapY + number * height * 0.15,
+		// 		width: width * 0.9,
+		// 		height: height * 0.1,
+		// 		fill: 'grey',
+		// 		stroke: 'black',
+		// 		strokeWidth: 2
+		// });
 	}
-};
+}

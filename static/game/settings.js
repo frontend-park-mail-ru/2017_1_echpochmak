@@ -77,7 +77,7 @@ class Settings {
 			name: 'triangl',
 			size: 30,
 			color: '#00FF00',
-			healh: 10,
+			health: 10,
 		};
 
 		this.stone = {

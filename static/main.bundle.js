@@ -271,7 +271,7 @@ class Settings {
 			name: 'triangl',
 			size: 30,
 			color: '#00FF00',
-			healh: 10,
+			health: 10,
 		};
 
 		this.stone = {
@@ -2365,9 +2365,9 @@ class SingleStrategy {
 			};
 		};
 
-		if (this.enemies[0].numberTurns === this.path.length){
+		if (this.enemies[0].numberTurns === this.path.length) {
 			this.enemies.splice(0, 1);
-			for (let s = 0; s < this.fieldsWithTowers; s++){
+			for (let s = 0; s < this.fieldsWithTowers.length; s++){
 				this.fieldsWithTowers[s].tower.bulletes.splice(0, 1);
 			}
 		}

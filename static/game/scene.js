@@ -53,14 +53,14 @@ class Scene {
 		}
 
 		for (let i = 0; i < this.state.variantRects.length; i++) {
-			hintsLayer.add(this.state.variantRects[i].draw);
+			this.hintsLayer.add(this.state.variantRects[i].draw);
 			if (this.state.variantRects[i].text) {
-				hintsLayer.add(this.state.variantRects[i].text);
+				this.hintsLayer.add(this.state.variantRects[i].text);
 			}
 		}
 
 		for (let i = 0; i < this.state.variantElements.length; i++){
-			hintsLayer.add(this.state.variantElements[i].draw);
+			this.hintsLayer.add(this.state.variantElements[i].draw);
 		}
 
 		for (let i = 0; i < this.state.variantsShow.length; i++){
@@ -74,7 +74,7 @@ class Scene {
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
 				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
-					gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+					this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
 				}
 			}
 		}

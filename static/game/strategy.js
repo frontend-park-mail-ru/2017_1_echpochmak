@@ -88,6 +88,8 @@ class SingleStrategy {
 			
 				this.fields[j][i]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[j][i])});
 				this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
+				this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+
 			};
 		};
 
@@ -159,17 +161,22 @@ class SingleStrategy {
 	}
 
 	onOverField(field) {
-		let i = field.coordinates[0];
-		let j = field.coordinates[1];
-		this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j].field.setStroke('black');
-		this.fields[i - 1 >= 0 ? i - 1 : i][j].field.setStroke('black');
-		this.fields[i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
-		this.fields[i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
-		this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
-		this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
-		this.fields[i - 1 >= 0 ? i - 1 : i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
-		this.fields[i - 1 >= 0 ? i - 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
+		// let i = field.coordinates[0];
+		// let j = field.coordinates[1];
+		// this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j].field.setStroke('black');
+		// this.fields[i - 1 >= 0 ? i - 1 : i][j].field.setStroke('black');
+		// this.fields[i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
+		// this.fields[i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
+		// this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
+		// this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
+		// this.fields[i - 1 >= 0 ? i - 1 : i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
+		// this.fields[i - 1 >= 0 ? i - 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
 		field.field.setStroke(field.ableTower ? 'green' : 'red');
+	}
+
+	onOutField(field) {
+		// alert('yes');
+		field.field.setStroke('black');	
 	}
 
 	onClickNewPentagon(field, kind, currentNewTower) {
@@ -423,7 +430,7 @@ class SingleStrategy {
 				}
 			}
 		}
-		
+
 		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.enemiesNumber = 0;

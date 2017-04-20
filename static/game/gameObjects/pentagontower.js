@@ -3,6 +3,7 @@ import Settings from '../settings.js'
 export default
 class PentagonTower {
 	constructor(name, x, y, radius) {
+		this.settings = new Settings();
 		this.draw = new Konva.RegularPolygon({
 			x: x,
 			y: y,
@@ -25,7 +26,7 @@ class PentagonTower {
 		this.bulletes[enemie].push(new Konva.Circle({
 			x: this.draw.getX(),
 			y: this.draw.getY(),
-			radius: Setting.bulletRadius,
+			radius: this.settings.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
 			fill: this.kind.colors[0],

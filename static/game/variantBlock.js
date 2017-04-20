@@ -16,6 +16,7 @@ class VariantBlock {
 				padding: 15,
 				align: 'center',
 			});
+		}
 
 		this.draw = new Konva.Rect({
 			x: this.settings.variantsX,

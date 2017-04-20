@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -193,6 +193,166 @@ class Router {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+class Settings {
+	constructor() {
+
+		if (Settings.__instance) {
+			return Settings.__instance;
+		}
+
+		this.gameFieldId = 'game-field';
+		this.hintsFieldId = 'hints-field';
+
+		this.gameFieldElement = document.getElementById(this.gameFieldId);
+		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
+
+		this.mapSize = 10;
+
+		this.start = [0,0];
+		this.finish = [this.mapSize - 1, this.mapSize - 1];
+		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
+
+		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
+		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
+
+		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
+		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
+
+		this.variantRadius = 10;
+		this.bulletStep = 20;
+		this.monsterStep = 10;
+
+		this.numberMonstersInWave = 20;
+		this.bulletRadius = 5;
+
+		this.circleRed = {
+			name: 'circleRed',
+			color: '#FF0000',
+			power: 10,
+			radiusFight: 400,
+		};
+
+		this.circleBlue = {
+			name: 'circleBlue',
+			color: '#00FFFF',
+			power: 15,
+			radiusFight: 400,
+		};
+
+		this.circleGreen = {
+			name: 'circleGreen',
+			color: '#00FF00',
+			power: 20,
+			radiusFight: 400,
+		};
+
+		this.circleYellow = {
+			name: 'circleYellow',
+			color: '#FFFF00',
+			power: 25,
+			radiusFight: 400,
+		};
+
+		this.circlePink = {
+			name: 'circlePink',
+			color: '#FF00FF',
+			power: 30,
+			radiusFight: 400,
+		};
+
+		this.circleSad = {
+			name: 'circleSad',
+			color: '#0000FF',
+			power: 35,
+			radiusFight: 400,
+		};
+
+		this.triangl = {
+			name: 'triangl',
+			size: 30,
+			color: '#00FF00',
+			healh: 10,
+		};
+
+		this.stone = {
+			name: 'stone',
+			color: 'black',
+		};
+
+		this.pentagonRPS = {
+			name: 'pentagonRPS',
+			power: 70,
+			colors: ['#FF0000', '#FF00FF', '#0000FF'],
+			radiusFight: 400,
+			circles: ['circleRed', 'circlePink', 'circleSad']
+		};
+
+		this.pentagonSBG = {
+			name: 'pentagonSBG',
+			power: 80,
+			colors: ['#0000FF', '#00FFFF', '#00FF00'],
+			radiusFight: 400,
+			circles: ['circleSad', 'circleBlue', 'circleGreen']
+		};
+
+		this.pentagonGYR = {
+			name: 'pentagonGYR',
+			power: 70,
+			colors: ['#00FF00', '#FFFF00', '#FF0000'],
+			radiusFight: 400,
+			circles: ['circleGreen', 'circleYellow', 'circleRed']
+		};
+
+		this.star = {
+			name: 'star',
+			colors: ['#0000FF', '#00FF00', '#FF0000'],
+			power: 100,
+			radiusFight: 400,
+		};
+
+		this.circles = [
+			this.circleRed, 
+			this.circleGreen, 
+			this.circleYellow, 
+			this.circleBlue, 
+			this.circleSad, 
+			this.circlePink
+		];
+
+		this.pentagons = [
+			this.pentagonRPS, 
+			this.pentagonSBG, 
+			this.pentagonGYR
+		];
+
+		// this.variantsX = window.innerWidth * 0.72;
+		// this.variantsY = this.mapY;
+		// this.variantsXSize = window.innerWidth * 0.25;
+		// this.variantsYSize = window.innerHeight * 0.1;
+		// this.betweenVariants = 120;
+
+		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
+		this.variantsY = this.mapY;
+		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
+		this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
+		this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+
+		this.variantCircls = [[this.circleRed, this.circlePink, this.circleSad],
+								[this.circleSad, this.circleBlue, this.circleGreen],
+								[this.circleGreen, this.circleYellow, this.circleRed]];
+
+		Settings.__instance = this;
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Settings;
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_router_js__ = __webpack_require__(1);
 
@@ -248,245 +408,6 @@ class Authorize {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Authorize;
 
 
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class Settings {
-	constructor() {
-
-		if (Settings.__instance) {
-			return Settings.__instance;
-		}
-
-		this.gameFieldId = 'game-field';
-		this.hintsFieldId = 'hints-field';
-
-		this.gameFieldElement = document.getElementById(this.gameFieldId);
-		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
-
-		this.mapSize = 20;
-
-		this.start = [0,0];
-		this.finish = [this.mapSize - 1, this.mapSize - 1];
-		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
-
-		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
-		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
-
-		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
-		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
-
-		this.variantRadius = 10;
-		this.bulletStep = 20;
-		this.monsterStep = 10;
-
-		this.circleRed = {
-			name: 'circleRed',
-			color: '#FF0000',
-			power: 10,
-		};
-
-		this.circleBlue = {
-			name: 'circleBlue',
-			color: '#00FFFF',
-			power: 15
-		};
-
-		this.circleGreen = {
-			name: 'circleGreen',
-			color: '#00FF00',
-			power: 20
-		};
-
-		this.circleYellow = {
-			name: 'circleYellow',
-			color: '#FFFF00',
-			power: 25
-		};
-
-		this.circlePink = {
-			name: 'circlePink',
-			color: '#FF00FF',
-			power: 30
-		};
-
-		this.circleSad = {
-			name: 'circleSad',
-			color: '#0000FF',
-			power: 35
-		};
-
-		this.triangl = {
-			name: 'triangl',
-			size: 30,
-			color: '#00FF00',
-			healh: 100,
-		};
-
-		this.stone = {
-			name: 'stone',
-			color: 'black',
-		};
-
-		this.pentagonRPS = {
-			name: 'pentagonRPS',
-			power: 70,
-			colors: ['#FF0000', '#FF00FF', '#0000FF'],
-		};
-
-		this.pentagonSBG = {
-			name: 'pentagonSBG',
-			power: 80,
-			colors: ['#0000FF', '#00FFFF', '#00FF00'],
-		};
-
-		this.pentagonGYR = {
-			name: 'pentagonGYR',
-			power: 70,
-			colors: ['#00FF00', '#FFFF00', '#FF0000'],
-		};
-
-		this.star = {
-			name: 'star',
-			colors: ['#0000FF', '#00FF00', '#FF0000'],
-			power: 100
-		};
-
-		this.circles = [
-			this.circleRed, 
-			this.circleGreen, 
-			this.circleYellow, 
-			this.circleBlue, 
-			this.circleSad, 
-			this.circlePink
-		];
-
-		this.pentagons = [
-			this.pentagonRPS, 
-			this.pentagonSBG, 
-			this.pentagonGYR
-		];
-
-		Settings.__instance = this;
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Settings;
-
-
-// const Settings = {
-
-// 	gameFieldId: 'game-field',
-// 	hintsFieldId: 'hints-field',
-
-// 	start: [0,0],
-// 	finish: [9,9],
-// 	checkpoints: [[0, 9], [9,0]],
-
-// 	mapSize: 10,
-// 	mapX: window.innerWidth * 0.2,	
-// 	mapY: window.innerHeight * 0.05,
-// 	variantRadius: 10,
-// 	bulletStep: 20,
-// 	monsterStep: 10,
-
-// 	circleRed: {
-// 		name: 'circleRed',
-// 		color: '#FF0000',
-// 		power: 10,
-// 	},
-
-// 	circleBlue: {
-// 		name: 'circleBlue',
-// 		color: '#00FFFF',
-// 		power: 15
-// 	},
-
-// 	circleGreen: {
-// 		name: 'circleGreen',
-// 		color: '#00FF00',
-// 		power: 20
-// 	},
-
-// 	circleYellow: {
-// 		name: 'circleYellow',
-// 		color: '#FFFF00',
-// 		power: 25
-// 	},
-
-// 	circlePink: {
-// 		name: 'circlePink',
-// 		color: '#FF00FF',
-// 		power: 30
-// 	},
-
-// 	circleSad: {
-// 		name: 'circleSad',
-// 		color: '#0000FF',
-// 		power: 35
-// 	},
-
-// 	triangl: {
-// 		name: 'triangl',
-// 		size: 30,
-// 		color: '#00FF00',
-// 		healh: 100,
-// 	},
-
-// 	stone: {
-// 		name: 'stone',
-// 		color: 'black',
-// 	},
-
-// 	pentagonRPS: {
-// 		name: 'pentagonRPS',
-// 		power: 70,
-// 		colors: ['#FF0000', '#FF00FF', '#0000FF'],
-// 	},
-
-// 	pentagonSBG: {
-// 		name: 'pentagonSBG',
-// 		power: 80,
-// 		colors: ['#0000FF', '#00FFFF', '#00FF00'],
-// 	},
-
-// 	pentagonGYR: {
-// 		name: 'pentagonGYR',
-// 		power: 70,
-// 		colors: ['#00FF00', '#FFFF00', '#FF0000'],
-// 	},
-
-// 	star: {
-// 		name: 'star',
-// 		colors: ['#0000FF', '#00FF00', '#FF0000'],
-// 		power: 100
-// 	}
-// };
-
-// // Settings.gameFieldElement = document.getElementById(Settings.gameFieldId);
-// // Settings.hintsFieldElement = document.getElementById(Settings.hintsFieldId);
-
-// // Settings.fieldSize = window.innerHeight * 0.9 / Settings.mapSize;
-// // Settings.fieldSize = Settings.gameFieldElement.offsetHeight * 0.9 / Settings.mapSize;
-
-// Settings.circles = [
-// 	Settings.circleRed, 
-// 	Settings.circleGreen, 
-// 	Settings.circleYellow, 
-// 	Settings.circleBlue, 
-// 	Settings.circleSad, 
-// 	Settings.circlePink
-// ];
-
-// Settings.pentagons = [
-// 	Settings.pentagonRPS, 
-// 	Settings.pentagonSBG, 
-// 	Settings.pentagonGYR
-// ];
-
-// export default Settings;
 
 /***/ }),
 /* 4 */
@@ -1035,7 +956,7 @@ class LeaderBoard extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1105,7 +1026,7 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_router_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 
 
 
@@ -1288,7 +1209,7 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 
 
 
@@ -1353,7 +1274,7 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_strategy_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_strategy_js__ = __webpack_require__(31);
 
 
 
@@ -1493,7 +1414,7 @@ class Button extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Link_link_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1565,7 +1486,7 @@ class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__FormMessage_formmessage_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1656,7 +1577,7 @@ class MenuButton extends __WEBPACK_IMPORTED_MODULE_0__Link_link_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FormMessage_formmessage_js__ = __webpack_require__(10);
 
@@ -1768,10 +1689,38 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+
+
+class Arrow {
+	constructor(row) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
+		this.draw = new Konva.Arrow({
+			x: this.settings.variantsX + this.settings.variantsXSize * 0.7,
+			y: this.settings.variantsY + this.settings.variantsYSize * 0.5 + row * this.settings.betweenVariants,
+			points: [-this.settings.variantsXSize * 0.1, 0, this.settings.variantsXSize * 0.1, 0],
+			pointerLength: 20,
+			pointerWidth: 20,
+			fill: 'red',
+			stroke: 'red',
+			strokeWidth: 4
+		})
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Arrow;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+
 
 class CircleTower {
 	constructor(name, x, y, radius) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.Circle({
 			x: x,
 			y: y,
@@ -1782,13 +1731,14 @@ class CircleTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
-	fire() {
-		this.bulletes.push(new Konva.Circle({
+	fire(enemie) {
+		this.bulletes[enemie].push(new Konva.Circle({
 			x: this.draw.getX(),
 			y: this.draw.getY(),
-			radius: 5,
+			radius: this.settings.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
 			fill: this.draw.getFill()
@@ -1799,11 +1749,12 @@ class CircleTower {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+
 
 class Monster {
 	constructor(name) {
@@ -1826,14 +1777,16 @@ class Monster {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+
 
 class PentagonTower {
 	constructor(name, x, y, radius) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.RegularPolygon({
 			x: x,
 			y: y,
@@ -1849,16 +1802,17 @@ class PentagonTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
-	fire() {
-		this.bulletes.push(new Konva.Circle({
-			x: this.draw.x,
-			y: this.draw.y,
-			radius: 5,
+	fire(enemie) {
+		this.bulletes[enemie].push(new Konva.Circle({
+			x: this.draw.getX(),
+			y: this.draw.getY(),
+			radius: this.settings.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
-			fill: 'black'
+			fill: this.kind.colors[0],
 		}));
 	}
 }
@@ -1866,14 +1820,16 @@ class PentagonTower {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+
 
 class StarTower {
 	constructor(name, x, y, radius) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.Star({
 			x: x,
 			y: y,
@@ -1891,6 +1847,7 @@ class StarTower {
 		});
 		this.kind = name;
 		this.bulletes = [];
+		this.radiusFight = name.radiusFight;
 	}
 
 	fire() {
@@ -1904,15 +1861,15 @@ class StarTower {
 		}));
 	}
 }
-/* unused harmony export default */
+/* harmony export (immutable) */ __webpack_exports__["a"] = StarTower;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
 
 
 class Scene {
@@ -1966,23 +1923,30 @@ class Scene {
 			this.gameLayer.add(this.state.fieldsNewTower[i].draw)
 		}
 
-		for (let i = 0; i < this.state.variantRects.length; i++){
+		for (let i = 0; i < this.state.variantRects.length; i++) {
 			this.hintsLayer.add(this.state.variantRects[i].draw);
+			if (this.state.variantRects[i].text) {
+				this.hintsLayer.add(this.state.variantRects[i].text);
+			}
 		}
 
-		//for (let i = 0; i < this.state.variantElements.length; i++){
-		//	this.layer.add(this.state.variantElements[i]);
-		//}
+		for (let i = 0; i < this.state.variantElements.length; i++){
+			this.hintsLayer.add(this.state.variantElements[i].draw);
+		}
+
 		for (let i = 0; i < this.state.variantsShow.length; i++){
 			this.gameLayer.add(this.state.variantsShow[i].draw);
 		}
+
 		for (let i = 0; i < this.state.enemies.length; i++){
 			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j])
+				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
+					this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+				}
 			}
 		}
 
@@ -1994,17 +1958,19 @@ class Scene {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scene_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scene_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(25);
+
 
 
 
@@ -2023,22 +1989,59 @@ class SingleStrategy {
 		this.status = 'playerStep';
 		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
+		this.variantElements = [];
 		this.fieldsWithTowers = [];
-		for (let i = 0; i < 4; i++){
-			this.variantRects[i] = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](i);
-		}
 		this.variantsShow = [];
 		this.enemies = [];
-		this.numberEnemies = 0;
+		this.tronHealth = 200;
+		this.enemiesNumber = 0;
 		this.path = [];
 
+		for (let i = 0; i < 4; i++) {
+			this.variantRects[i] = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](i);
+		}
+
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++){
+				this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](
+					this.settings.variantCircls[i][j],
+					this.settings.variantsX + this.settings.variantsXSize * 0.1 * (j * 2 + 1),
+					this.settings.variantsY + this.settings.variantsYSize * 0.5 + i * this.settings.betweenVariants,
+					this.settings.variantsYSize / 2 - 7
+				))
+			}
+			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](i));
+			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
+				this.settings.pentagons[i],
+				this.settings.variantsX + this.settings.variantsXSize * 0.9,
+				this.settings.variantsY + this.settings.variantsYSize * 0.5 + i * this.settings.betweenVariants,
+				this.settings.variantsYSize / 2 - 7
+			))
+		}
+
+		for (let i = 0; i < 3; i++) {
+			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
+				this.settings.pentagons[i],
+				this.settings.variantsX + this.settings.variantsXSize * 0.1 * (i * 2 + 1),
+				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
+				this.settings.variantsYSize / 2 - 7
+			))
+		}
+		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](3));
+		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__["a" /* default */](
+				this.settings.star,
+				this.settings.variantsX + this.settings.variantsXSize * 0.9,
+				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
+				this.settings.variantsYSize / 2 - 7
+			))
+		
 		for (let i = 0; i < this.settings.mapSize; i++){
 			this.fields[i] = Array(this.settings.mapSize);
 		}
 		
 		for (let i = 0; i < this.settings.mapSize; i++){
 			for (let j = 0; j < this.settings.mapSize; j++){
-				this.fields[i][j] = {
+				this.fields[j][i] = {
 					tower: 0,
 					field: new Konva.Rect({
 						x: this.settings.mapX + j * this.settings.fieldSize + j * 2,
@@ -2049,11 +2052,15 @@ class SingleStrategy {
 						stroke: 'black',
 						strokeWidth: 2
 					}),
-					coordinates: [i, j]
+					coordinates: [j, i],
+					ableTower: this.isAbleTower([j, i]),
 				};
 
 			
-				this.fields[i][j]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+				this.fields[j][i]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[j][i])});
+				this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
+				this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+
 			};
 		};
 
@@ -2108,28 +2115,111 @@ class SingleStrategy {
 		}
 	}
 
+	isAbleTower(place) {
+		return true;
+	}
+
 	onClickField(field) {
-		this.generateTower(field);
-		field.field.setStroke('red');
+		if (field.ableTower){
+			this.generateTower(field);
+			this.variantsShow = [];
+			this.variantRects.length = 4;
+		} else if (this.variantRects.length < 5){
+			let waveButton = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](4, "You cant stop monsters");
+			this.variantRects.push(waveButton);
+		}
+		
+	}
+
+	onOverField(field) {
+		// let i = field.coordinates[0];
+		// let j = field.coordinates[1];
+		// this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j].field.setStroke('black');
+		// this.fields[i - 1 >= 0 ? i - 1 : i][j].field.setStroke('black');
+		// this.fields[i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
+		// this.fields[i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
+		// this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
+		// this.fields[i + 1 < this.settings.mapSize ? i + 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
+		// this.fields[i - 1 >= 0 ? i - 1 : i][j + 1 < this.settings.mapSize ? j + 1 : j].field.setStroke('black');
+		// this.fields[i - 1 >= 0 ? i - 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
+		field.field.setStroke(field.ableTower ? 'green' : 'red');
+	}
+
+	onOutField(field) {
+		// alert('yes');
+		field.field.setStroke('black');	
+	}
+
+	onClickNewPentagon(field, kind, currentNewTower) {
+		if (currentNewTower) {
+			for (let i = 0; i < this.fieldsNewTower.length; i++) {
+				let xCoord = this.fieldsNewTower[i]['coordinates'][0];
+				let yCoord = this.fieldsNewTower[i]['coordinates'][1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field.setStroke('black');
+			}
+			this.fieldsNewTower = [];
+			this.newStones = 0;
+			this.status = 'Wave';
+		}
+		let x = field.coordinates[0];
+		let y = field.coordinates[1];
+		let xp = this.settings.mapX + x * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let yp = this.settings.mapY + y * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let deleteCircles = new Array(...kind.circles);
+		for (let i = 0; i < deleteCircles.length; i++){
+			if (deleteCircles[i] === (currentNewTower ? currentNewTower.kind.name : field.tower.kind.name)) {
+				deleteCircles.splice(i, 1);
+			}
+		}
+		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](kind, xp, yp, this.settings.fieldSize / 2 - 2);
+		for (let i = 0; i < this.fieldsWithTowers.length; i++){
+			if (this.fieldsWithTowers[i].tower.kind.name === deleteCircles[0]){
+				let xCoord = this.fieldsWithTowers[i].coordinates[0];
+				let yCoord = this.fieldsWithTowers[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2);
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2);
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, yPixel, xPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithTowers.splice(i, 1);
+				break;
+			};
+		};
+		for (let i = 0; i < this.fieldsWithTowers.length; i++){
+			if (this.fieldsWithTowers[i].tower.kind.name === deleteCircles[1]){
+				let xCoord = this.fieldsWithTowers[i].coordinates[0];
+				let yCoord = this.fieldsWithTowers[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2);
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2);
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, yPixel, xPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithTowers.splice(i, 1);
+				break;
+			};
+		};
+		this.towers[kind.name]++;
+		this.towers[kind.circles[0]]--;
+		this.towers[kind.circles[1]]--;
+		this.towers[kind.circles[2]]--;
 		this.variantsShow = [];
 	}
 
-	onClickStayVariant(field, currentNewTower){
+	onClickStayVariant(field, kind, currentNewTower){
 		for (let i = 0; i < this.fieldsNewTower.length; i++){
-			let xCoord = this.fieldsNewTower[i]['coordinates'][1];
-			let yCoord = this.fieldsNewTower[i]['coordinates'][0];
+			let xCoord = this.fieldsNewTower[i]['coordinates'][0];
+			let yCoord = this.fieldsNewTower[i]['coordinates'][1];
 			let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
 			let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
-			this.fields[yCoord][xCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
-			//console.log(this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field)
+			this.fields[xCoord][yCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
 			this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field.setStroke('black');
-			//console.log(this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field)
 		}
-		this.fields[field.coordinates[0]][field.coordinates[1]]['tower'] = currentNewTower;
+		this.fields[field.coordinates[0]][field.coordinates[1]]['tower'] = currentNewTower ;
 		this.towers[currentNewTower.kind.name]++;
 		this.fieldsWithTowers.push(field);
 		this.fieldsNewTower = [];
 		this.variantsShow = [];
+		this.newStones = 0;
+		this.status = 'Wave';
 	}
 
 	onClickWaveButton(){
@@ -2151,6 +2241,7 @@ class SingleStrategy {
 		);
 
 		field['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, field)});
+		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
 		circle.draw.addEventListener('mousedown', () => { this.createVariants.call(this, field) } ); 
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
@@ -2173,7 +2264,7 @@ class SingleStrategy {
 
 		let currentNewTower;
 		let variantStay;
-		//this.variantsShow = [];
+		this.variantsShow = [];
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
 			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
 				currentNewTower = this.fieldsNewTower[i];
@@ -2205,6 +2296,8 @@ class SingleStrategy {
 				variantY,
 				this.settings.variantRadius
 			);
+			let cNewTower = currentNewTower ? currentNewTower : undefined;
+			variant.draw.addEventListener('mousedown', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
 			variantX = field['field'].getX() + this.settings.fieldSize / 2 - Math.cos(beta) * this.settings.fieldSize;
 			variantY = field['field'].getY()  + this.settings.fieldSize / 2 - Math.sin(beta) * this.settings.fieldSize;
 			beta = beta + alfa;
@@ -2217,7 +2310,7 @@ class SingleStrategy {
 				variantY,
 				this.settings.variantRadius
 			);
-			variantStay.draw.addEventListener('mousedown', () => {this.onClickStayVariant.call(this, field, currentNewTower)});
+			variantStay.draw.addEventListener('mousedown', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
 			this.variantsShow.push(variantStay);
 		};
 	}
@@ -2237,16 +2330,7 @@ class SingleStrategy {
 	}
 
 	playerStep() {
-		// if (this.newStones >= 5){
-		// 	for (let i = 0; i < this.settings.mapSize; i++){
-		// 		for (let j = 0; j < this.settings.mapSize; j++){
-		// 			this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
-		// 		}
-		// 	}
-		// 	let waveButton = new VariantBlock(4);
-		// 	waveButton.draw.addEventListener('mousedown', () => {this.onClickWaveButton.call(this)})
-		// 	this.variantRects.push(waveButton);
-		// }
+
 	}
 
 	gameWave() {
@@ -2255,51 +2339,77 @@ class SingleStrategy {
 			this.path = this.findPath(this.settings.checkpoints);
 		}
 
-		if (this.numberEnemies < 20){
+		if (this.enemiesNumber < 20){
 			this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl));
-			this.numberEnemies++;
-		};
+			for (let i = 0; i < this.fieldsWithTowers.length; i++){
+				this.fieldsWithTowers[i].tower.bulletes.push([]);
+			}
+			this.enemiesNumber++;
+		}
+
 		for (let i = 0; i < this.fieldsWithTowers.length; i++){
-			if (this.status === 'Wave'){
-				this.fieldsWithTowers[i].tower.fire();
+			for (let j = 0; j < this.enemies.length; j++){
+				let distY = this.enemies[j].draw.getY() - this.fieldsWithTowers[i].tower.draw.getY();
+				let distX = this.enemies[j].draw.getX() - this.fieldsWithTowers[i].tower.draw.getX();
+				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithTowers[i].tower.radiusFight){
+					this.fieldsWithTowers[i].tower.fire(j);
+					break;
+				};
 			};
 			for (let j = 0; j < this.fieldsWithTowers[i].tower.bulletes.length; j++){
-				let distY = this.enemies[0].draw.getY() - this.fieldsWithTowers[i].tower.bulletes[j].getY();
-				let distX = this.enemies[0].draw.getX() - this.fieldsWithTowers[i].tower.bulletes[j].getX();
-				if (Math.abs(distX) < this.enemies[0].kind.size && Math.abs(distY) < this.enemies[0].kind.size){
-					this.fieldsWithTowers[i].tower.bulletes.splice(j, 1);
-					this.enemies[0].health - 10;
-					continue;
-				}
-				let stepX = this.settings.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
-				let stepY = Math.pow(this.settings.bulletStep * this.settings.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
-				this.fieldsWithTowers[i].tower.bulletes[j].setX(this.fieldsWithTowers[i].tower.bulletes[j].getX() + stepX);
-				this.fieldsWithTowers[i].tower.bulletes[j].setY(this.fieldsWithTowers[i].tower.bulletes[j].getY() + stepY);
+				for (let s = 0; s < this.fieldsWithTowers[i].tower.bulletes[j].length; s++){
+					let distY = this.enemies[j].draw.getY() - this.fieldsWithTowers[i].tower.bulletes[j][s].getY();
+					let distX = this.enemies[j].draw.getX() - this.fieldsWithTowers[i].tower.bulletes[j][s].getX();
+					if (Math.abs(distX) < this.enemies[j].kind.size && Math.abs(distY) < this.enemies[j].kind.size){
+						this.fieldsWithTowers[i].tower.bulletes[j].splice(s, 1);
+						this.enemies[j].health -= 10;
+						continue;
+					}
+					let stepX = this.settings.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+					let stepY = Math.pow(this.settings.bulletStep * this.settings.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+					this.fieldsWithTowers[i].tower.bulletes[j][s].setX(this.fieldsWithTowers[i].tower.bulletes[j][s].getX() + stepX);
+					this.fieldsWithTowers[i].tower.bulletes[j][s].setY(this.fieldsWithTowers[i].tower.bulletes[j][s].getY() + stepY);
+				};
 			};
 		};
+
 		if (this.enemies[0].numberTurns === this.path.length){
 			this.enemies.splice(0, 1);
-		};
+			for (let s = 0; s < this.fieldsWithTowers; s++){
+				this.fieldsWithTowers[s].tower.bulletes.splice(0, 1);
+			}
+		}
+
 		for (let i = 0; i < this.enemies.length; i++){
-			// console.log(this.enemies[i].numberTurns)
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
 			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
+
 			if (Math.abs(distX) < this.enemies[i].kind.size && Math.abs(distY) < this.enemies[i].kind.size){
 				this.enemies[i].numberTurns++;
 				continue;
-			};
+			}
+
 			let stepX = this.settings.monsterStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
 			let stepY = Math.pow(this.settings.monsterStep * this.settings.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
+			if (this.enemies[i].health <= 0) {
+				this.enemies.splice(i, 1);
+				for (let j = 0; j < this.fieldsWithTowers.length; j++){
+					this.fieldsWithTowers[j].tower.bulletes.splice(i, 1);
+				}
+			}
 		}
+
 		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
-			this.numberEnemies = 0;
+			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+					this.fields[i][j]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
+					this.fields[i][j].ableTower = this.isAbleTower([i, j]);
 				};
 			};
 			for (let i = 0; i < this.fieldsWithTowers.length; i++){
@@ -2357,36 +2467,60 @@ class SingleStrategy {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(2);
 
 
 class VariantBlock {
-	constructor(number) {
+	constructor(number, text) {
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
 
-		let width = this.settings.hintsFieldElement.offsetWidth;
-		let height = this.settings.hintsFieldElement.offsetHeight;
+		if (text) {
+			this.text = new Konva.Text({
+				x: this.settings.variantsX,
+				y: this.settings.variantsY + number * this.settings.betweenVariants,
+				width: this.settings.variantsXSize,
+				text: text,
+				fontSize: 18,
+				fill: 'red',
+				padding: 15,
+				align: 'center',
+			});
+		}
 
 		this.draw = new Konva.Rect({
-				x: width * 0.05,
-				y: this.settings.mapY + number * height * 0.15,
-				width: width * 0.9,
-				height: height * 0.1,
-				fill: 'grey',
-				stroke: 'black',
-				strokeWidth: 2
-			});
+			x: this.settings.variantsX,
+			y: this.settings.variantsY + number * this.settings.betweenVariants,
+			width: this.settings.variantsXSize,
+			height: (text ? this.text.getHeight() : this.settings.variantsYSize),
+			fill: 'grey',
+			stroke: 'black',
+			strokeWidth: 2
+		});
+
+		// let width = this.settings.hintsFieldElement.offsetWidth;
+		// let height = this.settings.hintsFieldElement.offsetHeight;
+
+		// this.draw = new Konva.Rect({
+		// 		x: width * 0.05,
+		// 		y: this.settings.mapY + number * height * 0.15,
+		// 		width: width * 0.9,
+		// 		height: height * 0.1,
+		// 		fill: 'grey',
+		// 		stroke: 'black',
+		// 		strokeWidth: 2
+		// });
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = VariantBlock;
-;
+
+
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2398,7 +2532,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_leaderboard_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_singleplayer_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_multiplayer_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_http_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_router_js__ = __webpack_require__(1);
 

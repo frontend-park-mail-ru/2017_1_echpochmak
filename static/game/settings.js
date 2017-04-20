@@ -12,7 +12,7 @@ class Settings {
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.mapSize = 20;
+		this.mapSize = 10;
 
 		this.start = [0,0];
 		this.finish = [this.mapSize - 1, this.mapSize - 1];
@@ -131,15 +131,21 @@ class Settings {
 			this.pentagonGYR
 		];
 
-		this.variantsX = window.innerWidth * 0.72;
-		this.variantsY = Setting.mapY;
-		this.variantsXSize = window.innerWidth * 0.25;
-		this.variantsYSize = window.innerHeight * 0.1;
-		this.betweenVariants = 120;
+		// this.variantsX = window.innerWidth * 0.72;
+		// this.variantsY = this.mapY;
+		// this.variantsXSize = window.innerWidth * 0.25;
+		// this.variantsYSize = window.innerHeight * 0.1;
+		// this.betweenVariants = 120;
 
-		this.variantCircls = [[Setting.circleRed, Setting.circlePink, Setting.circleSad],
-								[Setting.circleSad, Setting.circleBlue, Setting.circleGreen],
-								[Setting.circleGreen, Setting.circleYellow, Setting.circleRed]];
+		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
+		this.variantsY = this.mapY;
+		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
+		this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
+		this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+
+		this.variantCircls = [[this.circleRed, this.circlePink, this.circleSad],
+								[this.circleSad, this.circleBlue, this.circleGreen],
+								[this.circleGreen, this.circleYellow, this.circleRed]];
 
 		Settings.__instance = this;
 	}

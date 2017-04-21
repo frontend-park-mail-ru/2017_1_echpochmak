@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -71,129 +71,160 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const Setting = {
-	mapSize: 10,
-	// fieldSize: window.innerHeight * 0.9 / Setting.mapSize,
-	mapX: window.innerWidth * 0.2,	
-	mapY: window.innerHeight * 0.05,
-	variantRadius: 10,
-	bulletStep: 20,
-	monsterStep: 10,
-	numberMonstersInWave: 20,
-	bulletRadius: 5,
+class Settings {
+	constructor() {
 
-	circleRed: {
-		name: 'circleRed',
-		color: '#FF0000',
-		power: 10,
-		radiusFight: 400,
-	},
+		if (Settings.__instance) {
+			return Settings.__instance;
+		}
 
-	circleBlue: {
-		name: 'circleBlue',
-		color: '#00FFFF',
-		power: 15,
-		radiusFight: 400,
-	},
+		this.gameFieldId = 'game-field';
+		this.hintsFieldId = 'hints-field';
 
-	circleGreen: {
-		name: 'circleGreen',
-		color: '#00FF00',
-		power: 20,
-		radiusFight: 400,
-	},
+		this.gameFieldElement = document.getElementById(this.gameFieldId);
+		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-	circleYellow: {
-		name: 'circleYellow',
-		color: '#FFFF00',
-		power: 25,
-		radiusFight: 400,
-	},
+		this.mapSize = 10;
 
-	circlePink: {
-		name: 'circlePink',
-		color: '#FF00FF',
-		power: 30,
-		radiusFight: 400,
-	},
+		this.start = [0,0];
+		this.finish = [this.mapSize - 1, this.mapSize - 1];
+		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
 
-	circleSad: {
-		name: 'circleSad',
-		color: '#0000FF',
-		power: 35,
-		radiusFight: 400,
-	},
+		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
+		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
 
-	triangl: {
-		name: 'triangl',
-		size: 30,
-		color: '#00FF00',
-		health: 10,
-	},
+		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
+		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
 
-	stone: {
-		name: 'stone',
-		color: 'black',
-	},
+		this.variantRadius = 10;
+		this.bulletStep = 20;
+		this.monsterStep = 10;
 
-	pentagonRPS: {
-		name: 'pentagonRPS',
-		power: 70,
-		colors: ['#FF0000', '#FF00FF', '#0000FF'],
-	},
+		this.numberMonstersInWave = 20;
+		this.bulletRadius = 5;
 
-	pentagonSBG: {
-		name: 'pentagonSBG',
-		power: 80,
-		colors: ['#0000FF', '#00FFFF', '#00FF00'],
-	},
+		this.circleRed = {
+			name: 'circleRed',
+			color: '#FF0000',
+			power: 10,
+			radiusFight: 400,
+		};
 
-	pentagonGYR: {
-		name: 'pentagonGYR',
-		power: 70,
-		colors: ['#00FF00', '#FFFF00', '#FF0000'],
-	},
+		this.circleBlue = {
+			name: 'circleBlue',
+			color: '#00FFFF',
+			power: 15,
+			radiusFight: 400,
+		};
 
-	star: {
-		name: 'star',
-		colors: ['#0000FF', '#00FF00', '#FF0000'],
-		power: 100
+		this.circleGreen = {
+			name: 'circleGreen',
+			color: '#00FF00',
+			power: 20,
+			radiusFight: 400,
+		};
+
+		this.circleYellow = {
+			name: 'circleYellow',
+			color: '#FFFF00',
+			power: 25,
+			radiusFight: 400,
+		};
+
+		this.circlePink = {
+			name: 'circlePink',
+			color: '#FF00FF',
+			power: 30,
+			radiusFight: 400,
+		};
+
+		this.circleSad = {
+			name: 'circleSad',
+			color: '#0000FF',
+			power: 35,
+			radiusFight: 400,
+		};
+
+		this.triangl = {
+			name: 'triangl',
+			size: 30,
+			color: '#00FF00',
+			health: 10,
+		};
+
+		this.stone = {
+			name: 'stone',
+			color: 'black',
+		};
+
+		this.pentagonRPS = {
+			name: 'pentagonRPS',
+			power: 70,
+			colors: ['#FF0000', '#FF00FF', '#0000FF'],
+			radiusFight: 400,
+			circles: ['circleRed', 'circlePink', 'circleSad']
+		};
+
+		this.pentagonSBG = {
+			name: 'pentagonSBG',
+			power: 80,
+			colors: ['#0000FF', '#00FFFF', '#00FF00'],
+			radiusFight: 400,
+			circles: ['circleSad', 'circleBlue', 'circleGreen']
+		};
+
+		this.pentagonGYR = {
+			name: 'pentagonGYR',
+			power: 70,
+			colors: ['#00FF00', '#FFFF00', '#FF0000'],
+			radiusFight: 400,
+			circles: ['circleGreen', 'circleYellow', 'circleRed']
+		};
+
+		this.star = {
+			name: 'star',
+			colors: ['#0000FF', '#00FF00', '#FF0000'],
+			power: 100,
+			radiusFight: 400,
+		};
+
+		this.circles = [
+			this.circleRed, 
+			this.circleGreen, 
+			this.circleYellow, 
+			this.circleBlue, 
+			this.circleSad, 
+			this.circlePink
+		];
+
+		this.pentagons = [
+			this.pentagonRPS, 
+			this.pentagonSBG, 
+			this.pentagonGYR
+		];
+
+		// this.variantsX = window.innerWidth * 0.72;
+		// this.variantsY = this.mapY;
+		// this.variantsXSize = window.innerWidth * 0.25;
+		// this.variantsYSize = window.innerHeight * 0.1;
+		// this.betweenVariants = 120;
+
+		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
+		this.variantsY = this.mapY;
+		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
+		this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
+		this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+
+		this.variantCircls = [[this.circleRed, this.circlePink, this.circleSad],
+								[this.circleSad, this.circleBlue, this.circleGreen],
+								[this.circleGreen, this.circleYellow, this.circleRed]];
+
+		Settings.__instance = this;
 	}
-};
-
-Setting.pentagonGYR.circles = ['circleGreen', 'circleYellow', 'circleRed'];
-Setting.pentagonSBG.circles = ['circleSad', 'circleBlue', 'circleGreen'];
-Setting.pentagonRPS.circles = ['circleRed', 'circlePink', 'circleSad'];
-
-Setting.fieldSize = window.innerHeight * 0.9 / Setting.mapSize;
-
-Setting.circles = [
-	Setting.circleRed, 
-	Setting.circleGreen, 
-	Setting.circleYellow, 
-	Setting.circleBlue, 
-	Setting.circleSad, 
-	Setting.circlePink
-];
-
-Setting.pentagons = [
-	Setting.pentagonRPS, 
-	Setting.pentagonSBG, 
-	Setting.pentagonGYR
-];
-
-Setting.variantsX = window.innerWidth * 0.72;
-Setting.variantsY = Setting.mapY;
-Setting.variantsXSize = window.innerWidth * 0.25;
-Setting.variantsYSize = window.innerHeight * 0.1;
-Setting.betweenVariants = 120;
-
-Setting.variantCircls = [[Setting.circleRed, Setting.circlePink, Setting.circleSad],
-						[Setting.circleSad, Setting.circleBlue, Setting.circleGreen],
-						[Setting.circleGreen, Setting.circleYellow, Setting.circleRed]];
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Settings;
 
 
-/* harmony default export */ __webpack_exports__["a"] = (Setting);
 
 /***/ }),
 /* 1 */
@@ -217,16 +248,15 @@ Setting.variantCircls = [[Setting.circleRed, Setting.circlePink, Setting.circleS
 
 
 
-var way = [[1,1], [2, 8], [7,4], [9,1], [9,9]];
-
 class SingleStrategy {
 	
 	constructor() {
 
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.scene = new __WEBPACK_IMPORTED_MODULE_1__scene_js__["a" /* default */]();
 
 		this.status = 'playerStep';
-		this.fields = Array(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize);
+		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
 		this.variantElements = [];
 		this.fieldsWithTowers = [];
@@ -234,58 +264,59 @@ class SingleStrategy {
 		this.enemies = [];
 		this.tronHealth = 200;
 		this.enemiesNumber = 0;
+		this.path = [];
 
-		for (let i = 0; i < 4; i++){
+		for (let i = 0; i < 4; i++) {
 			this.variantRects[i] = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](i);
 		}
 
-		for (let i = 0; i < 3; i++){
+		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++){
 				this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantCircls[i][j],
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.1 * (j * 2 + 1),
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize * 0.5 + i * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize / 2 - 7
+					this.settings.variantCircls[i][j],
+					this.settings.variantsX + this.settings.variantsXSize * 0.1 * (j * 2 + 1),
+					this.settings.variantsY + this.settings.variantsYSize * 0.5 + i * this.settings.betweenVariants,
+					this.settings.variantsYSize / 2 - 7
 				))
 			}
 			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](i));
 			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].pentagons[i],
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.9,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize * 0.5 + i * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize / 2 - 7
+				this.settings.pentagons[i],
+				this.settings.variantsX + this.settings.variantsXSize * 0.9,
+				this.settings.variantsY + this.settings.variantsYSize * 0.5 + i * this.settings.betweenVariants,
+				this.settings.variantsYSize / 2 - 7
 			))
 		}
 
 		for (let i = 0; i < 3; i++) {
 			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].pentagons[i],
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.1 * (i * 2 + 1),
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize * 0.5 + 3 * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize / 2 - 7
+				this.settings.pentagons[i],
+				this.settings.variantsX + this.settings.variantsXSize * 0.1 * (i * 2 + 1),
+				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
+				this.settings.variantsYSize / 2 - 7
 			))
 		}
 		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](3));
 		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__["a" /* default */](
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].star,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.9,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize * 0.5 + 3 * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize / 2 - 7
+				this.settings.star,
+				this.settings.variantsX + this.settings.variantsXSize * 0.9,
+				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
+				this.settings.variantsYSize / 2 - 7
 			))
 		
-		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
-			this.fields[i] = Array(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize);
+		for (let i = 0; i < this.settings.mapSize; i++){
+			this.fields[i] = Array(this.settings.mapSize);
 		}
 		
-		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
-			for (let j = 0; j < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; j++){
+		for (let i = 0; i < this.settings.mapSize; i++){
+			for (let j = 0; j < this.settings.mapSize; j++){
 				this.fields[j][i] = {
 					tower: 0,
 					field: new Konva.Rect({
-						x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + j * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + j * 2,
-						y: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + i * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + i * 2,
-						width: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize,
-						height: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize,
+						x: this.settings.mapX + j * this.settings.fieldSize + j * 2,
+						y: this.settings.mapY + i * this.settings.fieldSize + i * 2,
+						width: this.settings.fieldSize,
+						height: this.settings.fieldSize,
 						fill: 'grey',
 						stroke: 'black',
 						strokeWidth: 2
@@ -295,8 +326,10 @@ class SingleStrategy {
 				};
 
 			
-				this.fields[j][i]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[j][i])});
+				this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
 				this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
+				this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+
 			};
 		};
 
@@ -317,9 +350,9 @@ class SingleStrategy {
 
 		this.state = {};
 
-		this.gameInterval = setInterval(() => {
+		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
-		}, 17);
+		});
 	}
 
 	gameLoop() {
@@ -332,7 +365,10 @@ class SingleStrategy {
 		this.updateState();
 		this.scene.setState(this.state);
 		this.scene.render();
-		// this.scene.testDraw();
+
+		requestAnimationFrame(() => {
+			this.gameLoop.call(this);
+		});
 	}
 
 	updateState() {
@@ -365,27 +401,21 @@ class SingleStrategy {
 	}
 
 	onOverField(field) {
-		let i = field.coordinates[0];
-		let j = field.coordinates[1];
-		this.fields[i + 1 < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize ? i + 1 : i][j].field.setStroke('black');
-		this.fields[i - 1 >= 0 ? i - 1 : i][j].field.setStroke('black');
-		this.fields[i][j + 1 < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize ? j + 1 : j].field.setStroke('black');
-		this.fields[i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
-		this.fields[i + 1 < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize ? i + 1 : i][j + 1 < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize ? j + 1 : j].field.setStroke('black');
-		this.fields[i + 1 < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize ? i + 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
-		this.fields[i - 1 >= 0 ? i - 1 : i][j + 1 < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize ? j + 1 : j].field.setStroke('black');
-		this.fields[i - 1 >= 0 ? i - 1 : i][j - 1 >= 0 ? j - 1 : j].field.setStroke('black');
 		field.field.setStroke(field.ableTower ? 'green' : 'red');
 	}
 
-	onClickNewPentagon(field, kind, currentNewTower){
-		if (currentNewTower){
-			for (let i = 0; i < this.fieldsNewTower.length; i++){
+	onOutField(field) {
+		field.field.setStroke('black');	
+	}
+
+	onClickNewPentagon(field, kind, currentNewTower) {
+		if (currentNewTower) {
+			for (let i = 0; i < this.fieldsNewTower.length; i++) {
 				let xCoord = this.fieldsNewTower[i]['coordinates'][0];
 				let yCoord = this.fieldsNewTower[i]['coordinates'][1];
-				let xPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + xCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-				let yPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + yCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-				this.fields[xCoord][yCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].stone, xPixel, yPixel, __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - 2);
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
 				this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field.setStroke('black');
 			}
 			this.fieldsNewTower = [];
@@ -394,22 +424,22 @@ class SingleStrategy {
 		}
 		let x = field.coordinates[0];
 		let y = field.coordinates[1];
-		let xp = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + x * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-		let yp = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + y * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
+		let xp = this.settings.mapX + x * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let yp = this.settings.mapY + y * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
 		let deleteCircles = new Array(...kind.circles);
 		for (let i = 0; i < deleteCircles.length; i++){
 			if (deleteCircles[i] === (currentNewTower ? currentNewTower.kind.name : field.tower.kind.name)) {
 				deleteCircles.splice(i, 1);
 			}
 		}
-		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](kind, xp, yp, __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - 2);
+		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](kind, xp, yp, this.settings.fieldSize / 2 - 2);
 		for (let i = 0; i < this.fieldsWithTowers.length; i++){
 			if (this.fieldsWithTowers[i].tower.kind.name === deleteCircles[0]){
 				let xCoord = this.fieldsWithTowers[i].coordinates[0];
 				let yCoord = this.fieldsWithTowers[i].coordinates[1];
-				let xPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + xCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2);
-				let yPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + yCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2);
-				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].stone, yPixel, xPixel, __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - 2);
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2);
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2);
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, yPixel, xPixel, this.settings.fieldSize / 2 - 2);
 				this.fieldsWithTowers.splice(i, 1);
 				break;
 			};
@@ -418,9 +448,9 @@ class SingleStrategy {
 			if (this.fieldsWithTowers[i].tower.kind.name === deleteCircles[1]){
 				let xCoord = this.fieldsWithTowers[i].coordinates[0];
 				let yCoord = this.fieldsWithTowers[i].coordinates[1];
-				let xPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + xCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2);
-				let yPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + yCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2);
-				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].stone, yPixel, xPixel, __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - 2);
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2);
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2);
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, yPixel, xPixel, this.settings.fieldSize / 2 - 2);
 				this.fieldsWithTowers.splice(i, 1);
 				break;
 			};
@@ -436,9 +466,9 @@ class SingleStrategy {
 		for (let i = 0; i < this.fieldsNewTower.length; i++){
 			let xCoord = this.fieldsNewTower[i]['coordinates'][0];
 			let yCoord = this.fieldsNewTower[i]['coordinates'][1];
-			let xPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + xCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-			let yPixel = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + yCoord * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-			this.fields[xCoord][yCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].stone, xPixel, yPixel, __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - 2);
+			let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+			let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+			this.fields[xCoord][yCoord]['tower'] = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
 			this.fields[this.fieldsNewTower[i].coordinates[0]][this.fieldsNewTower[i].coordinates[1]].field.setStroke('black');
 		}
 		this.fields[field.coordinates[0]][field.coordinates[1]]['tower'] = currentNewTower ;
@@ -459,35 +489,51 @@ class SingleStrategy {
 
 	generateTower(field) {
 
-		let circlePro = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circles[Math.floor(Math.random() * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circles.length)]
-		
+		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
+
 		let circle = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](
 			circlePro, 
-			field['field'].getX() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2,
-			field['field'].getY() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2,
-			__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - 2
+			field['field'].getX() + this.settings.fieldSize / 2,
+			field['field'].getY() + this.settings.fieldSize / 2,
+			this.settings.fieldSize / 2 - 2
 		);
 
-		field['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, field)});
+		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
 		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
-		circle.draw.addEventListener('mousedown', () => { this.createVariants.call(this, field) } ); 
+		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
+
+		if (this.newStones >= 5) {
+			for (let i = 0; i < this.settings.mapSize; i++){
+				for (let j = 0; j < this.settings.mapSize; j++){
+					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
+					this.fields[i][j]['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
+				}
+			}
+			for (let i = 0; i < this.fieldsNewTower.length; i++){
+				let x = this.fieldsNewTower[i].coordinates[0];
+				let y = this.fieldsNewTower[i].coordinates[1];
+				this.fields[x][y].field.setStroke('green');
+			}
+		}
 	}
 
 	createVariants(field) {
+		this.variantsShow = [];
+
 		let currentNewTower;
 		let variantStay;
 		this.variantsShow = [];
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			if ((field['field'].getX() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
+			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
 				currentNewTower = this.fieldsNewTower[i];
 				variantStay = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](
 					currentNewTower['kind'],
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantX,
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantY,
-					__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantRadius
+					this.settings.variantX,
+					this.settings.variantY,
+					this.settings.variantRadius
 				);
 			};
 		};
@@ -502,19 +548,19 @@ class SingleStrategy {
 		}
 		let alfa = 6.28 / (variants.length + 1);
 		let beta = alfa;
-		let variantX = field['field'].getX() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize;
-		let variantY = field['field'].getY() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2;
-		for (var i = 0; i < variants.length; i++){
+		let variantX = field['field'].getX() + this.settings.fieldSize / 2 - this.settings.fieldSize;
+		let variantY = field['field'].getY() + this.settings.fieldSize / 2;
+		for (let i = 0; i < variants.length; i++){
 			let variant = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
 				variants[i],
 				variantX,
 				variantY,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantRadius
+				this.settings.variantRadius
 			);
 			let cNewTower = currentNewTower ? currentNewTower : undefined;
-			variant.draw.addEventListener('mousedown', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
-			variantX = field['field'].getX() + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - Math.cos(beta) * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize;
-			variantY = field['field'].getY()  + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2 - Math.sin(beta) * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize;
+			variant.draw.addEventListener('click', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
+			variantX = field['field'].getX() + this.settings.fieldSize / 2 - Math.cos(beta) * this.settings.fieldSize;
+			variantY = field['field'].getY()  + this.settings.fieldSize / 2 - Math.sin(beta) * this.settings.fieldSize;
 			beta = beta + alfa;
 			this.variantsShow.push(variant);
 		}
@@ -523,51 +569,45 @@ class SingleStrategy {
 				currentNewTower.kind,
 				variantX,
 				variantY,
-				__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantRadius
+				this.settings.variantRadius
 			);
-			variantStay.draw.addEventListener('mousedown', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
+			variantStay.draw.addEventListener('click', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
 			this.variantsShow.push(variantStay);
 		};
 	}
 
 	listVariants(field) {
 		let variants = [];
-		if (((this.towers['circleRed'] > 0) && (this.towers['circlePink'] > 0) && (this.towers['circleSad'] > 0)) && ((field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleRed) || (field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circlePink) || (field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleSad))){
-		variants.push(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].pentagonRPS);
+		if (((this.towers['circleRed'] > 0) && (this.towers['circlePink'] > 0) && (this.towers['circleSad'] > 0)) && ((field.tower.kind == this.settings.circleRed) || (field.tower.kind == this.settings.circlePink) || (field.tower.kind == this.settings.circleSad))){
+		variants.push(this.settings.pentagonRPS);
 		};
-		if (((this.towers['circleSad'] > 0) && (this.towers['circleBlue'] > 0) && (this.towers['circleGreen'] > 0)) && ((field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleSad) || (field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleBlue) || (field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleGreen))){
-			variants.push(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].pentagonSBG);
+		if (((this.towers['circleSad'] > 0) && (this.towers['circleBlue'] > 0) && (this.towers['circleGreen'] > 0)) && ((field.tower.kind == this.settings.circleSad) || (field.tower.kind == this.settings.circleBlue) || (field.tower.kind == this.settings.circleGreen))){
+			variants.push(this.settings.pentagonSBG);
 		};
-		if (((this.towers['circleGreen'] > 0) && (this.towers['circleYellow'] > 0) && (this.towers['circleRed'] > 0)) && ((field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleGreen) || (field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleYellow) || (field.tower.kind == __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].circleRed))){
-			variants.push(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].pentagonGYR);
+		if (((this.towers['circleGreen'] > 0) && (this.towers['circleYellow'] > 0) && (this.towers['circleRed'] > 0)) && ((field.tower.kind == this.settings.circleGreen) || (field.tower.kind == this.settings.circleYellow) || (field.tower.kind == this.settings.circleRed))){
+			variants.push(this.settings.pentagonGYR);
 		};
 		return variants;
 	}
 
 	playerStep() {
-		if (this.newStones >= 5){
-			for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
-				for (let j = 0; j < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; j++){
-					this.fields[i][j]['field'].removeEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
-					this.fields[i][j]['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
-				}
-			}
-			for (let i = 0; i < this.fieldsNewTower.length; i++){
-				let x = this.fieldsNewTower[i].coordinates[0];
-				let y = this.fieldsNewTower[i].coordinates[1];
-				this.fields[x][y].field.setStroke('green');
-			}
-		}
+
 	}
 
 	gameWave() {
+
+		if (this.path.length === 0) {
+			this.path = this.findPath(this.settings.checkpoints);
+		}
+
 		if (this.enemiesNumber < 20){
-			this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].triangl));
+			this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl));
 			for (let i = 0; i < this.fieldsWithTowers.length; i++){
 				this.fieldsWithTowers[i].tower.bulletes.push([]);
 			}
 			this.enemiesNumber++;
-		};
+		}
+
 		for (let i = 0; i < this.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.enemies.length; j++){
 				let distY = this.enemies[j].draw.getY() - this.fieldsWithTowers[i].tower.draw.getY();
@@ -586,29 +626,33 @@ class SingleStrategy {
 						this.enemies[j].health -= 10;
 						continue;
 					}
-					let stepX = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
-					let stepY = Math.pow(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].bulletStep * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+					let stepX = this.settings.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+					let stepY = Math.pow(this.settings.bulletStep * this.settings.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 					this.fieldsWithTowers[i].tower.bulletes[j][s].setX(this.fieldsWithTowers[i].tower.bulletes[j][s].getX() + stepX);
 					this.fieldsWithTowers[i].tower.bulletes[j][s].setY(this.fieldsWithTowers[i].tower.bulletes[j][s].getY() + stepY);
 				};
 			};
 		};
-		if (this.enemies[0].numberTurns === way.length){
+
+		if (this.enemies[0].numberTurns === this.path.length) {
 			this.enemies.splice(0, 1);
-			for (let s = 0; s < this.fieldsWithTowers; s++){
+			for (let s = 0; s < this.fieldsWithTowers.length; s++){
 				this.fieldsWithTowers[s].tower.bulletes.splice(0, 1);
 			}
-		};
+		}
+
 		for (let i = 0; i < this.enemies.length; i++){
-			let place = way[this.enemies[i].numberTurns];
-			let distX = -this.enemies[i].draw.getX() + (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + place[0] * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2);
-			let distY = -this.enemies[i].draw.getY() + (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + place[1] * (__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize + 2) + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].fieldSize / 2);
+			let place = this.path[this.enemies[i].numberTurns];
+			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
+			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
+
 			if (Math.abs(distX) < this.enemies[i].kind.size && Math.abs(distY) < this.enemies[i].kind.size){
 				this.enemies[i].numberTurns++;
 				continue;
-			};
-			let stepX = __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].monsterStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
-			let stepY = Math.pow(__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].monsterStep * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
+			}
+
+			let stepX = this.settings.monsterStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
+			let stepY = Math.pow(this.settings.monsterStep * this.settings.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
 			if (this.enemies[i].health <= 0) {
@@ -618,12 +662,13 @@ class SingleStrategy {
 				}
 			}
 		}
-		if (this.enemies.length === 0){
+
+		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.enemiesNumber = 0;
-			for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
-				for (let j = 0; j < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; j++){
-					this.fields[i][j]['field'].addEventListener('mousedown', () => {this.onClickField.call(this, this.fields[i][j])});
+			for (let i = 0; i < this.settings.mapSize; i++){
+				for (let j = 0; j < this.settings.mapSize; j++){
+					this.fields[i][j]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
 					this.fields[i][j]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
 					this.fields[i][j].ableTower = this.isAbleTower([i, j]);
 				};
@@ -631,32 +676,51 @@ class SingleStrategy {
 			for (let i = 0; i < this.fieldsWithTowers.length; i++){
 				this.fields[this.fieldsWithTowers[i].coordinates[0]][this.fieldsWithTowers[i].coordinates[1]].tower.bulletes = [];
 			}
+			this.path = [];
 		};
 	}
 
-	findPath() {
-		let matrix = Array(mapSize);
-		for (let i = 0; i < mapSize; ++i) {
-			matrix[i] = Array(mapSize);
+	findPath(checkpoints) {
+
+		checkpoints.push(this.settings.finish);
+
+		let matrix = Array(this.settings.mapSize);
+		for (let i = 0; i < this.settings.mapSize; ++i) {
+			matrix[i] = Array(this.settings.mapSize);
 		}
 
-		for (let i = 0; i < mapSize; ++i) {
-			for (let j = 0; j < mapSize; ++j) {
+		for (let i = 0; i < this.settings.mapSize; ++i) {
+			for (let j = 0; j < this.settings.mapSize; ++j) {
 				if (this.fields[i][j].tower && this.fields[i][j].tower !== 0) {
-					matrix[i][j] = 1;
+					matrix[j][i] = 1;
 				} else {
-					matrix[i][j] = 0;
+					matrix[j][i] = 0;
 				}
 			}
 		}
 
-		const grid = new PF.Grid(matrix);
 		const finder = new PF.BiAStarFinder({
 			allowDiagonal: true,
 			heuristic: PF.Heuristic.euclidean
 		});
 
-		const path = finder.findPath(start.x, stert.y, finish.x, finish.y, grid);
+		let path = [];
+		let curStart = this.settings.start;
+		for (let i = 0; i < checkpoints.length; i++) {
+			if (i > 0) {
+				curStart = checkpoints[i-1];
+			}
+			
+			let subStart = curStart;
+			let subFinish = checkpoints[i];
+
+			const grid = new PF.Grid(matrix);
+			let subPath = finder.findPath(subStart[0], subStart[1], subFinish[0], subFinish[1], grid);
+
+			path = path.concat(subPath);
+		}
+
+		return(path);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SingleStrategy;
@@ -672,11 +736,12 @@ class SingleStrategy {
 
 
 class Arrow {
-	constructor(row){
+	constructor(row) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.Arrow({
-			x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.7,
-			y: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize * 0.5 + row * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-			points: [-__WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.1, 0, __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize * 0.1, 0],
+			x: this.settings.variantsX + this.settings.variantsXSize * 0.7,
+			y: this.settings.variantsY + this.settings.variantsYSize * 0.5 + row * this.settings.betweenVariants,
+			points: [-this.settings.variantsXSize * 0.1, 0, this.settings.variantsXSize * 0.1, 0],
 			pointerLength: 20,
 			pointerWidth: 20,
 			fill: 'red',
@@ -695,8 +760,10 @@ class Arrow {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(0);
 
+
 class CircleTower {
 	constructor(name, x, y, radius) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.Circle({
 			x: x,
 			y: y,
@@ -708,16 +775,13 @@ class CircleTower {
 		this.kind = name;
 		this.bulletes = [];
 		this.radiusFight = name.radiusFight;
-		//for (let i = 0; i < Setting.numberMonstersInWave; i++){
-		//	this.bulletes.push(Array(numberMonstersInWave));
-		//}
 	}
 
 	fire(enemie) {
 		this.bulletes[enemie].push(new Konva.Circle({
 			x: this.draw.getX(),
 			y: this.draw.getY(),
-			radius: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].bulletRadius,
+			radius: this.settings.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
 			fill: this.draw.getFill()
@@ -734,11 +798,13 @@ class CircleTower {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(0);
 
+
 class Monster {
 	constructor(name) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.RegularPolygon({
-			x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX,
-			y: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY,
+			x: this.settings.mapX,
+			y: this.settings.mapY,
 			sides: 3,
 			radius: name.size,
 			fill: name.color,
@@ -760,8 +826,10 @@ class Monster {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(0);
 
+
 class PentagonTower {
 	constructor(name, x, y, radius) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.RegularPolygon({
 			x: x,
 			y: y,
@@ -784,7 +852,7 @@ class PentagonTower {
 		this.bulletes[enemie].push(new Konva.Circle({
 			x: this.draw.getX(),
 			y: this.draw.getY(),
-			radius: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].bulletRadius,
+			radius: this.settings.bulletRadius,
 			stroke: 'black',
 			strokeWidth: 0,
 			fill: this.kind.colors[0],
@@ -801,8 +869,10 @@ class PentagonTower {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(0);
 
+
 class StarTower {
 	constructor(name, x, y, radius) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.draw = new Konva.Star({
 			x: x,
 			y: y,
@@ -859,87 +929,83 @@ const strategy = new __WEBPACK_IMPORTED_MODULE_0__strategy_js__["a" /* default *
 class Scene {
 	constructor() {
 		this.state = {};
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
+
+		this.gameStage = new Konva.Stage({
+			container: this.settings.gameFieldId,
+			width : this.settings.gameFieldElement.offsetWidth,
+			height : this.settings.gameFieldElement.offsetHeight
+		});
+
+		this.gameLayer = new Konva.Layer();
+
+		this.hintsStage = new Konva.Stage({
+			container: this.settings.hintsFieldId,
+			width : this.settings.hintsFieldElement.offsetWidth,
+			height : this.settings.hintsFieldElement.offsetHeight
+		})
+
+		this.hintsLayer = new Konva.Layer();
 	}
 
 	setState(state) {
 		this.state = state;
 	}
 
-
-
 	render() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		var layer = new Konva.Layer();
 
-		for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; i++){
-			for (let j = 0; j < __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapSize; j++){
-				// console.log(this.state.fields[i][j].field)
-				layer.add(this.state.fields[i][j].field);
+		let length = this.gameLayer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.gameLayer.children[0].remove();
+		}
+		
+		length = this.hintsLayer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.hintsLayer.children[0].remove();
+		}
+
+		for (let i = 0; i < this.settings.mapSize; i++){
+			for (let j = 0; j < this.settings.mapSize; j++){
+				this.gameLayer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
-					layer.add(this.state.fields[i][j].tower.draw);
-					//console.log(this.state.fields[i][j])
-				};
+					this.gameLayer.add(this.state.fields[i][j].tower.draw);
+				}
 				
-			};
-		};
-		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
-			layer.add(this.state.fieldsNewTower[i].draw)
-			console.log(this.state.fieldsNewTower.length)
-		}
-
-		for (let i = 0; i < this.state.variantRects.length; i++){
-			layer.add(this.state.variantRects[i].draw);
-			if (this.state.variantRects[i].text) {
-				layer.add(this.state.variantRects[i].text);
 			}
+		}
+		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
+			this.gameLayer.add(this.state.fieldsNewTower[i].draw)
+		}
 
-		};
+		for (let i = 0; i < this.state.variantRects.length; i++) {
+			this.hintsLayer.add(this.state.variantRects[i].draw);
+			if (this.state.variantRects[i].text) {
+				this.hintsLayer.add(this.state.variantRects[i].text);
+			}
+		}
+
 		for (let i = 0; i < this.state.variantElements.length; i++){
-			layer.add(this.state.variantElements[i].draw);
+			this.hintsLayer.add(this.state.variantElements[i].draw);
 		}
+
 		for (let i = 0; i < this.state.variantsShow.length; i++){
-			layer.add(this.state.variantsShow[i].draw);
+			this.gameLayer.add(this.state.variantsShow[i].draw);
 		}
+
 		for (let i = 0; i < this.state.enemies.length; i++){
-			layer.add(this.state.enemies[i].draw);
+			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
 		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
 			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
 				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
-					layer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+					this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
 				}
-				
 			}
 		}
 
-		stage.add(layer);
-	}
-
-	testDraw() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		var layer = new Konva.Layer();
-
-		let circle = new Konva.Circle({
-			x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapX + 50,
-			y: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].mapY + 50,
-			radius: 50,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: 'red'
-		});
-
-		layer.add(circle);
-
-		stage.add(layer);
+		this.gameStage.add(this.gameLayer);
+		this.hintsStage.add(this.hintsLayer);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Scene;
@@ -955,31 +1021,47 @@ class Scene {
 
 class VariantBlock {
 	constructor(number, text) {
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
+
 		if (text) {
 			this.text = new Konva.Text({
-				x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX,
-				y: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + number * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-				width: variantsXSize,
+				x: this.settings.variantsX,
+				y: this.settings.variantsY + number * this.settings.betweenVariants,
+				width: this.settings.variantsXSize,
 				text: text,
 				fontSize: 18,
 				fill: 'red',
 				padding: 15,
 				align: 'center',
 			});
-		};
+		}
+
 		this.draw = new Konva.Rect({
-			x: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsX,
-			y: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsY + number * __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].betweenVariants,
-			width: __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsXSize,
-			height: (text ? this.text.getHeight() : __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */].variantsYSize),
+			x: this.settings.variantsX,
+			y: this.settings.variantsY + number * this.settings.betweenVariants,
+			width: this.settings.variantsXSize,
+			height: (text ? this.text.getHeight() : this.settings.variantsYSize),
 			fill: 'grey',
 			stroke: 'black',
 			strokeWidth: 2
 		});
-	};
+
+		// let width = this.settings.hintsFieldElement.offsetWidth;
+		// let height = this.settings.hintsFieldElement.offsetHeight;
+
+		// this.draw = new Konva.Rect({
+		// 		x: width * 0.05,
+		// 		y: this.settings.mapY + number * height * 0.15,
+		// 		width: width * 0.9,
+		// 		height: height * 0.1,
+		// 		fill: 'grey',
+		// 		stroke: 'black',
+		// 		strokeWidth: 2
+		// });
+	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = VariantBlock;
-;
+
 
 
 /***/ })

@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -208,9 +208,7 @@ class Settings {
 
 		this.mapSize = 10;
 
-		this.start = [0,0];
-		this.finish = [this.mapSize - 1, this.mapSize - 1];
-		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
+		this.checkpoints = [[0, 0], [0, this.mapSize - 1], [this.mapSize - 1, 0], [this.mapSize - 1, this.mapSize - 1]];
 
 		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
 		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
@@ -271,7 +269,7 @@ class Settings {
 			name: 'triangl',
 			size: 30,
 			color: '#00FF00',
-			health: 10,
+			health: 100,
 		};
 
 		this.stone = {
@@ -1996,6 +1994,7 @@ class SingleStrategy {
 		this.tronHealth = 200;
 		this.enemiesNumber = 0;
 		this.path = [];
+		this.fieldsNewTower = [];
 
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i] = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](i);
@@ -2053,7 +2052,6 @@ class SingleStrategy {
 						strokeWidth: 2
 					}),
 					coordinates: [j, i],
-					ableTower: this.isAbleTower([j, i]),
 				};
 
 			
@@ -2064,7 +2062,7 @@ class SingleStrategy {
 			};
 		};
 
-		this.fieldsNewTower = [];
+		
 		this.newStones = 0;
 		this.towers = {
 			circleBlue: 0,
@@ -2116,11 +2114,42 @@ class SingleStrategy {
 	}
 
 	isAbleTower(place) {
-		return true;
+		for (let i = 0; i < this.settings.checkpoints.length; i++){
+			if (place.coordinates[0] == this.settings.checkpoints[i][0] && place.coordinates[1] == this.settings.checkpoints[i][1]) {
+				return false;
+			}
+		}
+		for (let i = 0; i < this.fieldsNewTower.length; i++) {
+			let x = this.fieldsNewTower[i].coordinates[0];
+			let y = this.fieldsNewTower[i].coordinates[1];
+			this.fields[x][y].tower = 1;
+		}
+		this.fields[place.coordinates[0]][place.coordinates[1]].tower = 1;
+		let path = this.findPath(this.settings.checkpoints);
+		let points = [];
+		for (let i = 0; i < this.settings.checkpoints.length; i++) {
+			points.push(this.settings.checkpoints[i]);
+		}
+		let j = 0;
+		for (let i = 0; (i < path.length) && (j < points.length); i++){
+			if (path[i][0] == points[j][0] && path[i][1] == points[j][1]) {
+				j++;
+			}
+		}
+		for (let i = 0; i < this.fieldsNewTower.length; i++) {
+			let x = this.fieldsNewTower[i].coordinates[0];
+			let y = this.fieldsNewTower[i].coordinates[1];
+			this.fields[x][y].tower = 0;
+		}
+		this.fields[place.coordinates[0]][place.coordinates[1]].tower = 0;
+		if (j == points.length) {
+			return true;
+		}
+		return false;
 	}
 
 	onClickField(field) {
-		if (field.ableTower){
+		if (this.isAbleTower(field)){
 			this.generateTower(field);
 			this.variantsShow = [];
 			this.variantRects.length = 4;
@@ -2132,7 +2161,7 @@ class SingleStrategy {
 	}
 
 	onOverField(field) {
-		field.field.setStroke(field.ableTower ? 'green' : 'red');
+		field.field.setStroke(this.isAbleTower(field) ? 'green' : 'red');
 	}
 
 	onOutField(field) {
@@ -2228,9 +2257,10 @@ class SingleStrategy {
 			field['field'].getY() + this.settings.fieldSize / 2,
 			this.settings.fieldSize / 2 - 2
 		);
-
+		field.field.setStroke('black');
 		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
 		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
+		field['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, field)});
 		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
@@ -2241,6 +2271,7 @@ class SingleStrategy {
 				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
 					this.fields[i][j]['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
+					this.fields[i][j]['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
 				}
 			}
 			for (let i = 0; i < this.fieldsNewTower.length; i++){
@@ -2364,13 +2395,8 @@ class SingleStrategy {
 				};
 			};
 		};
-
-		if (this.enemies[0].numberTurns === this.path.length) {
-			this.enemies.splice(0, 1);
-			for (let s = 0; s < this.fieldsWithTowers.length; s++){
-				this.fieldsWithTowers[s].tower.bulletes.splice(0, 1);
-			}
-		}
+		
+		
 
 		for (let i = 0; i < this.enemies.length; i++){
 			let place = this.path[this.enemies[i].numberTurns];
@@ -2394,16 +2420,28 @@ class SingleStrategy {
 			}
 		}
 
+		for (let i = 0; i < this.enemies.length; i++) {
+			if (this.enemies[i].numberTurns >= this.path.length) {
+				this.enemies.splice(i, 1);
+				for (let s = 0; s < this.fieldsWithTowers.length; s++){
+					this.fieldsWithTowers[s].tower.bulletes.splice(i, 1);
+				}
+				i--;
+			}
+		}
+
 		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
-					this.fields[i][j]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
-					this.fields[i][j]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
-					this.fields[i][j].ableTower = this.isAbleTower([i, j]);
-				};
-			};
+					if (this.fields[i][j].tower === 0) {
+						this.fields[i][j]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
+						this.fields[i][j]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
+						this.fields[i][j]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
+					}
+				}
+			}
 			for (let i = 0; i < this.fieldsWithTowers.length; i++){
 				this.fields[this.fieldsWithTowers[i].coordinates[0]][this.fieldsWithTowers[i].coordinates[1]].tower.bulletes = [];
 			}
@@ -2413,8 +2451,6 @@ class SingleStrategy {
 
 	findPath(checkpoints) {
 
-		checkpoints.push(this.settings.finish);
-
 		let matrix = Array(this.settings.mapSize);
 		for (let i = 0; i < this.settings.mapSize; ++i) {
 			matrix[i] = Array(this.settings.mapSize);
@@ -2423,9 +2459,9 @@ class SingleStrategy {
 		for (let i = 0; i < this.settings.mapSize; ++i) {
 			for (let j = 0; j < this.settings.mapSize; ++j) {
 				if (this.fields[i][j].tower && this.fields[i][j].tower !== 0) {
-					matrix[i][j] = 1;
+					matrix[j][i] = 1;
 				} else {
-					matrix[i][j] = 0;
+					matrix[j][i] = 0;
 				}
 			}
 		}
@@ -2436,13 +2472,11 @@ class SingleStrategy {
 		});
 
 		let path = [];
-		let curStart = this.settings.start;
-		for (let i = 0; i < checkpoints.length; i++) {
-			if (i > 0) {
-				curStart = checkpoints[i-1];
-			}
+		//let curStart = this.settings.checkpoints[0];
+		for (let i = 1; i < checkpoints.length; i++) {
+			let subStart = checkpoints[i-1];
 			
-			let subStart = curStart;
+			//let subStart = curStart;
 			let subFinish = checkpoints[i];
 
 			const grid = new PF.Grid(matrix);

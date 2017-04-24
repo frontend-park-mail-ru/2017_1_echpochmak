@@ -222,6 +222,8 @@ class Settings {
 
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
+		this.laserWidth = 8;
+		this.numberChangesColors = 100;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -1730,6 +1732,7 @@ class CircleTower {
 		this.kind = name;
 		this.bulletes = [];
 		this.radiusFight = name.radiusFight;
+		this.numberChangesColors = 0;//this.settings.numberChangesColors;
 	}
 
 	fire(enemie) {
@@ -1799,19 +1802,24 @@ class PentagonTower {
 			strokeWidth: 0
 		});
 		this.kind = name;
-		this.bulletes = [];
+		this.bulletes = 0;
 		this.radiusFight = name.radiusFight;
 	}
 
 	fire(enemie) {
-		this.bulletes[enemie].push(new Konva.Circle({
-			x: this.draw.getX(),
-			y: this.draw.getY(),
-			radius: this.settings.bulletRadius,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: this.kind.colors[0],
-		}));
+		let x1 = this.draw.getX();
+		let y1 = this.draw.getY();
+		let x2 = enemie.draw.getX();
+		let y2 = enemie.draw.getY();
+		this.bulletes = new Konva.Line({
+			points: [x1, y1, x2, y2],
+			stroke: this.kind.colors[0],
+			strokeWidth: this.settings.laserWidth,
+			lineCap: 'round',
+			lineJoin: 'round'
+		});
+		this.bulletes.enemie = enemie;
+		enemie.health -= 10;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PentagonTower;
@@ -1940,11 +1948,17 @@ class Scene {
 			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
-		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
-			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
-					this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+		for (let i = 0; i < this.state.fieldsWithCircles.length; i++){
+			for (let j = 0; j < this.state.fieldsWithCircles[i].tower.bulletes.length; j++){
+				for (let s = 0; s < this.state.fieldsWithCircles[i].tower.bulletes[j].length; s++){
+					this.gameLayer.add(this.state.fieldsWithCircles[i].tower.bulletes[j][s])
 				}
+			}
+		}
+
+		for (let i = 0; i < this.state.fieldsWithPentagons.length; i++) {
+			if (this.state.fieldsWithPentagons[i].tower.bulletes) {
+				this.gameLayer.add(this.state.fieldsWithPentagons[i].tower.bulletes);
 			}
 		}
 
@@ -1988,7 +2002,8 @@ class SingleStrategy {
 		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
 		this.variantElements = [];
-		this.fieldsWithTowers = [];
+		this.fieldsWithCircles = [];
+		this.fieldsWithPentagons = [];
 		this.variantsShow = [];
 		this.enemies = [];
 		this.tronHealth = 200;
@@ -2006,7 +2021,7 @@ class SingleStrategy {
 					this.settings.variantCircls[i][j],
 					this.settings.variantsX + this.settings.variantsXSize * 0.1 * (j * 2 + 1),
 					this.settings.variantsY + this.settings.variantsYSize * 0.5 + i * this.settings.betweenVariants,
-					this.settings.variantsYSize / 2 - 7
+					Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 				))
 			}
 			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](i));
@@ -2014,7 +2029,7 @@ class SingleStrategy {
 				this.settings.pentagons[i],
 				this.settings.variantsX + this.settings.variantsXSize * 0.9,
 				this.settings.variantsY + this.settings.variantsYSize * 0.5 + i * this.settings.betweenVariants,
-				this.settings.variantsYSize / 2 - 7
+				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
 		}
 
@@ -2023,7 +2038,7 @@ class SingleStrategy {
 				this.settings.pentagons[i],
 				this.settings.variantsX + this.settings.variantsXSize * 0.1 * (i * 2 + 1),
 				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
-				this.settings.variantsYSize / 2 - 7
+				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
 		}
 		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](3));
@@ -2031,7 +2046,7 @@ class SingleStrategy {
 				this.settings.star,
 				this.settings.variantsX + this.settings.variantsXSize * 0.9,
 				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
-				this.settings.variantsYSize / 2 - 7
+				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
 		
 		for (let i = 0; i < this.settings.mapSize; i++){
@@ -2109,7 +2124,8 @@ class SingleStrategy {
 			variantElements: this.variantElements,
 			variantsShow: this.variantsShow,
 			enemies: this.enemies,
-			fieldsWithTowers: this.fieldsWithTowers, 
+			fieldsWithCircles: this.fieldsWithCircles,
+			fieldsWithPentagons: this.fieldsWithPentagons,
 		}
 	}
 
@@ -2153,6 +2169,14 @@ class SingleStrategy {
 			this.generateTower(field);
 			this.variantsShow = [];
 			this.variantRects.length = 4;
+
+			//for (let i = 0; i < this.fieldsNewTower.length; i++) {
+			//	let x = this.fieldsNewTower.coordinates[0];
+			//	let y = this.fieldsNewTower.coordinates[1];
+			//	this.createVariants(this.fields[x][y]);
+			//}
+
+
 		} else if (this.variantRects.length < 5){
 			let waveButton = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](4, "You cant stop monsters");
 			this.variantRects.push(waveButton);
@@ -2192,34 +2216,45 @@ class SingleStrategy {
 				deleteCircles.splice(i, 1);
 			}
 		}
+		for (let i = 0; i < this.fieldsWithCircles.length; i++) {
+			let xCoord = this.fieldsWithCircles[i].coordinates[0];
+			let yCoord = this.fieldsWithCircles[i].coordinates[1];
+			if (xCoord === field.coordinates[0] && yCoord === field.coordinates[1]){
+				this.fieldsWithCircles.splice(i, 1);
+			}
+		}
 		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](kind, xp, yp, this.settings.fieldSize / 2 - 2);
-		for (let i = 0; i < this.fieldsWithTowers.length; i++){
-			if (this.fieldsWithTowers[i].tower.kind.name === deleteCircles[0]){
-				let xCoord = this.fieldsWithTowers[i].coordinates[0];
-				let yCoord = this.fieldsWithTowers[i].coordinates[1];
-				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2);
-				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2);
-				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, yPixel, xPixel, this.settings.fieldSize / 2 - 2);
-				this.fieldsWithTowers.splice(i, 1);
+		this.fieldsWithPentagons.push(field);
+		for (let i = 0; i < this.fieldsWithCircles.length; i++){
+			if (this.fieldsWithCircles[i].tower.kind.name === deleteCircles[0]){
+				let xCoord = this.fieldsWithCircles[i].coordinates[0];
+				let yCoord = this.fieldsWithCircles[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithCircles.splice(i, 1);
 				break;
 			};
 		};
-		for (let i = 0; i < this.fieldsWithTowers.length; i++){
-			if (this.fieldsWithTowers[i].tower.kind.name === deleteCircles[1]){
-				let xCoord = this.fieldsWithTowers[i].coordinates[0];
-				let yCoord = this.fieldsWithTowers[i].coordinates[1];
-				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2);
-				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2);
-				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, yPixel, xPixel, this.settings.fieldSize / 2 - 2);
-				this.fieldsWithTowers.splice(i, 1);
+		for (let i = 0; i < this.fieldsWithCircles.length; i++){
+			if (this.fieldsWithCircles[i].tower.kind.name === deleteCircles[1]){
+				let xCoord = this.fieldsWithCircles[i].coordinates[0];
+				let yCoord = this.fieldsWithCircles[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithCircles.splice(i, 1);
 				break;
 			};
 		};
 		this.towers[kind.name]++;
-		this.towers[kind.circles[0]]--;
-		this.towers[kind.circles[1]]--;
-		this.towers[kind.circles[2]]--;
+		this.towers[deleteCircles[0]]--;
+		this.towers[deleteCircles[1]]--;
 		this.variantsShow = [];
+		for (let i = 0; i < 4; i++) {
+			this.variantRects[i].draw.setStroke('black');
+			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+		}
 	}
 
 	onClickStayVariant(field, kind, currentNewTower){
@@ -2233,11 +2268,16 @@ class SingleStrategy {
 		}
 		this.fields[field.coordinates[0]][field.coordinates[1]]['tower'] = currentNewTower ;
 		this.towers[currentNewTower.kind.name]++;
-		this.fieldsWithTowers.push(field);
+		this.fieldsWithCircles.push(field);
 		this.fieldsNewTower = [];
 		this.variantsShow = [];
 		this.newStones = 0;
 		this.status = 'Wave';
+		for (let i = 0; i < 4; i++) {
+			this.variantRects[i].draw.setStroke('black');
+			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+			this.variantRects[i].isAble = false;
+		}
 	}
 
 	onClickWaveButton(){
@@ -2245,6 +2285,32 @@ class SingleStrategy {
 		this.variantRects.length = 4;
 		this.status = 'Wave';
 		this.variantsShow = [];
+	}
+
+	onClickVariantRect(variantRect) {
+		//for (let s = 0; s < 3; s++) {
+		//	for (let i = 0; i < this.fieldsWithCircles.length; i++) {
+		//		if (this.fieldsWithCircles[i].tower.kind.name == variantRect.kind.circles[s]) {
+		//			this.createVariants.call(this, this.fieldsWithCircles[i]);
+		//			return;
+		//		}
+		//	}
+		//}
+
+
+		//for (let s = 0; s < 3; s++) {
+		//	for (let i = 0; i < this.fieldsNewTower.length; i++) {
+		//		if (this.fieldsNewTower[i].kind.name == variantRect.kind.circles[s]) {
+		//			let x = this.fieldsNewTower[i].coordinates[0];
+		//			let y = this.fieldsNewTower[i].coordinates[1];
+		//			this.createVariants.call(this, this.fields[x][y]);
+		//			return;
+		//		}
+		//	}
+		//}
+
+		this.createVariants.call(this, variantRect.field);
+		
 	}
 
 	generateTower(field) {
@@ -2279,6 +2345,26 @@ class SingleStrategy {
 				let y = this.fieldsNewTower[i].coordinates[1];
 				this.fields[x][y].field.setStroke('green');
 			}
+			for (let j = 0; j < this.fieldsNewTower.length; j++) {
+				this.towers[this.fieldsNewTower[j].kind.name]++;
+				let variants = this.listVariants();
+				for (let i = 0; i < variants.length; i++) {
+					for (let s = 0; s < 4; s++) {
+						if (variants[i].name == this.variantRects[s].kind.name) {
+							this.variantRects[s].isAble = true;
+							this.variantRects[s].field = this.fields[this.fieldsNewTower[j].coordinates[0]][this.fieldsNewTower[j].coordinates[1]]
+						}
+					}
+				}
+				this.towers[this.fieldsNewTower[j].kind.name]--;
+			}
+			for (let i = 0; i < this.variantRects.length; i++) {
+				if (this.variantRects[i].isAble) {
+					this.variantRects[i].draw.setStroke('green');
+					this.variantRects[i].draw.addEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+				}
+			}
+			
 		}
 	}
 
@@ -2340,20 +2426,32 @@ class SingleStrategy {
 
 	listVariants(field) {
 		let variants = [];
-		if (((this.towers['circleRed'] > 0) && (this.towers['circlePink'] > 0) && (this.towers['circleSad'] > 0)) && ((field.tower.kind == this.settings.circleRed) || (field.tower.kind == this.settings.circlePink) || (field.tower.kind == this.settings.circleSad))){
+		if (((this.towers['circleRed'] > 0) && (this.towers['circlePink'] > 0) && (this.towers['circleSad'] > 0)) && (!field || (field.tower.kind == this.settings.circleRed) || (field.tower.kind == this.settings.circlePink) || (field.tower.kind == this.settings.circleSad))){
 		variants.push(this.settings.pentagonRPS);
 		};
-		if (((this.towers['circleSad'] > 0) && (this.towers['circleBlue'] > 0) && (this.towers['circleGreen'] > 0)) && ((field.tower.kind == this.settings.circleSad) || (field.tower.kind == this.settings.circleBlue) || (field.tower.kind == this.settings.circleGreen))){
+		if (((this.towers['circleSad'] > 0) && (this.towers['circleBlue'] > 0) && (this.towers['circleGreen'] > 0)) && (!field || (field.tower.kind == this.settings.circleSad) || (field.tower.kind == this.settings.circleBlue) || (field.tower.kind == this.settings.circleGreen))){
 			variants.push(this.settings.pentagonSBG);
 		};
-		if (((this.towers['circleGreen'] > 0) && (this.towers['circleYellow'] > 0) && (this.towers['circleRed'] > 0)) && ((field.tower.kind == this.settings.circleGreen) || (field.tower.kind == this.settings.circleYellow) || (field.tower.kind == this.settings.circleRed))){
+		if (((this.towers['circleGreen'] > 0) && (this.towers['circleYellow'] > 0) && (this.towers['circleRed'] > 0)) && (!field || (field.tower.kind == this.settings.circleGreen) || (field.tower.kind == this.settings.circleYellow) || (field.tower.kind == this.settings.circleRed))){
 			variants.push(this.settings.pentagonGYR);
 		};
 		return variants;
 	}
 
 	playerStep() {
-
+		for (let i = 0; i < this.fieldsNewTower.length; i++) {
+			if (this.fieldsNewTower[i].numberChangesColors > 1) {
+				if (this.fieldsNewTower[i].numberChangesColors % 10 === 0) {
+					let color = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)].color;
+					this.fieldsNewTower[i].draw.setFill(color);
+				}
+				this.fieldsNewTower[i].numberChangesColors--;
+			} else if (this.fieldsNewTower[i].numberChangesColors === 1) {
+				let color = this.fieldsNewTower[i].kind.color;
+				this.fieldsNewTower[i].draw.setFill(color);
+				this.fieldsNewTower[i].numberChangesColors--;
+			}
+		}
 	}
 
 	gameWave() {
@@ -2364,40 +2462,49 @@ class SingleStrategy {
 
 		if (this.enemiesNumber < 20){
 			this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl));
-			for (let i = 0; i < this.fieldsWithTowers.length; i++){
-				this.fieldsWithTowers[i].tower.bulletes.push([]);
+			for (let i = 0; i < this.fieldsWithCircles.length; i++){
+				this.fieldsWithCircles[i].tower.bulletes.push([]);
 			}
 			this.enemiesNumber++;
 		}
 
-		for (let i = 0; i < this.fieldsWithTowers.length; i++){
+		for (let i = 0; i < this.fieldsWithCircles.length; i++){
 			for (let j = 0; j < this.enemies.length; j++){
-				let distY = this.enemies[j].draw.getY() - this.fieldsWithTowers[i].tower.draw.getY();
-				let distX = this.enemies[j].draw.getX() - this.fieldsWithTowers[i].tower.draw.getX();
-				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithTowers[i].tower.radiusFight){
-					this.fieldsWithTowers[i].tower.fire(j);
+				let distY = this.enemies[j].draw.getY() - this.fieldsWithCircles[i].tower.draw.getY();
+				let distX = this.enemies[j].draw.getX() - this.fieldsWithCircles[i].tower.draw.getX();
+				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithCircles[i].tower.radiusFight){
+					this.fieldsWithCircles[i].tower.fire(j);
 					break;
 				};
 			};
-			for (let j = 0; j < this.fieldsWithTowers[i].tower.bulletes.length; j++){
-				for (let s = 0; s < this.fieldsWithTowers[i].tower.bulletes[j].length; s++){
-					let distY = this.enemies[j].draw.getY() - this.fieldsWithTowers[i].tower.bulletes[j][s].getY();
-					let distX = this.enemies[j].draw.getX() - this.fieldsWithTowers[i].tower.bulletes[j][s].getX();
+			for (let j = 0; j < this.fieldsWithCircles[i].tower.bulletes.length; j++){
+				for (let s = 0; s < this.fieldsWithCircles[i].tower.bulletes[j].length; s++){
+					let distY = this.enemies[j].draw.getY() - this.fieldsWithCircles[i].tower.bulletes[j][s].getY();
+					let distX = this.enemies[j].draw.getX() - this.fieldsWithCircles[i].tower.bulletes[j][s].getX();
 					if (Math.abs(distX) < this.enemies[j].kind.size && Math.abs(distY) < this.enemies[j].kind.size){
-						this.fieldsWithTowers[i].tower.bulletes[j].splice(s, 1);
+						this.fieldsWithCircles[i].tower.bulletes[j].splice(s, 1);
 						this.enemies[j].health -= 10;
 						continue;
 					}
 					let stepX = this.settings.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;
 					let stepY = Math.pow(this.settings.bulletStep * this.settings.bulletStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
-					this.fieldsWithTowers[i].tower.bulletes[j][s].setX(this.fieldsWithTowers[i].tower.bulletes[j][s].getX() + stepX);
-					this.fieldsWithTowers[i].tower.bulletes[j][s].setY(this.fieldsWithTowers[i].tower.bulletes[j][s].getY() + stepY);
+					this.fieldsWithCircles[i].tower.bulletes[j][s].setX(this.fieldsWithCircles[i].tower.bulletes[j][s].getX() + stepX);
+					this.fieldsWithCircles[i].tower.bulletes[j][s].setY(this.fieldsWithCircles[i].tower.bulletes[j][s].getY() + stepY);
 				};
 			};
 		};
-		
-		
 
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++) {
+			this.fieldsWithPentagons[i].tower.bulletes = 0;
+			for (let j = 0; j < this.enemies.length; j++) {
+				let distY = this.enemies[j].draw.getY() - this.fieldsWithPentagons[i].tower.draw.getY();
+				let distX = this.enemies[j].draw.getX() - this.fieldsWithPentagons[i].tower.draw.getX();
+				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithPentagons[i].tower.radiusFight){
+					this.fieldsWithPentagons[i].tower.fire(this.enemies[j]);
+					break;
+				}
+			}
+		}
 		for (let i = 0; i < this.enemies.length; i++){
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
@@ -2414,8 +2521,8 @@ class SingleStrategy {
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
 			if (this.enemies[i].health <= 0) {
 				this.enemies.splice(i, 1);
-				for (let j = 0; j < this.fieldsWithTowers.length; j++){
-					this.fieldsWithTowers[j].tower.bulletes.splice(i, 1);
+				for (let j = 0; j < this.fieldsWithCircles.length; j++){
+					this.fieldsWithCircles[j].tower.bulletes.splice(i, 1);
 				}
 			}
 		}
@@ -2423,8 +2530,8 @@ class SingleStrategy {
 		for (let i = 0; i < this.enemies.length; i++) {
 			if (this.enemies[i].numberTurns >= this.path.length) {
 				this.enemies.splice(i, 1);
-				for (let s = 0; s < this.fieldsWithTowers.length; s++){
-					this.fieldsWithTowers[s].tower.bulletes.splice(i, 1);
+				for (let s = 0; s < this.fieldsWithCircles.length; s++){
+					this.fieldsWithCircles[s].tower.bulletes.splice(i, 1);
 				}
 				i--;
 			}
@@ -2442,8 +2549,11 @@ class SingleStrategy {
 					}
 				}
 			}
-			for (let i = 0; i < this.fieldsWithTowers.length; i++){
-				this.fields[this.fieldsWithTowers[i].coordinates[0]][this.fieldsWithTowers[i].coordinates[1]].tower.bulletes = [];
+			for (let i = 0; i < this.fieldsWithCircles.length; i++){
+				this.fieldsWithCircles[i].tower.bulletes = [];
+			}
+			for (let i = 0; i < this.fieldsWithPentagons.length; i++){
+				this.fieldsWithPentagons[i].tower.bulletes = 0;
 			}
 			this.path = [];
 		};
@@ -2472,11 +2582,8 @@ class SingleStrategy {
 		});
 
 		let path = [];
-		//let curStart = this.settings.checkpoints[0];
 		for (let i = 1; i < checkpoints.length; i++) {
-			let subStart = checkpoints[i-1];
-			
-			//let subStart = curStart;
+			let subStart = checkpoints[i - 1];
 			let subFinish = checkpoints[i];
 
 			const grid = new PF.Grid(matrix);
@@ -2502,8 +2609,25 @@ class SingleStrategy {
 
 class VariantBlock {
 	constructor(number, text) {
-		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
 
+		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */];
+		this.isAble = false;
+		this.kind = 0;
+		this.field = 0;
+		switch (number) {
+			case (0):
+				this.kind = this.settings.pentagonRPS;
+				break;
+			case (1):
+				this.kind = this.settings.pentagonSBG;
+				break;
+			case (2):
+				this.kind = this.settings.pentagonGYR;
+				break;
+			case (3):
+				this.kind = this.settings.star;
+				break;
+		}
 		if (text) {
 			this.text = new Konva.Text({
 				x: this.settings.variantsX,
@@ -2524,7 +2648,7 @@ class VariantBlock {
 			height: (text ? this.text.getHeight() : this.settings.variantsYSize),
 			fill: 'grey',
 			stroke: 'black',
-			strokeWidth: 2
+			strokeWidth: 5
 		});
 
 		// let width = this.settings.hintsFieldElement.offsetWidth;

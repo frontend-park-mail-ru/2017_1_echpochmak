@@ -28,6 +28,8 @@ class Settings {
 
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
+		this.laserWidth = 8;
+		this.numberChangesColors = 100;
 
 		this.circleRed = {
 			name: 'circleRed',

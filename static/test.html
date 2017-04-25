@@ -6,8 +6,91 @@
 
 		<style>
 
-			div {
+			body {
+				font-family: aAlbionicTitulInfl, cursive;
+				background-size: auto;
+				background-attachment: fixed;
+			}
+
+			.kirka {
+				background-position: left bottom;
+				position:fixed;
+				bottom:0%;   
+				left:-7%;
+			}
+
+			.menu__button:visited {
+				text-decoration: none;
+			}
+
+			.menu__button {
+				display: inline-block;
+				border:1px solid #64734D;
+				border-radius: 20px;
+				color: #705D07;
+				font-family: aAlbionicTitulInfl, cursive;
+				font-weight: bolder;
+				font-size: 30px;
+				padding: 20px 20px;
+				box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E;
+				-moz-box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E,0 2px 4px 0 #D4D4D4;
+				-webkit-box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E,0 2px 4px 0 #D4D4D4;
+				text-shadow: 0 1px 0 #FFFFFF;
+				background-color: #DBFCA9;
+				text-decoration: none;
+				background-repeat:  no-repeat;
+				background-position: 20%;
+				/*margin-right: 0.5%;*/
+				/*margin-left: 0.5%;*/
+			}
+
+			.menu__button:hover, .menu__button:active {
+				background-repeat:  no-repeat;
+				text-decoration: none;
+				border-radius: 25px;
+				color: #3B1A1A;  
+				background-color: #D3FF91;
+			}
+
+			.menu__button_big {
+				background-color: #DBFCA9;
+				/*background-color: #D3FF91;*/
+				width: 305px;
+				height: 275px;
+			}
+
+			.menu__button_small {
+				background-color: #DBFCA9;
+				/*background-color: #D3FF91;*/
+				width: 305px;
+			}
+
+			.menu {
+				width: 100vw;
 				height: 100vh;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				grid-template-rows: 1fr 1fr;
+			}
+
+			.menu__single-button {
+				grid-column: 1 / 2;
+				grid-row: 1 / 2;
+			}
+
+			.menu__multi-button {
+				grid-column: 2 / 3;
+				grid-row: 1 / 2;
+			}
+
+			.menu__about-button {
+				grid-column: 1 / 2;
+				grid-row: 2 / 3;
+			}
+
+			.menu__leaderboard-button {
+				grid-column: 2 / 3;
+				grid-row: 2 / 3;
 			}
 
 		</style>
@@ -16,16 +99,33 @@
 
 	<body>
 
-		<div class="right col-xs-3 col-sm-3 col-md-3 col-lg-3">
-			a
-		</div>
+		<body background="./img/back_green.jpg">
 
-		<div class="center col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			b
-		</div>
+		<img src="./img/Pickaxe1.png" class="kirka">
 
-		<div class="left col-xs-3 col-sm-3 col-md-3 col-lg-3">
-			c
+		<div class="menu">
+			
+				<div class="menu__single-button" align="center">
+					<a href="#" class="menu__button_big menu__button" align="center">
+						Одиночная игра
+					</a>
+				</div>
+				<div class="menu__multi-button" align="center">
+					<a href="#" class="menu__button_big menu__button" align="center">
+						Мультиплеер
+					</a>
+				</div>
+				<div class="menu__about-button" align="center">
+					<a href="#" class="menu__button_small menu__button" align="center">
+						Об игре
+					</a>
+				</div>
+				<div class="menu__leaderboard-button" align="center">
+					<a href="#" class="menu__button_small menu__button" align="center">
+						Лидеры
+					</a>
+				</div>				
+
 		</div>
 
 	</body>

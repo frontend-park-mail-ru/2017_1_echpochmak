@@ -1,13 +1,13 @@
 .back {
 	font-size: 18pt;
 	color: #3B1A1A;
-	padding-right: 1%;
+	padding-left: 1%;
 	padding-top: 1%;
 }
 
 .back__button {
 	display: inline-block;
-	margin-right: 4%;
+	margin-left: 4%;
 }
 
 .back__image {

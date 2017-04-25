@@ -9,7 +9,7 @@ class Back extends BaseBlock {
 	constructor() {
 		super('div', {
 			class: 'back',
-			align: 'right'
+			align: 'left'
 		});
 		this.link = new Link('', {
 			class: 'back__button'

@@ -109,10 +109,16 @@ class SingleStrategy {
 		};
 
 		this.state = {};
+	}
 
+	start() {
 		requestAnimationFrame(() => {
 			this.gameLoop.call(this);
 		});
+	}
+
+	finish() {
+		
 	}
 
 	gameLoop() {

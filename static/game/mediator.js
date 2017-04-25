@@ -1,37 +1,32 @@
-(function () {
-
-	class Mediator {
-		constructor() {
-			if (Mediator.__instance) {
-				return Mediator.__instance;
-			}
-
-			this.messages = {};
-
-			Mediator.__instance = this;
+export default
+class Mediator {
+	constructor() {
+		if (Mediator.__instance) {
+			return Mediator.__instance;
 		}
 
-		emit(event, args) {
-			if (event in this.messages) {
-				for (const callback of this.messages[event]) {
-					callback(args);
-				}
-				return true;
-			} else {
-				return false;
-			}
-		}
+		this.messages = {};
 
-		subscribe(event, callback) {
-			if (event in this.messages) {
-				this.messages[event].push(callback);
-			} else {
-				this.messages[event] = [callback];
+		Mediator.__instance = this;
+	}
+
+	emit(event, args) {
+		if (event in this.messages) {
+			for (const callback of this.messages[event]) {
+				callback(args);
 			}
 			return true;
+		} else {
+			return false;
 		}
 	}
 
-	window.Mediator = Mediator;
-
-})();
+	subscribe(event, callback) {
+		if (event in this.messages) {
+			this.messages[event].push(callback);
+		} else {
+			this.messages[event] = [callback];
+		}
+		return true;
+	}
+}

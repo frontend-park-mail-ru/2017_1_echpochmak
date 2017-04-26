@@ -6,12 +6,14 @@ import PentagonTower from './gameObjects/pentagontower.js'
 import StarTower from './gameObjects/startower.js'
 import VariantBlock from './variantBlock.js'
 import Arrow from './gameObjects/arrow.js'
+import Mediator from './mediator.js'
 
 export default
 class SingleStrategy {
 	
 	constructor() {
 
+		this.mediator = new Mediator();
 		this.settings = new Settings();
 		this.scene = new Scene();
 
@@ -111,17 +113,7 @@ class SingleStrategy {
 		this.state = {};
 	}
 
-	start() {
-		requestAnimationFrame(() => {
-			this.gameLoop.call(this);
-		});
-	}
-
-	finish() {
-		
-	}
-
-	gameLoop() {
+	gameStep() {
 		if (this.status === 'playerStep') {
 			this.playerStep();
 		} else {
@@ -132,9 +124,9 @@ class SingleStrategy {
 		this.scene.setState(this.state);
 		this.scene.render();
 
-		requestAnimationFrame(() => {
-			this.gameLoop.call(this);
-		});
+		if (this.fieldsWithTowers.length > 1) {
+			this.mediator.emit('GAME END');
+		}
 	}
 
 	updateState() {

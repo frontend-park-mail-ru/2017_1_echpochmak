@@ -47,7 +47,6 @@
 // 			this.get().appendChild(this.leftBar.get());
 // 			this.get().appendChild(this.gameField.get());
 // 			this.get().appendChild(this.hints.get());
-// 			const strategy = new SingleStrategy();
 // 		})
 // 	}
 

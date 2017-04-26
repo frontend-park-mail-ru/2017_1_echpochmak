@@ -13,6 +13,11 @@ class Authorize {
 		this.service = new UserService();
 		this.router = new Router();
 		this.anonymUser = 'Гость';
+		this.loginned = false;
+		this.user = {
+			username: anonymUser,
+			score: 0
+		};
 		
 		this.showForGuest();
 

@@ -11,8 +11,8 @@ class Router {
 
 		this.routes = {};
 		this.activeRoute = null;
-		this.loginned = false;
-		this.username = '';
+		// this.loginned = false;
+		// this.username = '';
 
 		this.history = window.history;
 
@@ -71,13 +71,13 @@ class Router {
 
 	loginSwitch(name) {
 		this.currentView.loginSwitch(name);
-		this.loginned = true;
-		this.username = name;
+		// this.loginned = true;
+		// this.username = name;
 	}
 
 	unloginSwitch(name) {
 		this.currentView.unloginSwitch(name);
-		this.loginned = false;
-		this.username = name;
+		// this.loginned = false;
+		// this.username = name;
 	}
 }

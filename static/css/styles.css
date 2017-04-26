@@ -57,6 +57,10 @@ body {
 .left-bar {
 	height: 100vh;
 	padding: 0px;
+	background-color: rgba(58, 183, 51, 0.82);
+	border: 1px solid black;
+	border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
 }
 
 .game-field {

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="./socket.css" rel="stylesheet">
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<div class="sockets">
+			
+			<div class="send block" align="center">
+				<div class="title">
+					Отправка
+				</div>
+				<textarea class="send__input" disabled>
+				</textarea>
+			</div>
+				
+			<div class="buttons block" align="center">
+				<input class="url"> 
+				<button class="buttons__open"> 
+					Открыть сокет! 
+				</button>
+				<button class="buttons__send" disabled align="center"> 
+					Отправить этот великолепный JSON на ваш великолепный сервер
+				</button>
+			</div>
+
+			<div class="message block" align="center">
+				<div class="title">
+					Прием
+				</div>
+
+				<div class="message__json">
+				</div>
+			</div>
+
+		</div>
+
+		<script type="text/javascript" src="./socket.js"></script>
+
+	</body>
+</html>

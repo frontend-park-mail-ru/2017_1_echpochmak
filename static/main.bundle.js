@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -1832,7 +1832,7 @@ class CircleTower {
 		this.kind = name;
 		this.bulletes = [];
 		this.radiusFight = name.radiusFight;
-		this.numberChangesColors = 0;//this.settings.numberChangesColors;
+		this.numberChangesColors = this.settings.numberChangesColors;
 	}
 
 	fire(enemie) {
@@ -2250,10 +2250,6 @@ class SingleStrategy {
 		this.updateState();
 		this.scene.setState(this.state);
 		this.scene.render();
-
-		if (this.fieldsWithTowers.length > 1) {
-			this.mediator.emit('GAME END');
-		}
 	}
 
 	updateState() {

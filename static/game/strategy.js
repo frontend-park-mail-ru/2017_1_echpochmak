@@ -124,10 +124,6 @@ class SingleStrategy {
 		this.updateState();
 		this.scene.setState(this.state);
 		this.scene.render();
-
-		if (this.fieldsWithTowers.length > 1) {
-			this.mediator.emit('GAME END');
-		}
 	}
 
 	updateState() {

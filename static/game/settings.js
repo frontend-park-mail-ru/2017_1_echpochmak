@@ -14,9 +14,7 @@ class Settings {
 
 		this.mapSize = 15;
 
-		this.start = [0,0];
-		this.finish = [this.mapSize - 1, this.mapSize - 1];
-		this.checkpoints = [[0, this.mapSize - 1], [this.mapSize - 1, 0]];
+		this.checkpoints = [[0, 0], [0, this.mapSize - 1], [this.mapSize - 1, 0], [this.mapSize - 1, this.mapSize - 1]];
 
 		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
 		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
@@ -30,6 +28,8 @@ class Settings {
 
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
+		this.laserWidth = 8;
+		this.numberChangesColors = 100;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -77,7 +77,7 @@ class Settings {
 			name: 'triangl',
 			size: 30,
 			color: '#00FF00',
-			health: 10,
+			health: 100,
 		};
 
 		this.stone = {

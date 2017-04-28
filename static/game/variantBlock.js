@@ -3,8 +3,25 @@ import Settings from './settings.js'
 export default
 class VariantBlock {
 	constructor(number, text) {
-		this.settings = new Settings;
 
+		this.settings = new Settings;
+		this.isAble = false;
+		this.kind = 0;
+		this.field = 0;
+		switch (number) {
+			case (0):
+				this.kind = this.settings.pentagonRPS;
+				break;
+			case (1):
+				this.kind = this.settings.pentagonSBG;
+				break;
+			case (2):
+				this.kind = this.settings.pentagonGYR;
+				break;
+			case (3):
+				this.kind = this.settings.star;
+				break;
+		}
 		if (text) {
 			this.text = new Konva.Text({
 				x: this.settings.variantsX,
@@ -25,7 +42,7 @@ class VariantBlock {
 			height: (text ? this.text.getHeight() : this.settings.variantsYSize),
 			fill: 'grey',
 			stroke: 'black',
-			strokeWidth: 2
+			strokeWidth: 5
 		});
 
 		// let width = this.settings.hintsFieldElement.offsetWidth;

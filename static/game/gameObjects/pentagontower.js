@@ -18,18 +18,23 @@ class PentagonTower {
 			strokeWidth: 0
 		});
 		this.kind = name;
-		this.bulletes = [];
+		this.bulletes = 0;
 		this.radiusFight = name.radiusFight;
 	}
 
 	fire(enemie) {
-		this.bulletes[enemie].push(new Konva.Circle({
-			x: this.draw.getX(),
-			y: this.draw.getY(),
-			radius: this.settings.bulletRadius,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: this.kind.colors[0],
-		}));
+		let x1 = this.draw.getX();
+		let y1 = this.draw.getY();
+		let x2 = enemie.draw.getX();
+		let y2 = enemie.draw.getY();
+		this.bulletes = new Konva.Line({
+			points: [x1, y1, x2, y2],
+			stroke: this.kind.colors[0],
+			strokeWidth: this.settings.laserWidth,
+			lineCap: 'round',
+			lineJoin: 'round'
+		});
+		this.bulletes.enemie = enemie;
+		enemie.health -= 10;
 	}
 }

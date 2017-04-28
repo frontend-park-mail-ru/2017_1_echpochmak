@@ -71,11 +71,17 @@ class Scene {
 			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
-		for (let i = 0; i < this.state.fieldsWithTowers.length; i++){
-			for (let j = 0; j < this.state.fieldsWithTowers[i].tower.bulletes.length; j++){
-				for (let s = 0; s < this.state.fieldsWithTowers[i].tower.bulletes[j].length; s++){
-					this.gameLayer.add(this.state.fieldsWithTowers[i].tower.bulletes[j][s])
+		for (let i = 0; i < this.state.fieldsWithCircles.length; i++){
+			for (let j = 0; j < this.state.fieldsWithCircles[i].tower.bulletes.length; j++){
+				for (let s = 0; s < this.state.fieldsWithCircles[i].tower.bulletes[j].length; s++){
+					this.gameLayer.add(this.state.fieldsWithCircles[i].tower.bulletes[j][s])
 				}
+			}
+		}
+
+		for (let i = 0; i < this.state.fieldsWithPentagons.length; i++) {
+			if (this.state.fieldsWithPentagons[i].tower.bulletes) {
+				this.gameLayer.add(this.state.fieldsWithPentagons[i].tower.bulletes);
 			}
 		}
 

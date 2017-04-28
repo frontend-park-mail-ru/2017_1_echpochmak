@@ -61,6 +61,7 @@ body {
 	border: 1px solid black;
 	border-bottom-right-radius: 20px;
 	border-top-right-radius: 20px;
+	font-size: 25px;
 }
 
 .game-field {
@@ -71,4 +72,45 @@ body {
 .hints-field {
 	height: 100vh;
 	padding: 0px;
+}
+
+.left-bar__quit {
+	height: 30%;
+	padding: 5%;
+}
+
+.left-bar__user {
+	height: 40%;
+}
+
+.left-bar__HP {
+	height: 30%;
+}
+
+.quit-confirm {
+	position: fixed;
+	margin-top: 35vh;
+	margin-bottom: 35vh;
+	margin-left: 35vw;
+	margin-right: 35vw;
+	border: 2px solid black;
+	border-radius: 20px;
+	background-color: blue;
+	height: 30vh;
+	width: 30vw;
+	font-size: 20px;
+}
+
+.quit-confirm__text {
+	height: 50%;
+	padding: 3%;
+}
+
+.quit-confirm__buttons {
+	height: 50%;
+	padding: 3%;
+}
+
+.quit-confirm__buttons button {
+	margin: 3%;
 }

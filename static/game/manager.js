@@ -1,13 +1,16 @@
 import SingleStrategy from './strategy.js'
 import Mediator from './mediator.js'
+import Events from './events.js'
 
 export default
 class GameManager {
 	constructor(strategy) {
 		this.mediator = new Mediator();
 
-		this.mediator.subscribe('GAME START', this.start.bind(this));
-		this.mediator.subscribe('GAME END', this.end.bind(this));
+		this.mediator.subscribe(Events.PLAY_NEW_GAME, this.start.bind(this));
+		this.mediator.subscribe(Events.PLAY_AGAIN, this.start.bind(this));
+		this.mediator.subscribe(Events.GAME_FINISHED, this.end.bind(this));
+		this.mediator.subscribe(Events.QUIT_CONFIRMED, this.end.bind(this));
 	}
 
 	gameLoop() {

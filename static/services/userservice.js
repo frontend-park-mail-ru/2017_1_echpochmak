@@ -40,6 +40,19 @@ class UserService {
 		});
 	}
 
+	getUserScore(callback) {
+		this.http.get('/api/getscore', null, xhr => {
+			this.func(callback, xhr);
+		})
+	}
+
+	setUserScore(score, callback) {
+		const body = {score};
+		this.http.post('/api/setscore', body, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
 	getUsersList(callback) {
 		this.http.get('/api/users', null, xhr => {
 			this.func(callback, xhr);

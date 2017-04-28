@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 35);
+/******/ 	return __webpack_require__(__webpack_require__.s = 36);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -115,7 +115,10 @@ class Router {
 		this.routes = {};
 		this.activeRoute = null;
 		this.loginned = false;
-		this.username = '';
+		this.user = {
+			username: '',
+			score: 0
+		}
 
 		this.history = window.history;
 
@@ -164,24 +167,24 @@ class Router {
 		this.currentView = view;
 
 		if (this.loginned) {
-			this.loginSwitch(this.username)
+			this.loginSwitch(this.user)
 		} else {
-			this.unloginSwitch(this.username)
+			this.unloginSwitch(this.user)
 		}
 
 		return true;
 	}
 
-	loginSwitch(name) {
-		this.currentView.loginSwitch(name);
+	loginSwitch(user) {
+		this.currentView.loginSwitch(user.username);
 		this.loginned = true;
-		this.username = name;
+		this.user = user;
 	}
 
-	unloginSwitch(name) {
-		this.currentView.unloginSwitch(name);
+	unloginSwitch(user) {
+		this.currentView.unloginSwitch(user.username);
 		this.loginned = false;
-		this.username = name;
+		this.user = user;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Router;
@@ -194,7 +197,7 @@ class Router {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Back_back_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Back_back_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_router_js__ = __webpack_require__(1);
 
 
@@ -245,6 +248,86 @@ class BaseView extends __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblo
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_router_js__ = __webpack_require__(1);
+
+
+
+
+
+class Authorize {
+	constructor() {
+		if (Authorize.__instance) {
+			return Authorize.__instance;
+		}
+
+		this.service = new __WEBPACK_IMPORTED_MODULE_0__userservice_js__["a" /* default */]();
+		this.router = new __WEBPACK_IMPORTED_MODULE_1__modules_router_js__["a" /* default */]();
+
+		this.user = {};
+		this.anonymUser = {
+			username: 'Гость',
+			score: 0
+		}
+		Object.assign(this.user, this.anonymUser);
+		
+		this.showForGuest();
+
+		this.service.getUsername(xhr => {
+			if (xhr.status === 'ok') {
+				this.user.username = xhr.login;
+				this.loadUserScore();
+				this.showForUser();
+			} else {
+				this.showForGuest();
+			}
+		});
+
+		Authorize.__instance = this;
+	}
+
+	loadUserScore() {
+		this.service.getUserScore(xhr => {
+			if (xhr.status === 'ok') {
+				this.user.score = xhr.score;
+			}
+		})
+	}
+
+	authorize() {
+		this.service.getUsername(xhr => {
+			if (xhr.status === 'ok') {
+				this.user.username = xhr.login;
+				this.loadUserScore();
+				this.showForUser();
+			}
+		});
+	}
+
+	deauthorize() {
+		this.service.logout(xhr => {
+			Object.assign(this.user, this.anonymUser);
+			this.showForGuest();
+		});
+	}
+
+	showForUser() {
+		this.router.loginSwitch(this.user);
+	}
+
+	showForGuest() {
+		this.router.unloginSwitch(this.anonymUser);
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Authorize;
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 class Settings {
 	constructor() {
 
@@ -258,7 +341,7 @@ class Settings {
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.mapSize = 10;
+		this.mapSize = 15;
 
 		this.start = [0,0];
 		this.finish = [this.mapSize - 1, this.mapSize - 1];
@@ -401,72 +484,11 @@ class Settings {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_router_js__ = __webpack_require__(1);
-
-
-
-
-
-class Authorize {
-	constructor() {
-		if (Authorize.__instance) {
-			return Authorize.__instance;
-		}
-
-		this.service = new __WEBPACK_IMPORTED_MODULE_0__userservice_js__["a" /* default */]();
-		this.router = new __WEBPACK_IMPORTED_MODULE_1__modules_router_js__["a" /* default */]();
-		this.anonymUser = 'Гость';
-		
-		this.showForGuest();
-
-		this.service.getUsername(xhr => {
-			if (xhr.login) {
-				this.showForUser(xhr.login);
-			} else {
-				this.showForGuest();
-			}
-		});
-
-		Authorize.__instance = this;
-	}
-
-	authorize() {
-		this.service.getUsername(xhr => {
-			if (xhr.status === 'ok') {
-				this.showForUser(xhr.login);
-			}
-		});
-	}
-
-	deauthorize() {
-		this.service.logout(xhr => {
-			this.showForGuest();
-		});
-	}
-
-	showForUser(user) {
-		this.router.loginSwitch(user);
-	}
-
-	showForGuest() {
-		this.router.unloginSwitch(this.anonymUser);
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Authorize;
-
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http_js__ = __webpack_require__(9);
 
 
 
@@ -508,6 +530,19 @@ class UserService {
 		});
 	}
 
+	getUserScore(callback) {
+		this.http.get('/api/getscore', null, xhr => {
+			this.func(callback, xhr);
+		})
+	}
+
+	setUserScore(score, callback) {
+		const body = {score};
+		this.http.post('/api/setscore', body, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
 	getUsersList(callback) {
 		this.http.get('/api/users', null, xhr => {
 			this.func(callback, xhr);
@@ -539,7 +574,6 @@ class Mediator {
 			for (const callback of this.messages[event]) {
 				callback(args);
 			}
-			console.log(event);
 			return true;
 		} else {
 			return false;
@@ -564,6 +598,24 @@ class Mediator {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const Events = {
+	GAME_START: 	1,
+	PLAY_NEW_GAME: 	2,
+	TRY_QUIT: 		3,
+	QUIT_CONFIRMED: 4,
+	QUIT_CANCELED: 	5,
+	GAME_FINISHED: 	6,
+	PLAY_AGAIN: 	7,
+	EXIT_TO_MENU: 	8,
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Events);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__ = __webpack_require__(0);
 
 
@@ -583,7 +635,7 @@ class Link extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -712,7 +764,7 @@ class HTTP {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -734,12 +786,12 @@ class Form extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Button_button_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Button_button_js__ = __webpack_require__(22);
 
 
 
@@ -772,7 +824,7 @@ class FormButton extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -814,7 +866,7 @@ class FormMessage extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__[
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -856,7 +908,7 @@ class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /*
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -941,7 +993,7 @@ class About extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -989,15 +1041,15 @@ class LeaderBoard extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1020,7 +1072,7 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 		});
 		this.form = new __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__["a" /* default */]();
 
-		this.form.onsubmit((event) => {
+		this.form.on('submit', () => {
 
 			event.preventDefault();
 
@@ -1058,16 +1110,16 @@ class Login extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_router_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 
 
 
@@ -1184,7 +1236,7 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1241,16 +1293,16 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 
 
 
@@ -1271,7 +1323,7 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 			class: 'padd'
 		});
 		this.form = new __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__["a" /* default */]();
-		this.form.onsubmit((event) => {
+		this.form.on('submit', () => {
 
 			event.preventDefault();
 
@@ -1309,16 +1361,20 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_manager_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_manager_js__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_router_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__game_events_js__ = __webpack_require__(7);
+
+
 
 
 
@@ -1340,21 +1396,41 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 		this.gameSubView = new __WEBPACK_IMPORTED_MODULE_3__game_js__["a" /* default */]();
 		this.gameManager = new __WEBPACK_IMPORTED_MODULE_4__game_manager_js__["a" /* default */]();
 
+		this.router = new __WEBPACK_IMPORTED_MODULE_6__modules_router_js__["a" /* default */]();
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_5__game_mediator_js__["a" /* default */]();
 
 		this.render();
 
-		this.mediator.subscribe('NEW GAME', this.onStartGame.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_7__game_events_js__["a" /* default */].GAME_START, this.onStartGame.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_7__game_events_js__["a" /* default */].QUIT_CONFIRMED, this.onQuitConfirm.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_7__game_events_js__["a" /* default */].EXIT_TO_MENU, this.onExit.bind(this));
 	}
 
 	onStartGame() {
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
-		this.mediator.emit('GAME START');
+		this.mediator.emit(__WEBPACK_IMPORTED_MODULE_7__game_events_js__["a" /* default */].PLAY_NEW_GAME);
+	}
+
+	onQuitConfirm() {
+		this.get().removeChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());
+	}
+
+	onExit() {
+		this.router.go('/');
 	}
 
 	render() {
 		this.get().appendChild(this.startSubView.get());
+	}
+
+	loginSwitch(user) {
+		this.gameSubView.loginSwitch(user);
+	}
+
+	unloginSwitch(user) {
+		this.gameSubView.unloginSwitch(user);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SinglePlayer;
@@ -1362,12 +1438,12 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Link_link_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Link_link_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1411,7 +1487,7 @@ class Back extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1432,13 +1508,13 @@ class Button extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Link_link_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Link_link_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1501,16 +1577,16 @@ class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a"
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_form_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__FormMessage_formmessage_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_form_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__FormMessage_formmessage_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_router_js__ = __webpack_require__(1);
 
 
@@ -1573,11 +1649,11 @@ class LoginForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* defau
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Link_link_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Link_link_js__ = __webpack_require__(8);
 
 
 
@@ -1593,17 +1669,17 @@ class MenuButton extends __WEBPACK_IMPORTED_MODULE_0__Link_link_js__["a" /* defa
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_form_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_form_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FormMessage_formmessage_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FormMessage_formmessage_js__ = __webpack_require__(12);
 
 
 
@@ -1709,11 +1785,11 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class Arrow {
@@ -1735,11 +1811,11 @@ class Arrow {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class CircleTower {
@@ -1773,11 +1849,11 @@ class CircleTower {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class Monster {
@@ -1801,11 +1877,11 @@ class Monster {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class PentagonTower {
@@ -1844,11 +1920,11 @@ class PentagonTower {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class StarTower {
@@ -1889,12 +1965,14 @@ class StarTower {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__strategy_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__strategy_js__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(7);
+
 
 
 
@@ -1902,8 +1980,10 @@ class GameManager {
 	constructor(strategy) {
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_1__mediator_js__["a" /* default */]();
 
-		this.mediator.subscribe('GAME START', this.start.bind(this));
-		this.mediator.subscribe('GAME END', this.end.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].PLAY_NEW_GAME, this.start.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].PLAY_AGAIN, this.start.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].GAME_FINISHED, this.end.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].QUIT_CONFIRMED, this.end.bind(this));
 	}
 
 	gameLoop() {
@@ -1920,7 +2000,6 @@ class GameManager {
 	}
 
 	end() {
-		// cancelAnimationFrame(this.requestID);
 		this.play = false;
 	}
 }
@@ -1928,11 +2007,11 @@ class GameManager {
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class Scene {
@@ -2021,18 +2100,18 @@ class Scene {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scene_js__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scene_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(6);
 
 
@@ -2521,11 +2600,11 @@ class SingleStrategy {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(4);
 
 
 class VariantBlock {
@@ -2574,20 +2653,20 @@ class VariantBlock {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menu_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_login_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_registration_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_about_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_leaderboard_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_singleplayer_singleplayer_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_multiplayer_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_http_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menu_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_login_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_registration_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_about_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_leaderboard_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_singleplayer_singleplayer_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_multiplayer_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_http_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_router_js__ = __webpack_require__(1);
 
 
@@ -2621,12 +2700,18 @@ const auth = new __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__["a" /* def
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
+
+
+
 
 
 
@@ -2638,10 +2723,13 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 			class: 'singleplayer__game'
 		});
 		
+		this.mediator = new __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__["a" /* default */]();
+
 		this.get().removeChild(this.back.get());
 
 		this.leftBar = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 left-bar'
+			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 left-bar',
+			align: 'center'
 		});
 		this.gameField = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'col-xs-6 col-sm-6 col-md-6 col-lg-6 game-field',
@@ -2650,15 +2738,143 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 		this.hints = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'col-xs-3 col-sm-3 col-md-3 col-lg-3 hints-field',
 			id: 'hints-field'
-		})
+		});
+
+		this.createLeftBar();
+		this.createQuitWindow();
+		this.createFinishWindow();
 
 		this.render();
+		this.makeListeners();
+	}
+
+	createLeftBar() {
+		this.quitBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'left-bar__quit',
+			align: 'center'
+		});
+		this.quitButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.quitButton.get().innerHTML = 'Выйти';
+		this.userBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'left-bar__user',
+			align: 'center'
+		});
+
+		this.userBlock_username = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div');
+		this.userBlock_username_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
+		this.userBlock_username_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.userBlock_username_title.get().innerHTML = 'Игрок: '
+		this.userBlock_score = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div');
+		this.userBlock_score_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
+		this.userBlock_score_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.userBlock_score_title.get().innerHTML = 'Результат: '
+		this.userBlock_score_text.get().innerHTML = '0'
+		this.HPBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'left-bar__HP'
+		})
+		this.HPBlock.get().innerHTML = 'HP: 100%'
+	}
+
+	createQuitWindow() {
+		this.quitConfirm = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'quit-confirm',
+			align: 'center'
+		})
+		this.quitText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'quit-confirm__text'
+		})
+		this.quitButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'quit-confirm__buttons'
+		})
+		this.quitText.get().innerHTML = 'Точно выйти?';
+		this.quitConfirmButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.quitConfirmButton.get().innerHTML = 'Точно выйти';
+		this.quitCancelButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.quitCancelButton.get().innerHTML = 'Нет, не точно';
+	}
+
+	createFinishWindow() {
+		this.finishWindow = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'finish'
+		})
+		this.finishText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'finish__text'
+		})
+		this.finishText.get().innerHTML = 'Игра окончена! Вы молодец!';
+		this.finishButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'finish__buttons'
+		})
+		this.exitButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.exitButton.get().innerHTML = 'Выйти в меню';
+		this.againButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.againButton.get().innerHTML = 'Начать сначала';
+	}
+
+	makeListeners() {
+
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GAME_FINISHED, () => {
+			this.get().appendChild(this.finishWindow.get());
+		})
+
+		this.quitButton.on('click', () => {
+			this.get().appendChild(this.quitConfirm.get());
+		})
+
+		this.quitCancelButton.on('click', () => {
+			this.get().removeChild(this.quitConfirm.get());
+		})
+
+		this.quitConfirmButton.on('click', () => {
+			this.get().removeChild(this.quitConfirm.get());
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].QUIT_CONFIRMED);
+		})
+
+		this.exitButton.on('click', () => {
+			this.get().removeChild(this.finishWindow.get());
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].EXIT_TO_MENU);
+		})
+
+		this.againButton.on('click', () => {
+			this.get().removeChild(this.finishWindow.get());
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].PLAY_AGAIN);
+		})
 	}
 
 	render() {
 		this.get().appendChild(this.leftBar.get());
 		this.get().appendChild(this.gameField.get());
 		this.get().appendChild(this.hints.get());
+
+		this.leftBar.get().appendChild(this.quitBlock.get());
+		this.leftBar.get().appendChild(this.userBlock.get());
+		this.leftBar.get().appendChild(this.HPBlock.get());
+
+		this.userBlock.get().appendChild(this.userBlock_username.get());
+		this.userBlock.get().appendChild(this.userBlock_score.get());
+		this.userBlock_username.get().appendChild(this.userBlock_username_title.get());
+		this.userBlock_username.get().appendChild(this.userBlock_username_text.get());
+		this.userBlock_score.get().appendChild(this.userBlock_score_title.get());
+		this.userBlock_score.get().appendChild(this.userBlock_score_text.get());
+
+		this.quitBlock.get().appendChild(this.quitButton.get());
+
+		this.quitConfirm.get().appendChild(this.quitText.get());
+		this.quitConfirm.get().appendChild(this.quitButtons.get());
+		this.quitButtons.get().appendChild(this.quitConfirmButton.get());
+		this.quitButtons.get().appendChild(this.quitCancelButton.get());
+
+		this.finishWindow.get().appendChild(this.finishText.get());
+		this.finishWindow.get().appendChild(this.finishButtons.get());
+		this.finishButtons.get().appendChild(this.exitButton.get());
+		this.finishButtons.get().appendChild(this.againButton.get());
+	}
+
+	loginSwitch(user) {
+		this.userBlock_username_text.get().innerHTML = user;
+	}
+
+	unloginSwitch(user) {
+		this.loginSwitch(user);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SinglePlayerGame;
@@ -2666,13 +2882,15 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(7);
+
 
 
 
@@ -2706,7 +2924,7 @@ class SinglePlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /
 	makeListeners() {
 		this.newGame.on('click', (event) => {
 			event.preventDefault();
-			this.mediator.emit('NEW GAME');
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GAME_START);
 		})
 	}
 

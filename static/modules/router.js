@@ -11,8 +11,11 @@ class Router {
 
 		this.routes = {};
 		this.activeRoute = null;
-		// this.loginned = false;
-		// this.username = '';
+		this.loginned = false;
+		this.user = {
+			username: '',
+			score: 0
+		}
 
 		this.history = window.history;
 
@@ -61,23 +64,23 @@ class Router {
 		this.currentView = view;
 
 		if (this.loginned) {
-			this.loginSwitch(this.username)
+			this.loginSwitch(this.user)
 		} else {
-			this.unloginSwitch(this.username)
+			this.unloginSwitch(this.user)
 		}
 
 		return true;
 	}
 
-	loginSwitch(name) {
-		this.currentView.loginSwitch(name);
-		// this.loginned = true;
-		// this.username = name;
+	loginSwitch(user) {
+		this.currentView.loginSwitch(user.username);
+		this.loginned = true;
+		this.user = user;
 	}
 
-	unloginSwitch(name) {
-		this.currentView.unloginSwitch(name);
-		// this.loginned = false;
-		// this.username = name;
+	unloginSwitch(user) {
+		this.currentView.unloginSwitch(user.username);
+		this.loginned = false;
+		this.user = user;
 	}
 }

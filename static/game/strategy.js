@@ -7,6 +7,7 @@ import StarTower from './gameObjects/startower.js'
 import VariantBlock from './variantBlock.js'
 import Arrow from './gameObjects/arrow.js'
 import Mediator from './mediator.js'
+import Events from './events.js'
 
 export default
 class SingleStrategy {
@@ -17,6 +18,9 @@ class SingleStrategy {
 		this.settings = new Settings();
 		this.scene = new Scene();
 
+		this.wave = 1;
+		this.score = 0;
+
 		this.status = 'playerStep';
 		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
@@ -25,7 +29,7 @@ class SingleStrategy {
 		this.fieldsWithPentagons = [];
 		this.variantsShow = [];
 		this.enemies = [];
-		this.tronHealth = 200;
+		this.throneHealth = this.settings.throneHealth;
 		this.enemiesNumber = 0;
 		this.path = [];
 		this.fieldsNewTower = [];
@@ -180,19 +184,10 @@ class SingleStrategy {
 			this.generateTower(field);
 			this.variantsShow = [];
 			this.variantRects.length = 4;
-
-			//for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			//	let x = this.fieldsNewTower.coordinates[0];
-			//	let y = this.fieldsNewTower.coordinates[1];
-			//	this.createVariants(this.fields[x][y]);
-			//}
-
-
-		} else if (this.variantRects.length < 5){
+		} else if (this.variantRects.length < 5) {
 			let waveButton = new VariantBlock(4, "You cant stop monsters");
 			this.variantRects.push(waveButton);
-		}
-		
+		}		
 	}
 
 	onOverField(field) {
@@ -291,37 +286,8 @@ class SingleStrategy {
 		}
 	}
 
-	onClickWaveButton(){
-		this.newStones = 0;
-		this.variantRects.length = 4;
-		this.status = 'Wave';
-		this.variantsShow = [];
-	}
-
 	onClickVariantRect(variantRect) {
-		//for (let s = 0; s < 3; s++) {
-		//	for (let i = 0; i < this.fieldsWithCircles.length; i++) {
-		//		if (this.fieldsWithCircles[i].tower.kind.name == variantRect.kind.circles[s]) {
-		//			this.createVariants.call(this, this.fieldsWithCircles[i]);
-		//			return;
-		//		}
-		//	}
-		//}
-
-
-		//for (let s = 0; s < 3; s++) {
-		//	for (let i = 0; i < this.fieldsNewTower.length; i++) {
-		//		if (this.fieldsNewTower[i].kind.name == variantRect.kind.circles[s]) {
-		//			let x = this.fieldsNewTower[i].coordinates[0];
-		//			let y = this.fieldsNewTower[i].coordinates[1];
-		//			this.createVariants.call(this, this.fields[x][y]);
-		//			return;
-		//		}
-		//	}
-		//}
-
 		this.createVariants.call(this, variantRect.field);
-		
 	}
 
 	generateTower(field) {
@@ -343,7 +309,7 @@ class SingleStrategy {
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
 
-		if (this.newStones >= 5) {
+		if (this.newStones >= this.settings.numberTowersInStep) {
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
@@ -386,7 +352,7 @@ class SingleStrategy {
 		let variantStay;
 		this.variantsShow = [];
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
+			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= this.settings.numberTowersInStep)) {
 				currentNewTower = this.fieldsNewTower[i];
 				variantStay = new CircleTower(
 					currentNewTower['kind'],
@@ -471,8 +437,10 @@ class SingleStrategy {
 			this.path = this.findPath(this.settings.checkpoints);
 		}
 
-		if (this.enemiesNumber < 20){
-			this.enemies.push(new Monster(this.settings.triangl));
+		if (this.enemiesNumber < this.settings.numberMonstersInWave) {
+			let monster = new Monster(this.settings.triangl);
+			monster.health += this.settings.addHPInWave * (this.wave - 1);
+			this.enemies.push(monster);
 			for (let i = 0; i < this.fieldsWithCircles.length; i++){
 				this.fieldsWithCircles[i].tower.bulletes.push([]);
 			}
@@ -516,7 +484,7 @@ class SingleStrategy {
 				}
 			}
 		}
-		for (let i = 0; i < this.enemies.length; i++){
+		for (let i = 0; i < this.enemies.length; i++) {
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
 			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
@@ -530,11 +498,24 @@ class SingleStrategy {
 			let stepY = Math.pow(this.settings.monsterStep * this.settings.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
-			if (this.enemies[i].health <= 0) {
+
+			if (this.enemies[i].killed) {
 				this.enemies.splice(i, 1);
 				for (let j = 0; j < this.fieldsWithCircles.length; j++){
 					this.fieldsWithCircles[j].tower.bulletes.splice(i, 1);
 				}
+				i--;
+				continue;
+			}
+
+			if (this.enemies[i].health <= 0) {
+				this.enemies[i].killedTics++;
+				this.enemies[i].killed = true;
+				this.enemies[i].paintRed();
+				this.score++;
+				this.mediator.emit(Events.GET_SCORE, {
+					score: this.score
+				})
 			}
 		}
 
@@ -545,11 +526,29 @@ class SingleStrategy {
 					this.fieldsWithCircles[s].tower.bulletes.splice(i, 1);
 				}
 				i--;
+				let damage = this.settings.damage + this.settings.addDamageInWave * (this.wave - 1);
+				this.throneHealth -= damage;
+				this.mediator.emit(Events.THRONE_DAMAGE, {
+					health: (this.throneHealth > 0 ? this.throneHealth : 0)
+				})
+				if (this.throneHealth <= 0) {
+					this.mediator.emit(Events.GAME_FINISHED, {
+						score: this.score,
+						death: true
+					});
+				}
 			}
 		}
 
 		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
+			this.wave++;
+			this.mediator.emit(Events.NEW_WAVE_STARTED, {
+				wave: this.wave
+			});
+
+			console.log(this.wave);
+
 			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){

@@ -346,19 +346,28 @@ class Settings {
 		this.checkpoints = [[0, 0], [0, this.mapSize - 1], [this.mapSize - 1, 0], [this.mapSize - 1, this.mapSize - 1]];
 
 		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
-		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
+		this.fullMapSize = minSize * 0.9;
+		this.fieldSize = (this.fullMapSize / this.mapSize) - 2;
 
 		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
 		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
 
-		this.variantRadius = 10;
+		this.variantRadius = this.fieldSize * 0.2;
+		if (this.variantRadius < 5) {
+			this.variantRadius = 5;
+		}
 		this.bulletStep = 20;
 		this.monsterStep = 10;
 
+		this.numberTowersInStep = 3;
+		this.addHPInWave = 100;
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
 		this.numberChangesColors = 100;
+		this.throneHealth = 100;
+		this.damage = 10;
+		this.addDamageInWave = 0.5;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -404,9 +413,9 @@ class Settings {
 
 		this.triangl = {
 			name: 'triangl',
-			size: 30,
+			size: this.fieldSize * 0.5,
 			color: '#00FF00',
-			health: 100,
+			health: 1000,
 		};
 
 		this.stone = {
@@ -460,21 +469,19 @@ class Settings {
 			this.pentagonGYR
 		];
 
-		// this.variantsX = window.innerWidth * 0.72;
-		// this.variantsY = this.mapY;
-		// this.variantsXSize = window.innerWidth * 0.25;
-		// this.variantsYSize = window.innerHeight * 0.1;
-		// this.betweenVariants = 120;
-
 		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
 		this.variantsY = this.mapY;
 		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
-		this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
-		this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+		// this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
+		// this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+		this.variantsYSize = this.fullMapSize * 0.1;
+		this.betweenVariants = this.fullMapSize * 0.15;
 
-		this.variantCircls = [[this.circleRed, this.circlePink, this.circleSad],
-								[this.circleSad, this.circleBlue, this.circleGreen],
-								[this.circleGreen, this.circleYellow, this.circleRed]];
+		this.variantCircls = [
+			[this.circleRed, this.circlePink, this.circleSad],
+			[this.circleSad, this.circleBlue, this.circleGreen],
+			[this.circleGreen, this.circleYellow, this.circleRed]
+		];
 
 		Settings.__instance = this;
 	}
@@ -558,6 +565,27 @@ class UserService {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const Events = {
+	GAME_START: 		1,
+	PLAY_NEW_GAME: 		2,
+	TRY_QUIT: 			3,
+	QUIT_CONFIRMED: 	4,
+	QUIT_CANCELED: 		5,
+	GAME_FINISHED: 		6,
+	PLAY_AGAIN: 		7,
+	EXIT_TO_MENU: 		8,
+	NEW_WAVE_STARTED: 	9,
+	GET_SCORE: 			10,
+	THRONE_DAMAGE: 		11,
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Events);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 class Mediator {
 	constructor() {
 		if (Mediator.__instance) {
@@ -592,24 +620,6 @@ class Mediator {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Mediator;
 
 
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const Events = {
-	GAME_START: 	1,
-	PLAY_NEW_GAME: 	2,
-	TRY_QUIT: 		3,
-	QUIT_CONFIRMED: 4,
-	QUIT_CANCELED: 	5,
-	GAME_FINISHED: 	6,
-	PLAY_AGAIN: 	7,
-	EXIT_TO_MENU: 	8,
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Events);
 
 /***/ }),
 /* 8 */
@@ -1370,9 +1380,9 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_manager_js__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_mediator_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_router_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__game_events_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__game_events_js__ = __webpack_require__(6);
 
 
 
@@ -1872,6 +1882,12 @@ class Monster {
 		this.kind = name;
 		this.health = name.health;
 		this.numberTurns = 0;
+		this.killed = false;
+		this.killedTics = 0;
+	}
+
+	paintRed() {
+		this.draw.fill('red');
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Monster;
@@ -1976,8 +1992,8 @@ class StarTower {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__strategy_js__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediator_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediator_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(6);
 
 
 
@@ -2124,7 +2140,9 @@ class Scene {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(6);
+
 
 
 
@@ -2143,6 +2161,9 @@ class SingleStrategy {
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
 		this.scene = new __WEBPACK_IMPORTED_MODULE_1__scene_js__["a" /* default */]();
 
+		this.wave = 1;
+		this.score = 0;
+
 		this.status = 'playerStep';
 		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
@@ -2151,7 +2172,7 @@ class SingleStrategy {
 		this.fieldsWithPentagons = [];
 		this.variantsShow = [];
 		this.enemies = [];
-		this.tronHealth = 200;
+		this.throneHealth = this.settings.throneHealth;
 		this.enemiesNumber = 0;
 		this.path = [];
 		this.fieldsNewTower = [];
@@ -2306,19 +2327,10 @@ class SingleStrategy {
 			this.generateTower(field);
 			this.variantsShow = [];
 			this.variantRects.length = 4;
-
-			//for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			//	let x = this.fieldsNewTower.coordinates[0];
-			//	let y = this.fieldsNewTower.coordinates[1];
-			//	this.createVariants(this.fields[x][y]);
-			//}
-
-
-		} else if (this.variantRects.length < 5){
+		} else if (this.variantRects.length < 5) {
 			let waveButton = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](4, "You cant stop monsters");
 			this.variantRects.push(waveButton);
-		}
-		
+		}		
 	}
 
 	onOverField(field) {
@@ -2417,37 +2429,8 @@ class SingleStrategy {
 		}
 	}
 
-	onClickWaveButton(){
-		this.newStones = 0;
-		this.variantRects.length = 4;
-		this.status = 'Wave';
-		this.variantsShow = [];
-	}
-
 	onClickVariantRect(variantRect) {
-		//for (let s = 0; s < 3; s++) {
-		//	for (let i = 0; i < this.fieldsWithCircles.length; i++) {
-		//		if (this.fieldsWithCircles[i].tower.kind.name == variantRect.kind.circles[s]) {
-		//			this.createVariants.call(this, this.fieldsWithCircles[i]);
-		//			return;
-		//		}
-		//	}
-		//}
-
-
-		//for (let s = 0; s < 3; s++) {
-		//	for (let i = 0; i < this.fieldsNewTower.length; i++) {
-		//		if (this.fieldsNewTower[i].kind.name == variantRect.kind.circles[s]) {
-		//			let x = this.fieldsNewTower[i].coordinates[0];
-		//			let y = this.fieldsNewTower[i].coordinates[1];
-		//			this.createVariants.call(this, this.fields[x][y]);
-		//			return;
-		//		}
-		//	}
-		//}
-
 		this.createVariants.call(this, variantRect.field);
-		
 	}
 
 	generateTower(field) {
@@ -2469,7 +2452,7 @@ class SingleStrategy {
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
 
-		if (this.newStones >= 5) {
+		if (this.newStones >= this.settings.numberTowersInStep) {
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
@@ -2512,7 +2495,7 @@ class SingleStrategy {
 		let variantStay;
 		this.variantsShow = [];
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
-			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= 5)){
+			if ((field['field'].getX() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getX()) && (field['field'].getY() + this.settings.fieldSize / 2 == this.fieldsNewTower[i].draw.getY()) && (this.newStones >= this.settings.numberTowersInStep)) {
 				currentNewTower = this.fieldsNewTower[i];
 				variantStay = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](
 					currentNewTower['kind'],
@@ -2597,8 +2580,10 @@ class SingleStrategy {
 			this.path = this.findPath(this.settings.checkpoints);
 		}
 
-		if (this.enemiesNumber < 20){
-			this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl));
+		if (this.enemiesNumber < this.settings.numberMonstersInWave) {
+			let monster = new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl);
+			monster.health += this.settings.addHPInWave * (this.wave - 1);
+			this.enemies.push(monster);
 			for (let i = 0; i < this.fieldsWithCircles.length; i++){
 				this.fieldsWithCircles[i].tower.bulletes.push([]);
 			}
@@ -2642,7 +2627,7 @@ class SingleStrategy {
 				}
 			}
 		}
-		for (let i = 0; i < this.enemies.length; i++){
+		for (let i = 0; i < this.enemies.length; i++) {
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
 			let distY = -this.enemies[i].draw.getY() + (this.settings.mapY + place[1] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
@@ -2656,11 +2641,24 @@ class SingleStrategy {
 			let stepY = Math.pow(this.settings.monsterStep * this.settings.monsterStep - stepX * stepX, 0.5) * Math.abs(distY) / distY;
 			this.enemies[i].draw.setX(this.enemies[i].draw.getX() + stepX);
 			this.enemies[i].draw.setY(this.enemies[i].draw.getY() + stepY);
-			if (this.enemies[i].health <= 0) {
+
+			if (this.enemies[i].killed) {
 				this.enemies.splice(i, 1);
 				for (let j = 0; j < this.fieldsWithCircles.length; j++){
 					this.fieldsWithCircles[j].tower.bulletes.splice(i, 1);
 				}
+				i--;
+				continue;
+			}
+
+			if (this.enemies[i].health <= 0) {
+				this.enemies[i].killedTics++;
+				this.enemies[i].killed = true;
+				this.enemies[i].paintRed();
+				this.score++;
+				this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].GET_SCORE, {
+					score: this.score
+				})
 			}
 		}
 
@@ -2671,11 +2669,29 @@ class SingleStrategy {
 					this.fieldsWithCircles[s].tower.bulletes.splice(i, 1);
 				}
 				i--;
+				let damage = this.settings.damage + this.settings.addDamageInWave * (this.wave - 1);
+				this.throneHealth -= damage;
+				this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].THRONE_DAMAGE, {
+					health: (this.throneHealth > 0 ? this.throneHealth : 0)
+				})
+				if (this.throneHealth <= 0) {
+					this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].GAME_FINISHED, {
+						score: this.score,
+						death: true
+					});
+				}
 			}
 		}
 
 		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
+			this.wave++;
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].NEW_WAVE_STARTED, {
+				wave: this.wave
+			});
+
+			console.log(this.wave);
+
 			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
@@ -2860,8 +2876,8 @@ const auth = new __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__["a" /* def
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 
 
@@ -2909,24 +2925,38 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 		});
 		this.quitButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
 		this.quitButton.get().innerHTML = 'Выйти';
+
 		this.userBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'left-bar__user',
 			align: 'center'
 		});
+		this.userBlock_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
+		this.userBlock_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.userBlock_title.get().innerHTML = 'Игрок: '
+		
+		this.scoreBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'left-bar__score'
+		});
+		this.scoreBlock_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
+		this.scoreBlock_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.scoreBlock_title.get().innerHTML = 'Результат: '
+		this.scoreBlock_text.get().innerHTML = '0'
+		
+		this.waveBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'left-bar__wave'
+		})
+		this.waveBlock_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
+		this.waveBlock_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.waveBlock_title.get().innerHTML = 'Волна: ';
+		this.waveBlock_text.get().innerHTML = '1';
 
-		this.userBlock_username = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div');
-		this.userBlock_username_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
-		this.userBlock_username_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
-		this.userBlock_username_title.get().innerHTML = 'Игрок: '
-		this.userBlock_score = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div');
-		this.userBlock_score_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
-		this.userBlock_score_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
-		this.userBlock_score_title.get().innerHTML = 'Результат: '
-		this.userBlock_score_text.get().innerHTML = '0'
 		this.HPBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'left-bar__HP'
 		})
-		this.HPBlock.get().innerHTML = 'HP: 100%'
+		this.HPBlock_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
+		this.HPBlock_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.HPBlock_title.get().innerHTML = 'HP: ';
+		this.HPBlock_text.get().innerHTML = '100';
 	}
 
 	createQuitWindow() {
@@ -2949,12 +2979,12 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 	createFinishWindow() {
 		this.finishWindow = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish'
+			class: 'finish',
+			align: 'center'
 		})
 		this.finishText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'finish__text'
 		})
-		this.finishText.get().innerHTML = 'Игра окончена! Вы молодец!';
 		this.finishButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'finish__buttons'
 		})
@@ -2966,8 +2996,23 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 	makeListeners() {
 
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GAME_FINISHED, () => {
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GAME_FINISHED, (args) => {
+			this.finishText.get().innerHTML = 'Игра окончена. </br> Ваш результат: ' + args.score;
 			this.get().appendChild(this.finishWindow.get());
+		})
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].NEW_WAVE_STARTED, (args) => {
+			this.waveBlock_text.get().innerHTML = args.wave;
+		})
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GET_SCORE, (args) => {
+			this.scoreBlock_text.get().innerHTML = args.score;
+		})
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].THRONE_DAMAGE, (args) => {
+			this.HPBlock_text.get().innerHTML = args.health;
+		})
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].PLAY_AGAIN, () => {
+			this.waveBlock_text.get().innerHTML = 1;
+			this.scoreBlock_text.get().innerHTML = 0;
+			this.HPBlock_text.get().innerHTML = 100;
 		})
 
 		this.quitButton.on('click', () => {
@@ -3001,15 +3046,19 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 		this.leftBar.get().appendChild(this.quitBlock.get());
 		this.leftBar.get().appendChild(this.userBlock.get());
+		this.leftBar.get().appendChild(this.scoreBlock.get());
+		this.leftBar.get().appendChild(this.waveBlock.get());
 		this.leftBar.get().appendChild(this.HPBlock.get());
 
-		this.userBlock.get().appendChild(this.userBlock_username.get());
-		this.userBlock.get().appendChild(this.userBlock_score.get());
-		this.userBlock_username.get().appendChild(this.userBlock_username_title.get());
-		this.userBlock_username.get().appendChild(this.userBlock_username_text.get());
-		this.userBlock_score.get().appendChild(this.userBlock_score_title.get());
-		this.userBlock_score.get().appendChild(this.userBlock_score_text.get());
-
+		this.userBlock.get().appendChild(this.userBlock_title.get());
+		this.userBlock.get().appendChild(this.userBlock_text.get());
+		this.scoreBlock.get().appendChild(this.scoreBlock_title.get());
+		this.scoreBlock.get().appendChild(this.scoreBlock_text.get());
+		this.waveBlock.get().appendChild(this.waveBlock_title.get());
+		this.waveBlock.get().appendChild(this.waveBlock_text.get());
+		this.HPBlock.get().appendChild(this.HPBlock_title.get());
+		this.HPBlock.get().appendChild(this.HPBlock_text.get());
+		
 		this.quitBlock.get().appendChild(this.quitButton.get());
 
 		this.quitConfirm.get().appendChild(this.quitText.get());
@@ -3024,7 +3073,7 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 	}
 
 	loginSwitch(user) {
-		this.userBlock_username_text.get().innerHTML = user;
+		this.userBlock_text.get().innerHTML = user;
 	}
 
 	unloginSwitch(user) {
@@ -3042,8 +3091,8 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(6);
 
 
 

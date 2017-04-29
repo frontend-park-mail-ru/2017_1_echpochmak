@@ -16,5 +16,11 @@ class Monster {
 		this.kind = name;
 		this.health = name.health;
 		this.numberTurns = 0;
+		this.killed = false;
+		this.killedTics = 0;
+	}
+
+	paintRed() {
+		this.draw.fill('red');
 	}
 }

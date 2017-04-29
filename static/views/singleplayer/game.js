@@ -45,24 +45,38 @@ class SinglePlayerGame extends BaseView {
 		});
 		this.quitButton = new BaseBlock('button');
 		this.quitButton.get().innerHTML = 'Выйти';
+
 		this.userBlock = new BaseBlock('div', {
 			class: 'left-bar__user',
 			align: 'center'
 		});
+		this.userBlock_title = new BaseBlock('b');
+		this.userBlock_text = new BaseBlock('span');
+		this.userBlock_title.get().innerHTML = 'Игрок: '
+		
+		this.scoreBlock = new BaseBlock('div', {
+			class: 'left-bar__score'
+		});
+		this.scoreBlock_title = new BaseBlock('b');
+		this.scoreBlock_text = new BaseBlock('span');
+		this.scoreBlock_title.get().innerHTML = 'Результат: '
+		this.scoreBlock_text.get().innerHTML = '0'
+		
+		this.waveBlock = new BaseBlock('div', {
+			class: 'left-bar__wave'
+		})
+		this.waveBlock_title = new BaseBlock('b');
+		this.waveBlock_text = new BaseBlock('span');
+		this.waveBlock_title.get().innerHTML = 'Волна: ';
+		this.waveBlock_text.get().innerHTML = '1';
 
-		this.userBlock_username = new BaseBlock('div');
-		this.userBlock_username_title = new BaseBlock('b');
-		this.userBlock_username_text = new BaseBlock('span');
-		this.userBlock_username_title.get().innerHTML = 'Игрок: '
-		this.userBlock_score = new BaseBlock('div');
-		this.userBlock_score_title = new BaseBlock('b');
-		this.userBlock_score_text = new BaseBlock('span');
-		this.userBlock_score_title.get().innerHTML = 'Результат: '
-		this.userBlock_score_text.get().innerHTML = '0'
 		this.HPBlock = new BaseBlock('div', {
 			class: 'left-bar__HP'
 		})
-		this.HPBlock.get().innerHTML = 'HP: 100%'
+		this.HPBlock_title = new BaseBlock('b');
+		this.HPBlock_text = new BaseBlock('span');
+		this.HPBlock_title.get().innerHTML = 'HP: ';
+		this.HPBlock_text.get().innerHTML = '100';
 	}
 
 	createQuitWindow() {
@@ -85,12 +99,12 @@ class SinglePlayerGame extends BaseView {
 
 	createFinishWindow() {
 		this.finishWindow = new BaseBlock('div', {
-			class: 'finish'
+			class: 'finish',
+			align: 'center'
 		})
 		this.finishText = new BaseBlock('div', {
 			class: 'finish__text'
 		})
-		this.finishText.get().innerHTML = 'Игра окончена! Вы молодец!';
 		this.finishButtons = new BaseBlock('div', {
 			class: 'finish__buttons'
 		})
@@ -102,8 +116,23 @@ class SinglePlayerGame extends BaseView {
 
 	makeListeners() {
 
-		this.mediator.subscribe(Events.GAME_FINISHED, () => {
+		this.mediator.subscribe(Events.GAME_FINISHED, (args) => {
+			this.finishText.get().innerHTML = 'Игра окончена. </br> Ваш результат: ' + args.score;
 			this.get().appendChild(this.finishWindow.get());
+		})
+		this.mediator.subscribe(Events.NEW_WAVE_STARTED, (args) => {
+			this.waveBlock_text.get().innerHTML = args.wave;
+		})
+		this.mediator.subscribe(Events.GET_SCORE, (args) => {
+			this.scoreBlock_text.get().innerHTML = args.score;
+		})
+		this.mediator.subscribe(Events.THRONE_DAMAGE, (args) => {
+			this.HPBlock_text.get().innerHTML = args.health;
+		})
+		this.mediator.subscribe(Events.PLAY_AGAIN, () => {
+			this.waveBlock_text.get().innerHTML = 1;
+			this.scoreBlock_text.get().innerHTML = 0;
+			this.HPBlock_text.get().innerHTML = 100;
 		})
 
 		this.quitButton.on('click', () => {
@@ -137,15 +166,19 @@ class SinglePlayerGame extends BaseView {
 
 		this.leftBar.get().appendChild(this.quitBlock.get());
 		this.leftBar.get().appendChild(this.userBlock.get());
+		this.leftBar.get().appendChild(this.scoreBlock.get());
+		this.leftBar.get().appendChild(this.waveBlock.get());
 		this.leftBar.get().appendChild(this.HPBlock.get());
 
-		this.userBlock.get().appendChild(this.userBlock_username.get());
-		this.userBlock.get().appendChild(this.userBlock_score.get());
-		this.userBlock_username.get().appendChild(this.userBlock_username_title.get());
-		this.userBlock_username.get().appendChild(this.userBlock_username_text.get());
-		this.userBlock_score.get().appendChild(this.userBlock_score_title.get());
-		this.userBlock_score.get().appendChild(this.userBlock_score_text.get());
-
+		this.userBlock.get().appendChild(this.userBlock_title.get());
+		this.userBlock.get().appendChild(this.userBlock_text.get());
+		this.scoreBlock.get().appendChild(this.scoreBlock_title.get());
+		this.scoreBlock.get().appendChild(this.scoreBlock_text.get());
+		this.waveBlock.get().appendChild(this.waveBlock_title.get());
+		this.waveBlock.get().appendChild(this.waveBlock_text.get());
+		this.HPBlock.get().appendChild(this.HPBlock_title.get());
+		this.HPBlock.get().appendChild(this.HPBlock_text.get());
+		
 		this.quitBlock.get().appendChild(this.quitButton.get());
 
 		this.quitConfirm.get().appendChild(this.quitText.get());
@@ -160,7 +193,7 @@ class SinglePlayerGame extends BaseView {
 	}
 
 	loginSwitch(user) {
-		this.userBlock_username_text.get().innerHTML = user;
+		this.userBlock_text.get().innerHTML = user;
 	}
 
 	unloginSwitch(user) {

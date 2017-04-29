@@ -17,19 +17,28 @@ class Settings {
 		this.checkpoints = [[0, 0], [0, this.mapSize - 1], [this.mapSize - 1, 0], [this.mapSize - 1, this.mapSize - 1]];
 
 		let minSize = Math.min(this.gameFieldElement.offsetHeight, this.gameFieldElement.offsetWidth)
-		this.fieldSize = (minSize * 0.9 / this.mapSize) - 2;
+		this.fullMapSize = minSize * 0.9;
+		this.fieldSize = (this.fullMapSize / this.mapSize) - 2;
 
 		this.mapX = (this.gameFieldElement.offsetWidth - ((this.fieldSize + 2) * this.mapSize)) / 2;
 		this.mapY = (this.gameFieldElement.offsetHeight - ((this.fieldSize + 2) * this.mapSize)) / 2;
 
-		this.variantRadius = 10;
+		this.variantRadius = this.fieldSize * 0.2;
+		if (this.variantRadius < 5) {
+			this.variantRadius = 5;
+		}
 		this.bulletStep = 20;
 		this.monsterStep = 10;
 
+		this.numberTowersInStep = 3;
+		this.addHPInWave = 100;
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
 		this.numberChangesColors = 100;
+		this.throneHealth = 100;
+		this.damage = 10;
+		this.addDamageInWave = 0.5;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -75,9 +84,9 @@ class Settings {
 
 		this.triangl = {
 			name: 'triangl',
-			size: 30,
+			size: this.fieldSize * 0.5,
 			color: '#00FF00',
-			health: 100,
+			health: 1000,
 		};
 
 		this.stone = {
@@ -131,21 +140,19 @@ class Settings {
 			this.pentagonGYR
 		];
 
-		// this.variantsX = window.innerWidth * 0.72;
-		// this.variantsY = this.mapY;
-		// this.variantsXSize = window.innerWidth * 0.25;
-		// this.variantsYSize = window.innerHeight * 0.1;
-		// this.betweenVariants = 120;
-
 		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
 		this.variantsY = this.mapY;
 		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
-		this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
-		this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+		// this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
+		// this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
+		this.variantsYSize = this.fullMapSize * 0.1;
+		this.betweenVariants = this.fullMapSize * 0.15;
 
-		this.variantCircls = [[this.circleRed, this.circlePink, this.circleSad],
-								[this.circleSad, this.circleBlue, this.circleGreen],
-								[this.circleGreen, this.circleYellow, this.circleRed]];
+		this.variantCircls = [
+			[this.circleRed, this.circlePink, this.circleSad],
+			[this.circleSad, this.circleBlue, this.circleGreen],
+			[this.circleGreen, this.circleYellow, this.circleRed]
+		];
 
 		Settings.__instance = this;
 	}

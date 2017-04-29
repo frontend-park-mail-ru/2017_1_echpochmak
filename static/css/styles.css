@@ -80,11 +80,19 @@ body {
 }
 
 .left-bar__user {
-	height: 40%;
+	/*height: 20%;*/
+}
+
+.left-bar__score {
+	height: 20%;
+}
+
+.left-bar__wave {
+	height: 20%;
 }
 
 .left-bar__HP {
-	height: 30%;
+	height: 20%;
 }
 
 .quit-confirm {
@@ -112,5 +120,33 @@ body {
 }
 
 .quit-confirm__buttons button {
+	margin: 3%;
+}
+
+.finish {
+	position: fixed;
+	margin-top: 35vh;
+	margin-bottom: 35vh;
+	margin-left: 35vw;
+	margin-right: 35vw;
+	border: 2px solid black;
+	border-radius: 20px;
+	background-color: blue;
+	height: 30vh;
+	width: 30vw;
+	font-size: 20px;
+}
+
+.finish__text {
+	height: 50%;
+	padding: 3%;
+}
+
+.finish__buttons {
+	height: 50%;
+	padding: 3%;
+}
+
+.finish__buttons button {
 	margin: 3%;
 }

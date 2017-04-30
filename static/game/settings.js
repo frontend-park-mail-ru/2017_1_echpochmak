@@ -37,8 +37,8 @@ class Settings {
 		this.laserWidth = 8;
 		this.numberChangesColors = 100;
 		this.throneHealth = 100;
-		this.damage = 10;
-		this.addDamageInWave = 0.5;
+		this.damage = 1;
+		this.addDamageInWave = 1;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -86,7 +86,7 @@ class Settings {
 			name: 'triangl',
 			size: this.fieldSize * 0.5,
 			color: '#00FF00',
-			health: 1000,
+			health: 100,
 		};
 
 		this.stone = {
@@ -143,8 +143,6 @@ class Settings {
 		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
 		this.variantsY = this.mapY;
 		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
-		// this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
-		// this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
 		this.variantsYSize = this.fullMapSize * 0.1;
 		this.betweenVariants = this.fullMapSize * 0.15;
 

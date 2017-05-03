@@ -11,6 +11,8 @@ import Authorize from './services/authorize.js'
 import HTTP from './modules/http.js'
 import Router from './modules/router.js'
 
+import './css/styles.scss'
+
 const http = new HTTP();
 const router = new Router();
 

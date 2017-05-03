@@ -2,6 +2,8 @@
 
 import BaseBlock from '../BaseBlock/baseblock.js'
 
+import './formmessage.scss'
+
 export default
 class FormMessage extends BaseBlock {
 	constructor(text = '', attrs = {}) {

@@ -7,7 +7,6 @@
 	border:1px solid #64734D;
 	border-radius: 20px;
 	color: #705D07;
-	font-family: aAlbionicTitulInfl, cursive;
 	font-weight: bolder;
 	/*width: 290px;*/
 	/*height: 262px;*/
@@ -47,34 +46,18 @@
 }
 
 .menu__single-button {
-	background-image: url(./img/ruby.png);
+	background-image: url(~./img/ruby.png);
 }
 
 .menu__single-button:hover, .menu__single-button:active {
 	background-color: #d3ff91;
-	background-image: url(./img/ruby1.png);
-}
-
-.menu__about-button {
-	/*background-image: url(./img/izum.png);*/
-}
-
-.menu__about-button:hover, .menu__about-button:active {
-	/*background-image: url(./img/izum1.png);*/
+	background-image: url(~./img/ruby1.png);
 }
 
 .menu__multi-button {
-	background-image: url(./img/saph.png);
+	background-image: url(~./img/saph.png);
 }
 
 .menu__multi-button:hover, .menu__multi-button:active {
-	background-image: url(./img/saph1.png);
-}
-
-.menu__leaderboard-button {
-	/*background-image: url(./img/bril.png);*/
-}
-
-.menu__leaderboard-button:hover, .menu__leaderboard-button:active {
-	/*background-image: url(./img/bril1.png);*/
+	background-image: url(~./img/saph1.png);
 }

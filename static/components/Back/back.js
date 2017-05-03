@@ -4,6 +4,8 @@ import BaseBlock from '../BaseBlock/baseblock.js'
 import Link from '../Link/link.js'
 import Router from '../../modules/router.js'
 
+import './back.scss'
+
 export default
 class Back extends BaseBlock {
 	constructor() {

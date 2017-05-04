@@ -217,8 +217,8 @@ class BaseView extends __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblo
 		})
 		this.get().appendChild(this.back.get());
 
-		this.green_background = './img/back_green.jpg';
-		this.white_background = './img/back_white.jpg';
+		this.green_background = '/img/back_green.jpg';
+		this.white_background = '/img/back_white.jpg';
 		this.background = this.green_background;
 	}
 
@@ -2056,7 +2056,7 @@ class Back extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* 
 		});
 		this.image = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('img', {
 			class: 'back__image',
-			src: './img/back.png'
+			src: '/img/back.png'
 		});
 		this.text = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('p');
 		this.text.get().innerHTML = 'Обратно в меню';
@@ -3296,8 +3296,6 @@ class SingleStrategy {
 				wave: this.wave
 			});
 
-			console.log(this.wave);
-
 			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
@@ -3636,7 +3634,9 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 		this.quitConfirmButton.on('click', () => {
 			this.get().removeChild(this.quitConfirm.get());
-			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].QUIT_CONFIRMED);
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].QUIT_CONFIRMED, {
+				score: parseInt((this.scoreBlock_text.get().innerHTML))
+			});
 		})
 
 		this.exitButton.on('click', () => {

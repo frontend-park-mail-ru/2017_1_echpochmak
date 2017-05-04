@@ -556,8 +556,6 @@ class SingleStrategy {
 				wave: this.wave
 			});
 
-			console.log(this.wave);
-
 			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){

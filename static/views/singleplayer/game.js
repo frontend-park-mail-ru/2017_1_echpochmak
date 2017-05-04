@@ -145,7 +145,9 @@ class SinglePlayerGame extends BaseView {
 
 		this.quitConfirmButton.on('click', () => {
 			this.get().removeChild(this.quitConfirm.get());
-			this.mediator.emit(Events.QUIT_CONFIRMED);
+			this.mediator.emit(Events.QUIT_CONFIRMED, {
+				score: parseInt((this.scoreBlock_text.get().innerHTML))
+			});
 		})
 
 		this.exitButton.on('click', () => {

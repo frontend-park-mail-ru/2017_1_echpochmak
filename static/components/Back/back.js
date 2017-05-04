@@ -18,7 +18,7 @@ class Back extends BaseBlock {
 		});
 		this.image = new BaseBlock('img', {
 			class: 'back__image',
-			src: './img/back.png'
+			src: '/img/back.png'
 		});
 		this.text = new BaseBlock('p');
 		this.text.get().innerHTML = 'Обратно в меню';

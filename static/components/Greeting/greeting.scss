@@ -1,13 +1,23 @@
+.greeting {
+	width: 99%;
+	max-height: 10%;
+}
+
 .greeting__text-block {
-	position: absolute;
-	top: 0;
-	right: 3%
+	/*position: absolute;*/
+	/*top: 0;*/
+	/*right: 3%*/
+	max-height: 5vh;
+	height: 50%;
+	margin-bottom: 25px;
 }
 
 .greeting__button-block {
-	position: absolute;
-	top: 8%;
-	right: 3%;
+	/*position: absolute;*/
+	/*top: 8%;*/
+	/*right: 3%;*/
+	max-height: 5vh;
+	height: 50%;
 }
 
 .greeting__text {
@@ -25,16 +35,11 @@
 	background: -o-linear-gradient(top, #c47d43, #826639);
 	background-image: -ms-linear-gradient(top, #c47d43 0%, #826639 100%);
 	padding: 7px 14px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
 	border-radius: 6px;
-	-webkit-box-shadow: rgba(255,255,255,0.4) 0 0px 0, inset rgba(255,255,255,0.4) 0 0px 0;
-	-moz-box-shadow: rgba(255,255,255,0.4) 0 0px 0, inset rgba(255,255,255,0.4) 0 0px 0;
 	box-shadow: rgba(255,255,255,0.4) 0 0px 0, inset rgba(255,255,255,0.4) 0 0px 0;
 	text-shadow: #0e496e 0 1px 0;
 	color: #ffe69c;
 	font-size: 17px;
-	/*font-family: helvetica, serif;*/
 	text-decoration: none;
 	vertical-align: middle;
 	margin-left: 5px;

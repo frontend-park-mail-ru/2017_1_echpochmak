@@ -248,7 +248,7 @@ class BaseView extends __WEBPACK_IMPORTED_MODULE_0__components_BaseBlock_baseblo
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userservice_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_router_js__ = __webpack_require__(1);
 
 
@@ -490,6 +490,76 @@ class Settings {
 
 /***/ }),
 /* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http_js__ = __webpack_require__(11);
+
+
+
+
+class UserService {
+	constructor() {
+		this.http = new __WEBPACK_IMPORTED_MODULE_0__modules_http_js__["a" /* default */]();
+
+		this.func = (callback, xhr) => {
+			if (typeof (callback) === 'function') {
+				callback.call(xhr, JSON.parse(xhr.responseText || ''));
+			}
+		};
+	}
+
+	register(mail, login, password, callback) {
+		const body = {mail, login, password};
+		this.http.post('/api/registration', body, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
+	login(login, password, callback) {
+		const body = {login, password};
+		this.http.post('/api/login', body, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
+	logout(callback) {
+		this.http.get('/api/logout', null, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
+	getUsername(callback) {
+		this.http.get('/api/user', null, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
+	getUserScore(callback) {
+		this.http.get('/api/getscore', null, xhr => {
+			this.func(callback, xhr);
+		})
+	}
+
+	setUserScore(score, callback) {
+		const body = {score};
+		this.http.post('/api/setscore', body, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+
+	getUsersList(callback) {
+		this.http.get('/api/users', null, xhr => {
+			this.func(callback, xhr);
+		});
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = UserService;
+
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -545,7 +615,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -794,76 +864,6 @@ function updateLink(linkElement, obj) {
 	if(oldSrc)
 		URL.revokeObjectURL(oldSrc);
 }
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_http_js__ = __webpack_require__(11);
-
-
-
-
-class UserService {
-	constructor() {
-		this.http = new __WEBPACK_IMPORTED_MODULE_0__modules_http_js__["a" /* default */]();
-
-		this.func = (callback, xhr) => {
-			if (typeof (callback) === 'function') {
-				callback.call(xhr, JSON.parse(xhr.responseText || ''));
-			}
-		};
-	}
-
-	register(mail, login, password, callback) {
-		const body = {mail, login, password};
-		this.http.post('/api/registration', body, xhr => {
-			this.func(callback, xhr);
-		});
-	}
-
-	login(login, password, callback) {
-		const body = {login, password};
-		this.http.post('/api/login', body, xhr => {
-			this.func(callback, xhr);
-		});
-	}
-
-	logout(callback) {
-		this.http.get('/api/logout', null, xhr => {
-			this.func(callback, xhr);
-		});
-	}
-
-	getUsername(callback) {
-		this.http.get('/api/user', null, xhr => {
-			this.func(callback, xhr);
-		});
-	}
-
-	getUserScore(callback) {
-		this.http.get('/api/getscore', null, xhr => {
-			this.func(callback, xhr);
-		})
-	}
-
-	setUserScore(score, callback) {
-		const body = {score};
-		this.http.post('/api/setscore', body, xhr => {
-			this.func(callback, xhr);
-		});
-	}
-
-	getUsersList(callback) {
-		this.http.get('/api/users', null, xhr => {
-			this.func(callback, xhr);
-		});
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = UserService;
-
 
 
 /***/ }),
@@ -1241,7 +1241,7 @@ class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /*
 var content = __webpack_require__(29);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(7)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1349,7 +1349,7 @@ class About extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_userservice_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_userservice_js__ = __webpack_require__(5);
 
 
 
@@ -1398,7 +1398,7 @@ class LeaderBoard extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoginForm_loginform_js__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 
@@ -1484,6 +1484,9 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 		super('div', {
 			class: 'menu'
 		});
+
+		this.greeting = new __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__["a" /* default */]('Гость');
+		
 		this.padd = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'padd',
 			align: 'center'
@@ -1508,7 +1511,6 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 		this.leaderButton = new __WEBPACK_IMPORTED_MODULE_2__components_MenuButton_menubutton_js__["a" /* default */]('Лидеры', {
 			class: 'menu__leaderboard-button menu__button_small'
 		});
-		this.greeting = new __WEBPACK_IMPORTED_MODULE_3__components_Greeting_greeting_js__["a" /* default */]('Гость');
 
 		this.render();
 		this.makeListeners();
@@ -1517,6 +1519,7 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 	render() {
 		this.get().removeChild(this.back.get());
 
+		this.get().appendChild(this.greeting.get());
 		this.get().appendChild(this.padd.get());
 		this.padd.get().appendChild(this.line1.get());
 		this.padd.get().appendChild(this.line2.get());
@@ -1524,7 +1527,6 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 		this.line1.get().appendChild(this.multiButton.get());
 		this.line2.get().appendChild(this.aboutButton.get());
 		this.line2.get().appendChild(this.leaderButton.get());
-		this.get().appendChild(this.greeting.get());
 	}
 
 	makeListeners() {
@@ -1651,7 +1653,7 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_RegisterForm_registerform_js__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_router_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 
 
@@ -1791,7 +1793,7 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(6)();
 // imports
 
 
@@ -1805,7 +1807,7 @@ exports.push([module.i, ".back {\n  font-size: 18pt;\n  color: #3B1A1A;\n  paddi
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(6)();
 // imports
 
 
@@ -1819,12 +1821,12 @@ exports.push([module.i, ".form__message {\n  font-size: 20px;\n  color: red; }\n
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(6)();
 // imports
 
 
 // module
-exports.push([module.i, ".greeting__text-block {\n  position: absolute;\n  top: 0;\n  right: 3%; }\n\n.greeting__button-block {\n  position: absolute;\n  top: 8%;\n  right: 3%; }\n\n.greeting__text {\n  color: #3B1A1A;\n  display: inline; }\n\n.greeting__button {\n  border: 1px solid #0a3c59;\n  background: #826639;\n  background: -webkit-gradient(linear, left top, left bottom, from(#c47d43), to(#826639));\n  background: -webkit-linear-gradient(top, #c47d43, #826639);\n  background: -moz-linear-gradient(top, #c47d43, #826639);\n  background: -ms-linear-gradient(top, #c47d43, #826639);\n  background: -o-linear-gradient(top, #c47d43, #826639);\n  background-image: -ms-linear-gradient(top, #c47d43 0%, #826639 100%);\n  padding: 7px 14px;\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 0px 0, inset rgba(255, 255, 255, 0.4) 0 0px 0;\n  -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 0px 0, inset rgba(255, 255, 255, 0.4) 0 0px 0;\n  box-shadow: rgba(255, 255, 255, 0.4) 0 0px 0, inset rgba(255, 255, 255, 0.4) 0 0px 0;\n  text-shadow: #0e496e 0 1px 0;\n  color: #ffe69c;\n  font-size: 17px;\n  /*font-family: helvetica, serif;*/\n  text-decoration: none;\n  vertical-align: middle;\n  margin-left: 5px; }\n\n.greeting__button:hover {\n  border: 1px solid #0a3c59;\n  text-shadow: #1e4158 0 1px 0;\n  background: #5c4a2f;\n  background: -webkit-gradient(linear, left top, left bottom, from(#b87b4d), to(#5c4a2f));\n  background: -webkit-linear-gradient(top, #b87b4d, #5c4a2f);\n  background: -moz-linear-gradient(top, #b87b4d, #5c4a2f);\n  background: -ms-linear-gradient(top, #b87b4d, #5c4a2f);\n  background: -o-linear-gradient(top, #b87b4d, #5c4a2f);\n  background-image: -ms-linear-gradient(top, #b87b4d 0%, #5c4a2f 100%);\n  color: #e6c163; }\n\n.greeting__button:active {\n  text-shadow: #1e4158 0 1px 0;\n  border: 1px solid #0a3c59;\n  background: #4d2613;\n  background: -webkit-gradient(linear, left top, left bottom, from(#4d2613), to(#5c4a2f));\n  background: -webkit-linear-gradient(top, #4d2613, #4d2613);\n  background: -moz-linear-gradient(top, #4d2613, #4d2613);\n  background: -ms-linear-gradient(top, #4d2613, #4d2613);\n  background: -o-linear-gradient(top, #4d2613, #4d2613);\n  background-image: -ms-linear-gradient(top, #4d2613 0%, #4d2613 100%);\n  color: #c47937; }\n", ""]);
+exports.push([module.i, ".greeting {\n  width: 99%;\n  max-height: 10%; }\n\n.greeting__text-block {\n  /*position: absolute;*/\n  /*top: 0;*/\n  /*right: 3%*/\n  max-height: 5vh;\n  height: 50%;\n  margin-bottom: 25px; }\n\n.greeting__button-block {\n  /*position: absolute;*/\n  /*top: 8%;*/\n  /*right: 3%;*/\n  max-height: 5vh;\n  height: 50%; }\n\n.greeting__text {\n  color: #3B1A1A;\n  display: inline; }\n\n.greeting__button {\n  border: 1px solid #0a3c59;\n  background: #826639;\n  background: -webkit-gradient(linear, left top, left bottom, from(#c47d43), to(#826639));\n  background: -webkit-linear-gradient(top, #c47d43, #826639);\n  background: -moz-linear-gradient(top, #c47d43, #826639);\n  background: -ms-linear-gradient(top, #c47d43, #826639);\n  background: -o-linear-gradient(top, #c47d43, #826639);\n  background-image: -ms-linear-gradient(top, #c47d43 0%, #826639 100%);\n  padding: 7px 14px;\n  border-radius: 6px;\n  box-shadow: rgba(255, 255, 255, 0.4) 0 0px 0, inset rgba(255, 255, 255, 0.4) 0 0px 0;\n  text-shadow: #0e496e 0 1px 0;\n  color: #ffe69c;\n  font-size: 17px;\n  text-decoration: none;\n  vertical-align: middle;\n  margin-left: 5px; }\n\n.greeting__button:hover {\n  border: 1px solid #0a3c59;\n  text-shadow: #1e4158 0 1px 0;\n  background: #5c4a2f;\n  background: -webkit-gradient(linear, left top, left bottom, from(#b87b4d), to(#5c4a2f));\n  background: -webkit-linear-gradient(top, #b87b4d, #5c4a2f);\n  background: -moz-linear-gradient(top, #b87b4d, #5c4a2f);\n  background: -ms-linear-gradient(top, #b87b4d, #5c4a2f);\n  background: -o-linear-gradient(top, #b87b4d, #5c4a2f);\n  background-image: -ms-linear-gradient(top, #b87b4d 0%, #5c4a2f 100%);\n  color: #e6c163; }\n\n.greeting__button:active {\n  text-shadow: #1e4158 0 1px 0;\n  border: 1px solid #0a3c59;\n  background: #4d2613;\n  background: -webkit-gradient(linear, left top, left bottom, from(#4d2613), to(#5c4a2f));\n  background: -webkit-linear-gradient(top, #4d2613, #4d2613);\n  background: -moz-linear-gradient(top, #4d2613, #4d2613);\n  background: -ms-linear-gradient(top, #4d2613, #4d2613);\n  background: -o-linear-gradient(top, #4d2613, #4d2613);\n  background-image: -ms-linear-gradient(top, #4d2613 0%, #4d2613 100%);\n  color: #c47937; }\n", ""]);
 
 // exports
 
@@ -1833,7 +1835,7 @@ exports.push([module.i, ".greeting__text-block {\n  position: absolute;\n  top: 
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(6)();
 // imports
 
 
@@ -1847,12 +1849,12 @@ exports.push([module.i, ".form-input__error-message {\n  color: red;\n  font-siz
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(6)();
 // imports
 
 
 // module
-exports.push([module.i, ".menu__button:visited {\n  text-decoration: none; }\n\n.menu__button {\n  display: inline-block;\n  border: 1px solid #64734D;\n  border-radius: 20px;\n  color: #705D07;\n  font-weight: bolder;\n  /*width: 290px;*/\n  /*height: 262px;*/\n  font-size: 30px;\n  padding: 20px 20px;\n  box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E;\n  -moz-box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E,0 2px 4px 0 #D4D4D4;\n  -webkit-box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E,0 2px 4px 0 #D4D4D4;\n  text-shadow: 0 1px 0 #FFFFFF;\n  background-color: #DBFCA9;\n  text-decoration: none;\n  background-repeat: no-repeat;\n  background-position: 20%;\n  margin-right: 0.5%;\n  margin-left: 0.5%; }\n\n.menu__button:hover, .menu__button:active {\n  background-repeat: no-repeat;\n  text-decoration: none;\n  border-radius: 25px;\n  color: #3B1A1A;\n  background-color: #D3FF91; }\n\n.menu__button_big {\n  background-color: #DBFCA9;\n  /*background-color: #D3FF91;*/\n  width: 305px;\n  height: 275px; }\n\n.menu__button_small {\n  background-color: #DBFCA9;\n  /*background-color: #D3FF91;*/\n  width: 305px; }\n\n.menu__single-button {\n  background-image: url(" + __webpack_require__(35) + "); }\n\n.menu__single-button:hover, .menu__single-button:active {\n  background-color: #d3ff91;\n  background-image: url(" + __webpack_require__(36) + "); }\n\n.menu__multi-button {\n  background-image: url(" + __webpack_require__(37) + "); }\n\n.menu__multi-button:hover, .menu__multi-button:active {\n  background-image: url(" + __webpack_require__(38) + "); }\n", ""]);
+exports.push([module.i, ".menu__button:visited {\n  text-decoration: none; }\n\n.menu__button {\n  display: inline-block;\n  border: 1px solid #64734D;\n  border-radius: 20px;\n  color: #705D07;\n  font-weight: bolder;\n  font-size: 30px;\n  padding: 20px 20px;\n  box-shadow: inset 0 1px 0 0 #C7E69A,inset 0 -1px 0 0 #A0B87B,inset 0 0 0 1px #B8D48E;\n  text-shadow: 0 1px 0 #FFFFFF;\n  background-color: #DBFCA9;\n  text-decoration: none;\n  background-repeat: no-repeat;\n  background-position: 20%;\n  margin-right: 0.5%;\n  margin-left: 0.5%; }\n\n.menu__button:hover, .menu__button:active {\n  background-repeat: no-repeat;\n  text-decoration: none;\n  border-radius: 25px;\n  color: #3B1A1A;\n  background-color: #D3FF91; }\n\n.menu__button_big {\n  background-color: #DBFCA9;\n  width: 305px;\n  height: 275px; }\n\n.menu__button_small {\n  background-color: #DBFCA9;\n  width: 305px; }\n\n.menu__single-button {\n  background-image: url(" + __webpack_require__(35) + "); }\n\n.menu__single-button:hover, .menu__single-button:active {\n  background-image: url(" + __webpack_require__(36) + "); }\n\n.menu__multi-button {\n  background-image: url(" + __webpack_require__(37) + "); }\n\n.menu__multi-button:hover, .menu__multi-button:active {\n  background-image: url(" + __webpack_require__(38) + "); }\n", ""]);
 
 // exports
 
@@ -1861,12 +1863,12 @@ exports.push([module.i, ".menu__button:visited {\n  text-decoration: none; }\n\n
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+exports = module.exports = __webpack_require__(6)();
 // imports
 
 
 // module
-exports.push([module.i, "/*@font-face{\n\tfont-family: aAlbionicTitulInfl;\n\tsrc: url(./font/1915.ttf) format(\"truetype\");\n}*/\nbody {\n  /*font-family: comic, cursive;*/\n  font-family: 'Comic Sans MS', 'Arial';\n  background-size: auto;\n  background-attachment: fixed; }\n\n.list {\n  position: relative;\n  background-color: #DBFCA9;\n  margin-left: 15%;\n  margin-right: 15%;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 3%;\n  font-size: 18pt;\n  border-radius: 20px;\n  border: 1px solid #64734D; }\n\n.list__header {\n  font-size: 30pt;\n  margin-bottom: 3%;\n  margin-top: -2%; }\n\n.list__header hr {\n  color: #64734D;\n  background-color: #64734D;\n  opacity: 1;\n  height: 1px;\n  border: 0; }\n\n.list__sub-header {\n  font-size: 22pt;\n  margin-bottom: 2%; }\n\n.line {\n  padding-bottom: 1%; }\n\n.padd {\n  width: 99%;\n  position: absolute;\n  transform: translateY(-50%);\n  top: 50%; }\n\n.kirka {\n  background-position: left bottom;\n  position: fixed;\n  bottom: 0%;\n  left: -7%; }\n\n.left-bar {\n  height: 100vh;\n  padding: 0px;\n  background-color: rgba(58, 183, 51, 0.82);\n  border: 1px solid black;\n  border-bottom-right-radius: 20px;\n  border-top-right-radius: 20px;\n  font-size: 25px; }\n\n.game-field {\n  height: 100vh;\n  padding: 0px; }\n\n.hints-field {\n  height: 100vh;\n  padding: 0px; }\n\n.left-bar__quit {\n  height: 30%;\n  padding: 5%; }\n\n.left-bar__user {\n  /*height: 20%;*/ }\n\n.left-bar__score {\n  height: 20%; }\n\n.left-bar__wave {\n  height: 20%; }\n\n.left-bar__HP {\n  height: 20%; }\n\n.quit-confirm {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n\n.quit-confirm__text {\n  height: 50%;\n  padding: 3%; }\n\n.quit-confirm__buttons {\n  height: 50%;\n  padding: 3%; }\n\n.quit-confirm__buttons button {\n  margin: 3%; }\n\n.finish {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n\n.finish__text {\n  height: 50%;\n  padding: 3%; }\n\n.finish__buttons {\n  height: 50%;\n  padding: 3%; }\n\n.finish__buttons button {\n  margin: 3%; }\n", ""]);
+exports.push([module.i, "body {\n  font-family: 'Comic Sans MS', 'Arial';\n  background-size: auto;\n  background-attachment: fixed; }\n\n.list {\n  position: relative;\n  background-color: #DBFCA9;\n  margin-left: 15%;\n  margin-right: 15%;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 3%;\n  font-size: 18pt;\n  border-radius: 20px;\n  border: 1px solid #64734D; }\n\n.list__header {\n  font-size: 30pt;\n  margin-bottom: 3%;\n  margin-top: -2%; }\n\n.list__header hr {\n  color: #64734D;\n  background-color: #64734D;\n  opacity: 1;\n  height: 1px;\n  border: 0; }\n\n.list__sub-header {\n  font-size: 22pt;\n  margin-bottom: 2%; }\n\n.line {\n  padding-bottom: 1%; }\n\n.padd {\n  max-height: 60vh;\n  width: 99%;\n  position: absolute;\n  transform: translateY(-50%);\n  top: 50%; }\n\n.kirka {\n  background-position: left bottom;\n  position: fixed;\n  bottom: 0%;\n  left: -7%; }\n\n.left-bar {\n  height: 100vh;\n  padding: 0px;\n  background-color: rgba(58, 183, 51, 0.82);\n  border: 1px solid black;\n  border-bottom-right-radius: 20px;\n  border-top-right-radius: 20px;\n  font-size: 25px; }\n\n.game-field {\n  height: 100vh;\n  padding: 0px; }\n\n.hints-field {\n  height: 100vh;\n  padding: 0px; }\n\n.left-bar__quit {\n  height: 30%;\n  padding: 5%; }\n\n.left-bar__user {\n  /*height: 20%;*/ }\n\n.left-bar__score {\n  height: 20%; }\n\n.left-bar__wave {\n  height: 20%; }\n\n.left-bar__HP {\n  height: 20%; }\n\n.quit-confirm {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n\n.quit-confirm__text {\n  height: 50%;\n  padding: 3%; }\n\n.quit-confirm__buttons {\n  height: 50%;\n  padding: 3%; }\n\n.quit-confirm__buttons button {\n  margin: 3%; }\n\n.finish {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n\n.finish__text {\n  height: 50%;\n  padding: 3%; }\n\n.finish__buttons {\n  height: 50%;\n  padding: 3%; }\n\n.finish__buttons button {\n  margin: 3%; }\n", ""]);
 
 // exports
 
@@ -1881,7 +1883,7 @@ exports.push([module.i, "/*@font-face{\n\tfont-family: aAlbionicTitulInfl;\n\tsr
 var content = __webpack_require__(24);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(7)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1907,7 +1909,7 @@ if(false) {
 var content = __webpack_require__(25);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(7)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1933,7 +1935,7 @@ if(false) {
 var content = __webpack_require__(26);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(7)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1959,7 +1961,7 @@ if(false) {
 var content = __webpack_require__(27);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(7)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1985,7 +1987,7 @@ if(false) {
 var content = __webpack_require__(28);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, {});
+var update = __webpack_require__(7)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -2122,7 +2124,8 @@ class Button extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /
 class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */] {
 	constructor(name) {
 		super('div', {
-			class: 'greeting'
+			class: 'greeting',
+			align: 'right'
 		});
 		this.greetingBlock = new __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /* default */]('div', {
 			align: 'right',
@@ -2181,7 +2184,7 @@ class Greeting extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__FormMessage_formmessage_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_userservice_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_router_js__ = __webpack_require__(1);
 
@@ -2276,7 +2279,7 @@ class MenuButton extends __WEBPACK_IMPORTED_MODULE_0__Link_link_js__["a" /* defa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Form_form_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Input_input_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__FormButton_formbutton_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_router_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__FormMessage_formmessage_js__ = __webpack_require__(14);
@@ -2584,6 +2587,8 @@ class StarTower {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__strategy_js__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediator_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(5);
+
 
 
 
@@ -2611,8 +2616,10 @@ class GameManager {
 		this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
 	}
 
-	end() {
+	end(args) {
 		this.play = false;
+		const userService = new __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__["a" /* default */];
+		userService.setUserScore(args.score, () => {});
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = GameManager;
@@ -2827,6 +2834,7 @@ class SingleStrategy {
 
 			
 				this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
+				this.fields[j][i]['field'].addEventListener('tap', () => {this.onClickField.call(this, this.fields[j][i])});
 				this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
 				this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
 
@@ -2993,6 +3001,7 @@ class SingleStrategy {
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i].draw.setStroke('black');
 			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+			this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 		}
 	}
 
@@ -3015,6 +3024,7 @@ class SingleStrategy {
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i].draw.setStroke('black');
 			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+			this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 			this.variantRects[i].isAble = false;
 		}
 	}
@@ -3035,9 +3045,11 @@ class SingleStrategy {
 		);
 		field.field.setStroke('black');
 		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
+		field['field'].removeEventListener('tap', () => {this.onClickField.call(this, field)});
 		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
 		field['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, field)});
 		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+		circle.draw.addEventListener('tap', () => { this.createVariants.call(this, field) } ); 
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
@@ -3046,6 +3058,7 @@ class SingleStrategy {
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
+					this.fields[i][j]['field'].removeEventListener('tap', () => {this.onClickField.call(this, this.fields[i][j])});
 					this.fields[i][j]['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
 					this.fields[i][j]['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
 				}
@@ -3072,6 +3085,7 @@ class SingleStrategy {
 				if (this.variantRects[i].isAble) {
 					this.variantRects[i].draw.setStroke('green');
 					this.variantRects[i].draw.addEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+					this.variantRects[i].draw.addEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 				}
 			}
 			
@@ -3117,6 +3131,7 @@ class SingleStrategy {
 			);
 			let cNewTower = currentNewTower ? currentNewTower : undefined;
 			variant.draw.addEventListener('click', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
+			variant.draw.addEventListener('tap', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
 			variantX = field['field'].getX() + this.settings.fieldSize / 2 - Math.cos(beta) * this.settings.fieldSize;
 			variantY = field['field'].getY()  + this.settings.fieldSize / 2 - Math.sin(beta) * this.settings.fieldSize;
 			beta = beta + alfa;
@@ -3130,6 +3145,7 @@ class SingleStrategy {
 				this.settings.variantRadius
 			);
 			variantStay.draw.addEventListener('click', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
+			variantStay.draw.addEventListener('tap', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
 			this.variantsShow.push(variantStay);
 		};
 	}
@@ -3287,6 +3303,7 @@ class SingleStrategy {
 				for (let j = 0; j < this.settings.mapSize; j++){
 					if (this.fields[i][j].tower === 0) {
 						this.fields[i][j]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
+						this.fields[i][j]['field'].addEventListener('tap', () => {this.onClickField.call(this, this.fields[i][j])});
 						this.fields[i][j]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
 						this.fields[i][j]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
 					}

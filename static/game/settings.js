@@ -37,7 +37,7 @@ class Settings {
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 10;
+		this.numberChangesColors = 6;
 		this.throneHealth = 100;
 		this.damage = 1;
 		this.addDamageInWave = 1;

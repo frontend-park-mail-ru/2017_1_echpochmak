@@ -508,16 +508,18 @@ class SingleStrategy {
 	playerStep() {
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
 			if (this.fieldsNewTower[i].numberChangesColors > 1) {
-				if (this.fieldsNewTower[i].numberChangesColors % 10 === 0) {
+				//if (this.fieldsNewTower[i].numberChangesColors %  === 0) {
 					let color = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)].color;
 					this.fieldsNewTower[i].draw.setFill(color);
-				}
+				//}
 				this.fieldsNewTower[i].numberChangesColors--;
 			} else if (this.fieldsNewTower[i].numberChangesColors === 1) {
 				let endColor = this.fieldsNewTower[i].kind.color;
 				this.fieldsNewTower[i].draw.setFill(endColor);
 				this.fieldsNewTower[i].numberChangesColors--;
-				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+				let x = this.fieldsNewTower[i].coordinates[0];
+				let y = this.fieldsNewTower[i].coordinates[1];
+				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, this.fields[x][y]) } ); 
 			}
 		}
 	}
@@ -630,8 +632,8 @@ class SingleStrategy {
 				}
 			}
 		}
-
-		if (this.enemies.length === 0) {
+		//if (this.enemies.length === 0)
+		if (this.enemies.length > 0) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(Events.NEW_WAVE_STARTED, {

@@ -11,11 +11,6 @@ class StarTower {
 			innerRadius: radius / 2,
 			outerRadius: radius,
 			fill: 'khaki',
-			//fillRadialGradientStartPoint: 0,
-			//fillRadialGradientStartRadius: 0,
-			//fillRadialGradientEndPoint: 0,
-			//fillRadialGradientEndRadius: radius,
-			//fillRadialGradientColorStops: [0, name.colors[0], 0.5, name.colors[1], 1, name.colors[2]],
 			stroke: 'black',
 			strokeWidth: 0,
 		});

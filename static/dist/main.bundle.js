@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -366,7 +366,7 @@ class Settings {
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 10;
+		this.numberChangesColors = 6;
 		this.throneHealth = 100;
 		this.damage = 1;
 		this.addDamageInWave = 1;
@@ -2572,11 +2572,6 @@ class StarTower {
 			innerRadius: radius / 2,
 			outerRadius: radius,
 			fill: 'khaki',
-			//fillRadialGradientStartPoint: 0,
-			//fillRadialGradientStartRadius: 0,
-			//fillRadialGradientEndPoint: 0,
-			//fillRadialGradientEndRadius: radius,
-			//fillRadialGradientColorStops: [0, name.colors[0], 0.5, name.colors[1], 1, name.colors[2]],
 			stroke: 'black',
 			strokeWidth: 0,
 		});
@@ -2899,9 +2894,9 @@ class SingleStrategy {
 			circleYellow: 0,
 			circlePink: 0,
 			circleSad: 0,
-			pentagonRPS: 1,
-			pentagonSBG: 1,
-			pentagonGYR: 1,
+			pentagonRPS: 0,
+			pentagonSBG: 0,
+			pentagonGYR: 0,
 			star: 0,
 		};
 
@@ -3289,16 +3284,18 @@ class SingleStrategy {
 	playerStep() {
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
 			if (this.fieldsNewTower[i].numberChangesColors > 1) {
-				if (this.fieldsNewTower[i].numberChangesColors % 10 === 0) {
+				//if (this.fieldsNewTower[i].numberChangesColors %  === 0) {
 					let color = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)].color;
 					this.fieldsNewTower[i].draw.setFill(color);
-				}
+				//}
 				this.fieldsNewTower[i].numberChangesColors--;
 			} else if (this.fieldsNewTower[i].numberChangesColors === 1) {
 				let endColor = this.fieldsNewTower[i].kind.color;
 				this.fieldsNewTower[i].draw.setFill(endColor);
 				this.fieldsNewTower[i].numberChangesColors--;
-				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+				let x = this.fieldsNewTower[i].coordinates[0];
+				let y = this.fieldsNewTower[i].coordinates[1];
+				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, this.fields[x][y]) } ); 
 			}
 		}
 	}
@@ -3411,8 +3408,8 @@ class SingleStrategy {
 				}
 			}
 		}
-
-		if (this.enemies.length === 0) {
+		//if (this.enemies.length === 0)
+		if (this.enemies.length > 0) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].NEW_WAVE_STARTED, {

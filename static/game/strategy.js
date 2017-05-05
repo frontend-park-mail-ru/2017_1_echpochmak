@@ -118,9 +118,9 @@ class SingleStrategy {
 			circleYellow: 0,
 			circlePink: 0,
 			circleSad: 0,
-			pentagonRPS: 1,
-			pentagonSBG: 1,
-			pentagonGYR: 1,
+			pentagonRPS: 0,
+			pentagonSBG: 0,
+			pentagonGYR: 0,
 			star: 0,
 		};
 

@@ -29,18 +29,18 @@ class Settings {
 			this.variantRadius = 5;
 		}
 		this.bulletStep = 20;
-		this.monsterStep = 20;
+		this.monsterStep = 10;
 
-		this.numberTowersInStep = 1;
+		this.numberTowersInStep = 3;
 
-		this.addHPInWave = 100;
+		this.addHPInWave = 50;
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
 		this.numberChangesColors = 10;
 		this.throneHealth = 100;
-		this.damage = 0;
-		this.addDamageInWave = 0;
+		this.damage = 1;
+		this.addDamageInWave = 1;
 
 		this.circleRed = {
 			name: 'circleRed',

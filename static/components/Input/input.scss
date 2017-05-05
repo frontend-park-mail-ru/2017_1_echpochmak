@@ -1,8 +1,9 @@
-.form-input__error-message {
-	color: red;
-	font-size: 15px;
-}
-
-.form-input__label {
-	font-size: 20pt;
+.form-input {
+	&__error-message {
+		color: red;
+		font-size: 15px;
+	}
+	&__label {
+		font-size: 20pt;
+	}
 }

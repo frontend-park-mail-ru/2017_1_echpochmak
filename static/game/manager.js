@@ -1,4 +1,4 @@
-import SingleStrategy from './strategy.js'
+import SingleStrategy from './strategies/strategy.js'
 import Mediator from './mediator.js'
 import Events from './events.js'
 import UserService from '../services/userservice.js'
@@ -7,6 +7,7 @@ export default
 class GameManager {
 	constructor(strategy) {
 		this.mediator = new Mediator();
+		this.strategy = strategy;
 
 		this.mediator.subscribe(Events.PLAY_NEW_GAME, this.start.bind(this));
 		this.mediator.subscribe(Events.PLAY_AGAIN, this.start.bind(this));
@@ -22,7 +23,8 @@ class GameManager {
 	}
 
 	start() {
-		this.strategy = new SingleStrategy();
+		// this.strategy = new SingleStrategy();
+		this.strategy.init();
 		this.play = true;
 		this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
 	}

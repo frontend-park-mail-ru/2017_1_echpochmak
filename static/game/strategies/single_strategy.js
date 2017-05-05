@@ -1,19 +1,25 @@
-import Settings from './settings.js'
-import Scene from './scene.js'
-import Monster from './gameObjects/monster.js'
-import CircleTower from './gameObjects/circletower.js'
-import PentagonTower from './gameObjects/pentagontower.js'
-import StarTower from './gameObjects/startower.js'
-import VariantBlock from './variantBlock.js'
-import Arrow from './gameObjects/arrow.js'
-import Mediator from './mediator.js'
-import Events from './events.js'
+import Settings from '../settings.js'
+import Scene from '../scene.js'
+import Monster from '../gameObjects/monster.js'
+import CircleTower from '../gameObjects/circletower.js'
+import PentagonTower from '../gameObjects/pentagontower.js'
+import StarTower from '../gameObjects/startower.js'
+import VariantBlock from '../variantBlock.js'
+import Arrow from '../gameObjects/arrow.js'
+import Mediator from '../mediator.js'
+import Events from '../events.js'
+
+import Konva from 'konva'
+import PF from 'pathfinding'
 
 export default
 class SingleStrategy {
 	
 	constructor() {
 
+	}
+
+	init() {
 		this.mediator = new Mediator();
 		this.settings = new Settings();
 		this.scene = new Scene();

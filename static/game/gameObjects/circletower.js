@@ -1,4 +1,5 @@
 import Settings from '../settings.js'
+import Konva from 'konva';
 
 export default
 class CircleTower {

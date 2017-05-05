@@ -4,6 +4,7 @@ import BaseView from '../baseview.js'
 import BaseBlock from '../../components/BaseBlock/baseblock.js'
 import SinglePlayerStart from './start.js'
 import SinglePlayerGame from './game.js'
+import SingleStrategy from '../../game/strategies/single_strategy.js'
 import GameManager from '../../game/manager.js'
 import Mediator from '../../game/mediator.js'
 import Router from '../../modules/router.js'
@@ -20,7 +21,7 @@ class SinglePlayer extends BaseView {
 
 		this.startSubView = new SinglePlayerStart();
 		this.gameSubView = new SinglePlayerGame();
-		this.gameManager = new GameManager();
+		this.gameManager = new GameManager(new SingleStrategy());
 
 		this.router = new Router();
 		this.mediator = new Mediator();

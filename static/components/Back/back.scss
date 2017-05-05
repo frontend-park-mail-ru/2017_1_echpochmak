@@ -3,14 +3,13 @@
 	color: #3B1A1A;
 	padding-left: 1%;
 	padding-top: 1%;
-}
 
-.back__button {
-	display: inline-block;
-	margin-left: 4%;
-}
-
-.back__image {
-	max-width: 14%;
-	max-height: auto;
+	&__button {
+		display: inline-block;
+		-left: 4%;
+	}
+	&__image {
+		max-width: 14%;
+		max-height: auto;
+	}
 }

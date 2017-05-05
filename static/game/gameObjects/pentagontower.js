@@ -35,6 +35,6 @@ class PentagonTower {
 			lineJoin: 'round'
 		});
 		this.bulletes.enemie = enemie;
-		enemie.health -= 10;
+		enemie.health -= 2;
 	}
 }

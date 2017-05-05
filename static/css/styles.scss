@@ -1,5 +1,5 @@
 body {
-	font-family: aAlbionicTitulInfl, cursive;
+	font-family: 'Comic Sans MS', 'Arial';
 	background-size: auto;
 	background-attachment: fixed;
 }
@@ -15,25 +15,30 @@ body {
 	font-size: 18pt;
 	border-radius: 20px;
 	border:1px solid #64734D;
+
+	__header {
+		font-size: 30pt;
+		margin-bottom: 3%;
+		margin-top: -2%;
+
+		& hr {
+			color: #64734D;
+			background-color: #64734D;
+			opacity: 1;
+			height: 1px;
+			border: 0;
+		}
+	}
+	
+	&__sub-header {	
+		font-size: 22pt;
+		margin-bottom: 2%;
+	}
 }
 
-.list__header {
-	font-size: 30pt;
-	margin-bottom: 3%;
-	margin-top: -2%;
-}
-
-.list__header hr {
-	color: #64734D;
-	background-color: #64734D;
-	opacity: 1;
-	height: 1px;
-	border: 0;
-}
-
-.list__sub-header {	
-	font-size: 22pt;
-	margin-bottom: 2%;
+.game-field, hints-field {
+	height: 100vh;
+	padding: 0px;
 }
 
 .line { 
@@ -41,6 +46,7 @@ body {
 }
 
 .padd {
+	max-height: 60vh;
 	width: 99%;
     position: absolute;
     transform: translateY(-50%);
@@ -62,37 +68,15 @@ body {
 	border-bottom-right-radius: 20px;
 	border-top-right-radius: 20px;
 	font-size: 25px;
-}
 
-.game-field {
-	height: 100vh;
-	padding: 0px;
-}
-
-.hints-field {
-	height: 100vh;
-	padding: 0px;
-}
-
-.left-bar__quit {
-	height: 30%;
-	padding: 5%;
-}
-
-.left-bar__user {
-	/*height: 20%;*/
-}
-
-.left-bar__score {
-	height: 20%;
-}
-
-.left-bar__wave {
-	height: 20%;
-}
-
-.left-bar__HP {
-	height: 20%;
+	&__quit {
+		height: 30%;
+		padding: 5%;
+	}
+	
+	&__score, &__wave, &__HP {
+		height: 20%;
+	}
 }
 
 .quit-confirm {
@@ -107,20 +91,21 @@ body {
 	height: 30vh;
 	width: 30vw;
 	font-size: 20px;
-}
 
-.quit-confirm__text {
-	height: 50%;
-	padding: 3%;
-}
 
-.quit-confirm__buttons {
-	height: 50%;
-	padding: 3%;
-}
+	&__text {
+		height: 50%;
+		padding: 3%;
+	}
+	
+	&__buttons {
+		height: 50%;
+		padding: 3%;
 
-.quit-confirm__buttons button {
-	margin: 3%;
+		& button {
+			margin: 3%;
+		}
+	}
 }
 
 .finish {
@@ -135,18 +120,18 @@ body {
 	height: 30vh;
 	width: 30vw;
 	font-size: 20px;
-}
 
-.finish__text {
-	height: 50%;
-	padding: 3%;
-}
+	&__text {
+		height: 50%;
+		padding: 3%;
+	}
+	
+	&__buttons {
+		height: 50%;
+		padding: 3%;
 
-.finish__buttons {
-	height: 50%;
-	padding: 3%;
-}
-
-.finish__buttons button {
-	margin: 3%;
+		& button {
+			margin: 3%;
+		}
+	}
 }

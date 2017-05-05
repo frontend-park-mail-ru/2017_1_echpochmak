@@ -100,6 +100,7 @@ class SingleStrategy {
 				};
 				if (!((i === 0) && ((j === 0) || (j === this.settings.mapSize - 1)) || (i === this.settings.mapSize - 1) && ((j === 0) || (j === this.settings.mapSize - 1)))) {
 					this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
+					this.fields[j][i]['field'].addEventListener('tap', () => {this.onClickField.call(this, this.fields[j][i])});
 					this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
 					this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
 				}
@@ -271,6 +272,7 @@ class SingleStrategy {
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i].draw.setStroke('black');
 			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+			this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 		}
 	}
 
@@ -293,6 +295,7 @@ class SingleStrategy {
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i].draw.setStroke('black');
 			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+			this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 			this.variantRects[i].isAble = false;
 		}
 	}
@@ -382,9 +385,12 @@ class SingleStrategy {
 		);
 		field.field.setStroke('black');
 		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
+		field['field'].removeEventListener('tap', () => {this.onClickField.call(this, field)});
 		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
 		field['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, field)});
-		
+
+		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+		circle.draw.addEventListener('tap', () => { this.createVariants.call(this, field) } ); 
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
@@ -393,6 +399,7 @@ class SingleStrategy {
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
 					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
+					this.fields[i][j]['field'].removeEventListener('tap', () => {this.onClickField.call(this, this.fields[i][j])});
 					this.fields[i][j]['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
 					this.fields[i][j]['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
 				}
@@ -419,6 +426,7 @@ class SingleStrategy {
 				if (this.variantRects[i].isAble) {
 					this.variantRects[i].draw.setStroke('green');
 					this.variantRects[i].draw.addEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+					this.variantRects[i].draw.addEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 				}
 			}
 			
@@ -464,6 +472,7 @@ class SingleStrategy {
 			);
 			let cNewTower = currentNewTower ? currentNewTower : undefined;
 			variant.draw.addEventListener('click', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
+			variant.draw.addEventListener('tap', () => {this.onClickNewPentagon.call(this, field, variant.kind, cNewTower)});
 			variantX = field['field'].getX() + this.settings.fieldSize / 2 - Math.cos(beta) * this.settings.fieldSize;
 			variantY = field['field'].getY()  + this.settings.fieldSize / 2 - Math.sin(beta) * this.settings.fieldSize;
 			beta = beta + alfa;
@@ -477,6 +486,7 @@ class SingleStrategy {
 				this.settings.variantRadius
 			);
 			variantStay.draw.addEventListener('click', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
+			variantStay.draw.addEventListener('tap', () => {this.onClickStayVariant.call(this, field, variantStay.kind, currentNewTower)});
 			this.variantsShow.push(variantStay);
 		};
 	}
@@ -630,13 +640,12 @@ class SingleStrategy {
 				wave: this.wave
 			});
 
-			console.log(this.wave);
-
 			this.enemiesNumber = 0;
 			for (let i = 0; i < this.settings.mapSize; i++){
 				for (let j = 0; j < this.settings.mapSize; j++){
 					if (this.fields[i][j].tower === 0) {
 						this.fields[i][j]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
+						this.fields[i][j]['field'].addEventListener('tap', () => {this.onClickField.call(this, this.fields[i][j])});
 						this.fields[i][j]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
 						this.fields[i][j]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
 					}

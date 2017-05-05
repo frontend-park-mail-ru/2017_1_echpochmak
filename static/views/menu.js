@@ -13,6 +13,9 @@ class Menu extends BaseView {
 		super('div', {
 			class: 'menu'
 		});
+
+		this.greeting = new Greeting('Гость');
+		
 		this.padd = new BaseBlock('div', {
 			class: 'padd',
 			align: 'center'
@@ -37,7 +40,6 @@ class Menu extends BaseView {
 		this.leaderButton = new MenuButton('Лидеры', {
 			class: 'menu__leaderboard-button menu__button_small'
 		});
-		this.greeting = new Greeting('Гость');
 
 		this.render();
 		this.makeListeners();
@@ -46,6 +48,7 @@ class Menu extends BaseView {
 	render() {
 		this.get().removeChild(this.back.get());
 
+		this.get().appendChild(this.greeting.get());
 		this.get().appendChild(this.padd.get());
 		this.padd.get().appendChild(this.line1.get());
 		this.padd.get().appendChild(this.line2.get());
@@ -53,7 +56,6 @@ class Menu extends BaseView {
 		this.line1.get().appendChild(this.multiButton.get());
 		this.line2.get().appendChild(this.aboutButton.get());
 		this.line2.get().appendChild(this.leaderButton.get());
-		this.get().appendChild(this.greeting.get());
 	}
 
 	makeListeners() {

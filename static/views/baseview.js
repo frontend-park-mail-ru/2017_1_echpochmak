@@ -17,8 +17,8 @@ class BaseView extends BaseBlock {
 		})
 		this.get().appendChild(this.back.get());
 
-		this.green_background = './img/back_green.jpg';
-		this.white_background = './img/back_white.jpg';
+		this.green_background = '/img/back_green.jpg';
+		this.white_background = '/img/back_white.jpg';
 		this.background = this.green_background;
 	}
 

@@ -4,6 +4,8 @@ import BaseBlock from '../BaseBlock/baseblock.js'
 import Link from '../Link/link.js'
 import Router from '../../modules/router.js'
 
+import './back.scss'
+
 export default
 class Back extends BaseBlock {
 	constructor() {
@@ -16,7 +18,7 @@ class Back extends BaseBlock {
 		});
 		this.image = new BaseBlock('img', {
 			class: 'back__image',
-			src: './img/back.png'
+			src: '/img/back.png'
 		});
 		this.text = new BaseBlock('p');
 		this.text.get().innerHTML = 'Обратно в меню';

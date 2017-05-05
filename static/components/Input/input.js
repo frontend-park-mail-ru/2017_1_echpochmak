@@ -2,6 +2,8 @@
 
 import BaseBlock from '../BaseBlock/baseblock.js'
 
+import './input.scss'
+
 export default
 class Input extends BaseBlock {
 	constructor(labelName, attrs) {

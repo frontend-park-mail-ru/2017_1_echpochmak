@@ -1,6 +1,7 @@
 import SingleStrategy from './strategy.js'
 import Mediator from './mediator.js'
 import Events from './events.js'
+import UserService from '../services/userservice.js'
 
 export default
 class GameManager {
@@ -26,7 +27,9 @@ class GameManager {
 		this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
 	}
 
-	end() {
+	end(args) {
 		this.play = false;
+		const userService = new UserService;
+		userService.setUserScore(args.score, () => {});
 	}
 }

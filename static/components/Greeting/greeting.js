@@ -5,11 +5,14 @@ import Link from '../Link/link.js'
 import Authorize from '../../services/authorize.js'
 import Router from '../../modules/router.js'
 
+import './greeting.scss'
+
 export default
 class Greeting extends BaseBlock {
 	constructor(name) {
 		super('div', {
-			class: 'greeting'
+			class: 'greeting',
+			align: 'right'
 		});
 		this.greetingBlock = new BaseBlock('div', {
 			align: 'right',

@@ -5,6 +5,7 @@ import BaseBlock from '../components/BaseBlock/baseblock.js'
 import MenuButton from '../components/MenuButton/menubutton.js'
 import Greeting from '../components/Greeting/greeting.js'
 import Router from '../modules/router.js'
+import Authorize from '../services/authorize.js'
 
 export default
 class Menu extends BaseView {
@@ -12,6 +13,9 @@ class Menu extends BaseView {
 		super('div', {
 			class: 'menu'
 		});
+
+		this.greeting = new Greeting('Гость');
+		
 		this.padd = new BaseBlock('div', {
 			class: 'padd',
 			align: 'center'
@@ -25,18 +29,17 @@ class Menu extends BaseView {
 			align: 'center'
 		});
 		this.singleButton = new MenuButton('Одиночная игра', {
-			class: 'ruby single-button'
+			class: 'menu__single-button menu__button_big'
 		});
 		this.multiButton = new MenuButton('Мультиплеер', {
-			class: 'saph multi-button'
+			class: 'menu__multi-button menu__button_big'
 		});
 		this.aboutButton = new MenuButton('Об игре', {
-			class: 'izum about-button'
+			class: 'menu__about-button menu__button_small'
 		});
 		this.leaderButton = new MenuButton('Лидеры', {
-			class: 'bril leaderboard-button'
+			class: 'menu__leaderboard-button menu__button_small'
 		});
-		this.greeting = new Greeting('Гость');
 
 		this.render();
 		this.makeListeners();
@@ -45,6 +48,7 @@ class Menu extends BaseView {
 	render() {
 		this.get().removeChild(this.back.get());
 
+		this.get().appendChild(this.greeting.get());
 		this.get().appendChild(this.padd.get());
 		this.padd.get().appendChild(this.line1.get());
 		this.padd.get().appendChild(this.line2.get());
@@ -52,29 +56,45 @@ class Menu extends BaseView {
 		this.line1.get().appendChild(this.multiButton.get());
 		this.line2.get().appendChild(this.aboutButton.get());
 		this.line2.get().appendChild(this.leaderButton.get());
-		this.get().appendChild(this.greeting.get());
 	}
 
 	makeListeners() {
 
 		const router = new Router();
 
-		this.singleButton.on('click', () => {
+		this.greeting.loginButton.on('click', (event) => {
+			event.preventDefault();
+			router.go('/login/');
+		});
+
+		this.greeting.registerButton.on('click', (event) => {
+			event.preventDefault();
+			router.go('/register/');
+		});
+
+		this.greeting.exitButton.on('click', (event) => {
+			event.preventDefault();
+
+			const auth = new Authorize();
+			auth.deauthorize();
+		});
+
+		this.singleButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/game/');
 		});
 
-		this.multiButton.on('click', () => {
+		this.multiButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/multiplayer/');
 		});
 
-		this.aboutButton.on('click', () => {
+		this.aboutButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/about/');
 		});
 
-		this.leaderButton.on('click', () => {
+		this.leaderButton.on('click', (event) => {
 			event.preventDefault();
 			router.go('/leaders/');
 		});

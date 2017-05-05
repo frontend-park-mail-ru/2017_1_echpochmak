@@ -5,44 +5,46 @@ import Link from '../Link/link.js'
 import Authorize from '../../services/authorize.js'
 import Router from '../../modules/router.js'
 
+import './greeting.scss'
+
 export default
 class Greeting extends BaseBlock {
 	constructor(name) {
 		super('div', {
-			class: 'greeting'
+			class: 'greeting',
+			align: 'right'
 		});
 		this.greetingBlock = new BaseBlock('div', {
 			align: 'right',
-			class: 'divtxt'
+			class: 'greeting__text-block'
 		});
 		this.entryBy = new BaseBlock('h3', {
-			class: 'txt'
+			class: 'greeting__text'
 		});
 		this.entryBy.get().innerHTML = 'Вы вошли как ';
 		this.username = new BaseBlock('h2', {
-			class: 'txt username'
+			class: 'greeting__text username'
 		});
 		this.username.get().innerHTML = name;
 		this.noAuth = new BaseBlock('div', {
 			align: 'right',
-			class: 'divbut no-authorized'
+			class: 'greeting__button-block no-authorized'
 		});
 		this.auth = new BaseBlock('div', {
 			align: 'right',
-			class: 'divbut authorized'
+			class: 'greeting__button-block authorized'
 		});
 		this.registerButton = new Link('Регистрация', {
-			class: 'button registration-button'
+			class: 'greeting__button'
 		});
 		this.loginButton = new Link('Вход', {
-			class: 'button login-button'
+			class: 'greeting__button'
 		});
 		this.exitButton = new Link('Выйти', {
-			class: 'button exit-button'
+			class: 'greeting__button'
 		});
 
 		this.render();
-		this.makeListeners();
 	}
 
 	render() {
@@ -54,27 +56,5 @@ class Greeting extends BaseBlock {
 		this.noAuth.get().appendChild(this.registerButton.get());
 		this.noAuth.get().appendChild(this.loginButton.get());
 		this.auth.get().appendChild(this.exitButton.get());
-	}
-
-	makeListeners() {
-
-		const router = new Router();
-
-		this.loginButton.on('click', () => {
-			event.preventDefault();
-			router.go('/login/');
-		});
-
-		this.registerButton.on('click', () => {
-			event.preventDefault();
-			router.go('/register/');
-		});
-
-		this.exitButton.on('click', () => {
-			event.preventDefault();
-
-			const auth = new Authorize();
-			auth.deauthorize();
-		});
 	}
 }

@@ -1,90 +1,98 @@
-import Setting from './settings.js'
+import Settings from './settings.js'
+import Konva from 'konva';
 
 export default
 class Scene {
 	constructor() {
 		this.state = {};
+		this.settings = new Settings;
+
+		this.gameStage = new Konva.Stage({
+			container: this.settings.gameFieldId,
+			width : this.settings.gameFieldElement.offsetWidth,
+			height : this.settings.gameFieldElement.offsetHeight
+		});
+
+		this.gameLayer = new Konva.Layer();
+
+		this.hintsStage = new Konva.Stage({
+			container: this.settings.hintsFieldId,
+			width : this.settings.hintsFieldElement.offsetWidth,
+			height : this.settings.hintsFieldElement.offsetHeight
+		})
+
+		this.hintsLayer = new Konva.Layer();
 	}
 
 	setState(state) {
 		this.state = state;
 	}
 
-
-
 	render() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		var layer = new Konva.Layer();
 
-		for (let i = 0; i < Setting.mapSize; i++){
-			for (let j = 0; j < Setting.mapSize; j++){
-				// console.log(this.state.fields[i][j].field)
-				layer.add(this.state.fields[i][j].field);
+		let length = this.gameLayer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.gameLayer.children[0].remove();
+		}
+		
+		length = this.hintsLayer.children.length;
+		for (let i = 0; i < length; i++) {
+			this.hintsLayer.children[0].remove();
+		}
+
+		for (let i = 0; i < this.settings.mapSize; i++){
+			for (let j = 0; j < this.settings.mapSize; j++){
+				this.gameLayer.add(this.state.fields[i][j].field);
 				if (this.state.fields[i][j].tower){
-					layer.add(this.state.fields[i][j].tower.draw);
-				};
+					this.gameLayer.add(this.state.fields[i][j].tower.draw);
+				}
 				
-			};
-		};
+			}
+		}
 		for (let i = 0; i < this.state.fieldsNewTower.length; i++){
-			layer.add(this.state.fieldsNewTower[i].draw);
+			this.gameLayer.add(this.state.fieldsNewTower[i].draw)
 		}
 
-		for (let i = 0; i < this.state.variantRects.length; i++){
-			layer.add(this.state.variantRects[i].draw);
-		};
-		//for (let i = 0; i < this.state.variantElements.length; i++){
-		//	layer.add(this.state.variantElements[i]);
-		//}
+		for (let i = 0; i < this.state.variantRects.length; i++) {
+			this.hintsLayer.add(this.state.variantRects[i].draw);
+			if (this.state.variantRects[i].text) {
+				this.hintsLayer.add(this.state.variantRects[i].text);
+			}
+		}
+
+		for (let i = 0; i < this.state.variantElements.length; i++){
+			this.hintsLayer.add(this.state.variantElements[i].draw);
+		}
+
 		for (let i = 0; i < this.state.variantsShow.length; i++){
-			layer.add(this.state.variantsShow[i].draw);
+			this.gameLayer.add(this.state.variantsShow[i].draw);
 		}
+
 		for (let i = 0; i < this.state.enemies.length; i++){
-			layer.add(this.state.enemies[i].draw);
+			this.gameLayer.add(this.state.enemies[i].draw);
 		}
 
-		// for (kindTowers in this.state.towers) {
-		// 	for (let i = 0; i < this.state.towers[kindTowers].length; i++){
-		// 		for (let j = 0; j < this.state.towers[kindTowers][i]['bulletes'].length; j++) {
-		// 			layer.add(this.state.towers[kindTowers][i]['bulletes'][j])
-		// 		}
-		// 	}
-		// }
+		for (let i = 0; i < this.state.fieldsWithCircles.length; i++){
+			for (let j = 0; j < this.state.fieldsWithCircles[i].tower.bulletes.length; j++){
+				for (let s = 0; s < this.state.fieldsWithCircles[i].tower.bulletes[j].length; s++){
+					this.gameLayer.add(this.state.fieldsWithCircles[i].tower.bulletes[j][s])
+				}
+			}
+		}
 
-		// for (let towerKind of Object.keys(this.state.towers)) {
-		// 	for (let i = 0; i < this.state.towers.towerKind.length; i++){
-		// 		for (let j = 0; j < this.state.towers.towerKind[i].bulletes.length; j++) {
-		// 			layer.add(this.state.towers.towerKind[i].bulletes[j])
-		// 		}
-		// 	}
-		// }
+		for (let i = 0; i < this.state.fieldsWithPentagons.length; i++) {
+			if (this.state.fieldsWithPentagons[i].tower.bulletes) {
+				this.gameLayer.add(this.state.fieldsWithPentagons[i].tower.bulletes);
+			}
+		}
 
-		stage.add(layer);
-	}
+		
 
-	testDraw() {
-		let stage = new Konva.Stage({
-			container: 'konva',
-			width : window.innerWidth,
-			height : window.innerHeight
-		});
-		var layer = new Konva.Layer();
+		for (let i = 0; i < this.state.checkpoints.length ; i++) {
+			this.gameLayer.add(this.state.checkpoints[i].draw);
+		}
 
-		let circle = new Konva.Circle({
-			x: Setting.mapX + 50,
-			y: Setting.mapY + 50,
-			radius: 50,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: 'red'
-		});
-
-		layer.add(circle);
-
-		stage.add(layer);
+		this.gameStage.add(this.gameLayer);
+		this.hintsStage.add(this.hintsLayer);
 	}
 }

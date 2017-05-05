@@ -20,7 +20,7 @@ class Login extends BaseView {
 		});
 		this.form = new LoginForm();
 
-		this.form.onsubmit(() => {
+		this.form.on('submit', () => {
 
 			event.preventDefault();
 

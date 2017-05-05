@@ -12,13 +12,21 @@ class Authorize {
 
 		this.service = new UserService();
 		this.router = new Router();
-		this.anonymUser = 'Гость';
+
+		this.user = {};
+		this.anonymUser = {
+			username: 'Гость',
+			score: 0
+		}
+		Object.assign(this.user, this.anonymUser);
 		
 		this.showForGuest();
 
 		this.service.getUsername(xhr => {
-			if (xhr.login) {
-				this.showForUser(xhr.login);
+			if (xhr.status === 'ok') {
+				this.user.username = xhr.login;
+				this.loadUserScore();
+				this.showForUser();
 			} else {
 				this.showForGuest();
 			}
@@ -27,22 +35,33 @@ class Authorize {
 		Authorize.__instance = this;
 	}
 
+	loadUserScore() {
+		this.service.getUserScore(xhr => {
+			if (xhr.status === 'ok') {
+				this.user.score = xhr.score;
+			}
+		})
+	}
+
 	authorize() {
 		this.service.getUsername(xhr => {
 			if (xhr.status === 'ok') {
-				this.showForUser(xhr.login);
+				this.user.username = xhr.login;
+				this.loadUserScore();
+				this.showForUser();
 			}
 		});
 	}
 
 	deauthorize() {
 		this.service.logout(xhr => {
+			Object.assign(this.user, this.anonymUser);
 			this.showForGuest();
 		});
 	}
 
-	showForUser(user) {
-		this.router.loginSwitch(user);
+	showForUser() {
+		this.router.loginSwitch(this.user);
 	}
 
 	showForGuest() {

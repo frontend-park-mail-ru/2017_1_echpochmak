@@ -1,15 +1,19 @@
 'use strict';
 
-import BaseView from './baseview.js'
-import BaseBlock from '../components/BaseBlock/baseblock.js'
-import SingleStrategy from '../game/strategy.js'
+import BaseView from '../baseview.js'
+import BaseBlock from '../../components/BaseBlock/baseblock.js'
+import Mediator from '../../game/mediator.js'
+import Events from '../../game/events.js'
 
 export default
-class SinglePlayer extends BaseView {
+class SinglePlayerStart extends BaseView {
 	constructor() {
 		super('div', {
-			class: 'singleplayer'
+			class: 'singleplayer__start'
 		});
+
+		this.mediator = new Mediator();
+
 		this.padd = new BaseBlock('div', {
 			class: 'padd'
 		});
@@ -27,13 +31,9 @@ class SinglePlayer extends BaseView {
 	}
 
 	makeListeners() {
-		this.newGame.on('click', () => {
-			this.get().removeChild(this.padd.get());
-			const konva = new BaseBlock('div', {
-				id: 'konva'
-			});
-			this.get().appendChild(konva.get());
-			const strategy = new SingleStrategy();
+		this.newGame.on('click', (event) => {
+			event.preventDefault();
+			this.mediator.emit(Events.GAME_START);
 		})
 	}
 

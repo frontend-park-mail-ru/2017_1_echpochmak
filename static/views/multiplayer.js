@@ -2,6 +2,11 @@
 
 import BaseView from './baseview.js'
 import BaseBlock from '../components/BaseBlock/baseblock.js'
+import MultiStrategy from '../game/strategies/multi_strategy.js'
+import GameManager from '../game/manager.js'
+import Mediator from '../game/mediator.js'
+import Router from '../modules/router.js'
+import Events from '../game/events.js'
 
 export default
 class MultiPlayer extends BaseView {
@@ -9,6 +14,10 @@ class MultiPlayer extends BaseView {
 		super('div', {
 			class: 'multiplayer'
 		});
+
+		this.gameManager = new GameManager(new MultiStrategy());
+		// this.gameManager.start();
+
 		this.padd = new BaseBlock('div', {
 			class: 'padd'
 		});
@@ -43,5 +52,10 @@ class MultiPlayer extends BaseView {
 	unloginSwitch(name) {
 		this.auth.get().hidden = true;
 		this.noAuth.get().hidden = false;
+	}
+
+	show() {
+		super.show();
+		this.gameManager.start();
 	}
 }

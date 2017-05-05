@@ -2,6 +2,8 @@
 
 import BaseBlock from '../BaseBlock/baseblock.js'
 
+import './formmessage.scss'
+
 export default
 class FormMessage extends BaseBlock {
 	constructor(text = '', attrs = {}) {
@@ -12,7 +14,7 @@ class FormMessage extends BaseBlock {
 			class: 'col-xs-4 col-sm-4 col-md-4 col-lg-4'
 		});
 		this.messageBlock = new BaseBlock('div', {
-			class: 'col-xs-5 col-sm-5 col-md-5 col-lg-5 form-message'
+			class: 'col-xs-5 col-sm-5 col-md-5 col-lg-5 form__message'
 		});
 
 		this.render();

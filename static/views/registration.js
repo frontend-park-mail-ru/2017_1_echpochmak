@@ -19,7 +19,7 @@ class Register extends BaseView {
 			class: 'padd'
 		});
 		this.form = new RegisterForm();
-		this.form.onsubmit(() => {
+		this.form.on('submit', () => {
 
 			event.preventDefault();
 

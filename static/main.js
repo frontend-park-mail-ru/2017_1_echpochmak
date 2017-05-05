@@ -5,11 +5,13 @@ import Login from './views/login.js'
 import Register from './views/registration.js'
 import About from './views/about.js'
 import LeaderBoard from './views/leaderboard.js'
-import SinglePlayer from './views/singleplayer.js'
+import SinglePlayer from './views/singleplayer/singleplayer.js'
 import MultiPlayer from './views/multiplayer.js'
 import Authorize from './services/authorize.js'
 import HTTP from './modules/http.js'
 import Router from './modules/router.js'
+
+import './css/styles.scss'
 
 const http = new HTTP();
 const router = new Router();

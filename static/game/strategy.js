@@ -524,8 +524,6 @@ class SingleStrategy {
 
 	gameWave() {
 
-
-
 		if (this.path.length === 0) {
 			this.path = this.findPath(this.settings.checkpoints);
 		}
@@ -633,7 +631,7 @@ class SingleStrategy {
 			}
 		}
 
-		// if (this.enemies.length === 0) {
+		if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(Events.NEW_WAVE_STARTED, {
@@ -658,7 +656,7 @@ class SingleStrategy {
 				this.fieldsWithPentagons[i].tower.bulletes = 0;
 			}
 			this.path = [];
-		// };
+		};
 	}
 
 	findPath(checkpoints) {

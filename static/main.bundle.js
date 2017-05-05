@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -337,6 +337,7 @@ class Settings {
 
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
+		this.hpCircl = 'hpCircl';
 
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
@@ -357,17 +358,18 @@ class Settings {
 			this.variantRadius = 5;
 		}
 		this.bulletStep = 20;
-		this.monsterStep = 10;
+		this.monsterStep = 20;
 
-		this.numberTowersInStep = 3;
+		this.numberTowersInStep = 1;
+
 		this.addHPInWave = 100;
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 100;
+		this.numberChangesColors = 10;
 		this.throneHealth = 100;
-		this.damage = 10;
-		this.addDamageInWave = 0.5;
+		this.damage = 0;
+		this.addDamageInWave = 0;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -415,7 +417,7 @@ class Settings {
 			name: 'triangl',
 			size: this.fieldSize * 0.5,
 			color: '#00FF00',
-			health: 1000,
+			health: 100,
 		};
 
 		this.stone = {
@@ -449,9 +451,11 @@ class Settings {
 
 		this.star = {
 			name: 'star',
-			colors: ['#0000FF', '#00FF00', '#FF0000'],
+			colors: 'khaki',
 			power: 100,
 			radiusFight: 400,
+			numberBullets: 3,
+			pentagons: ['pentagonGYR', 'pentagonRPS', 'pentagonSBG'],
 		};
 
 		this.circles = [
@@ -472,8 +476,6 @@ class Settings {
 		this.variantsX = this.hintsFieldElement.offsetWidth * 0.05;
 		this.variantsY = this.mapY;
 		this.variantsXSize = this.hintsFieldElement.offsetWidth * 0.9;
-		// this.variantsYSize = this.hintsFieldElement.offsetHeight * 0.1;
-		// this.betweenVariants = this.hintsFieldElement.offsetHeight * 0.15;
 		this.variantsYSize = this.fullMapSize * 0.1;
 		this.betweenVariants = this.fullMapSize * 0.15;
 
@@ -1803,18 +1805,34 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 
 
 class Arrow {
-	constructor(row) {
+	constructor(row, type) {
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
-		this.draw = new Konva.Arrow({
-			x: this.settings.variantsX + this.settings.variantsXSize * 0.7,
-			y: this.settings.variantsY + this.settings.variantsYSize * 0.5 + row * this.settings.betweenVariants,
-			points: [-this.settings.variantsXSize * 0.1, 0, this.settings.variantsXSize * 0.1, 0],
-			pointerLength: 20,
-			pointerWidth: 20,
-			fill: 'red',
-			stroke: 'red',
-			strokeWidth: 4
-		})
+		if (type == 'inVariantBlocks') {
+			this.draw = new Konva.Arrow({
+				x: this.settings.variantsX + this.settings.variantsXSize * 0.7,
+				y: this.settings.variantsY + this.settings.variantsYSize * 0.5 + row * this.settings.betweenVariants,
+				points: [-this.settings.variantsXSize * 0.1, 0, this.settings.variantsXSize * 0.1, 0],
+				pointerLength: 20,
+				pointerWidth: 20,
+				fill: 'red',
+				stroke: 'red',
+				strokeWidth: 4
+			})
+		} else if (type == 'checkpoints'){
+			let xp = (this.settings.checkpoints[row][0] + 1) * (this.settings.fieldSize + 2) - this.settings.fieldSize / 2 + this.settings.mapX;
+			let yp = (this.settings.checkpoints[row][1] + 1) * (this.settings.fieldSize + 2) - this.settings.fieldSize / 2 + this.settings.mapY;
+			this.draw = new Konva.Arrow({
+				x: xp,
+				y: yp,
+				points: [0, -this.settings.fieldSize * 0.4, 0, this.settings.fieldSize * 0.4],
+				pointerLength: this.settings.fieldSize * 0.4,
+				pointerWidth: this.settings.fieldSize * 0.4,
+				fill: 'lime',
+				stroke: 'green',
+				strokeWidth: 4,
+			})
+		}
+		
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Arrow;
@@ -1935,7 +1953,7 @@ class PentagonTower {
 			lineJoin: 'round'
 		});
 		this.bulletes.enemie = enemie;
-		enemie.health -= 10;
+		enemie.health -= 2;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = PentagonTower;
@@ -1958,29 +1976,44 @@ class StarTower {
 			numPoints: 5,
 			innerRadius: radius / 2,
 			outerRadius: radius,
-			radius: radius,
-			fillRadialGradientStartPoint: 0,
-			fillRadialGradientStartRadius: 0,
-			fillRadialGradientEndPoint: 0,
-			fillRadialGradientEndRadius: radius,
-			fillRadialGradientColorStops: [0, name.colors[0], 0.5, name.colors[1], 1, name.colors[2]],
+			fill: 'khaki',
+			//fillRadialGradientStartPoint: 0,
+			//fillRadialGradientStartRadius: 0,
+			//fillRadialGradientEndPoint: 0,
+			//fillRadialGradientEndRadius: radius,
+			//fillRadialGradientColorStops: [0, name.colors[0], 0.5, name.colors[1], 1, name.colors[2]],
 			stroke: 'black',
-			strokeWidth: 0
+			strokeWidth: 0,
 		});
 		this.kind = name;
 		this.bulletes = [];
 		this.radiusFight = name.radiusFight;
 	}
 
-	fire() {
-		this.bulletes.push(new Konva.Circle({
-			x: this.draw.x,
-			y: this.draw.y,
-			radius: 5,
-			stroke: 'black',
-			strokeWidth: 0,
-			fill: 'black'
-		}));
+	//fire() {
+	//	this.bulletes.push(new Konva.Circle({
+	//		x: this.draw.x,
+	//		y: this.draw.y,
+	//		radius: 5,
+	//		stroke: 'black',
+	//		strokeWidth: 0,
+	//		fill: 'black'
+	//	}));
+	//}
+	fire(enemie) {
+		let x1 = this.draw.getX();
+		let y1 = this.draw.getY();
+		let x2 = enemie.draw.getX();
+		let y2 = enemie.draw.getY();
+		this.bulletes = new Konva.Line({
+			points: [x1, y1, x2, y2],
+			stroke: this.kind.color,
+			strokeWidth: this.settings.laserWidth,
+			lineCap: 'round',
+			lineJoin: 'round'
+		});
+	this.bulletes.enemie = enemie;
+	enemie.health -= 2;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = StarTower;
@@ -2120,6 +2153,12 @@ class Scene {
 			}
 		}
 
+		
+
+		for (let i = 0; i < this.state.checkpoints.length ; i++) {
+			this.gameLayer.add(this.state.checkpoints[i].draw);
+		}
+
 		this.gameStage.add(this.gameLayer);
 		this.hintsStage.add(this.hintsLayer);
 	}
@@ -2170,12 +2209,14 @@ class SingleStrategy {
 		this.variantElements = [];
 		this.fieldsWithCircles = [];
 		this.fieldsWithPentagons = [];
+		this.fieldsWithStars = [];
 		this.variantsShow = [];
 		this.enemies = [];
 		this.throneHealth = this.settings.throneHealth;
 		this.enemiesNumber = 0;
 		this.path = [];
 		this.fieldsNewTower = [];
+		this.checkpoints = [];
 
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i] = new __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__["a" /* default */](i);
@@ -2190,7 +2231,7 @@ class SingleStrategy {
 					Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 				))
 			}
-			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](i));
+			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](i, 'inVariantBlocks'));
 			this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](
 				this.settings.pentagons[i],
 				this.settings.variantsX + this.settings.variantsXSize * 0.9,
@@ -2207,13 +2248,18 @@ class SingleStrategy {
 				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
 		}
-		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](3));
+		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](3, 'inVariantBlocks'));
 		this.variantElements.push(new __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__["a" /* default */](
 				this.settings.star,
 				this.settings.variantsX + this.settings.variantsXSize * 0.9,
 				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
 				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
+
+		for (let i = 1; i < this.settings.checkpoints.length - 1; i++) {
+			let arrow = new __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__["a" /* default */](i, 'checkpoints');
+			this.checkpoints.push(arrow);
+		}
 		
 		for (let i = 0; i < this.settings.mapSize; i++){
 			this.fields[i] = Array(this.settings.mapSize);
@@ -2234,15 +2280,16 @@ class SingleStrategy {
 					}),
 					coordinates: [j, i],
 				};
-
-			
-				this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
-				this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
-				this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+				if (!((i === 0) && ((j === 0) || (j === this.settings.mapSize - 1)) || (i === this.settings.mapSize - 1) && ((j === 0) || (j === this.settings.mapSize - 1)))) {
+					this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
+					this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
+					this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+				}
 
 			};
 		};
-
+		this.fields[0][this.settings.mapSize - 1].field.setFill('DarkOliveGreen');
+		this.fields[this.settings.mapSize - 1][0].field.setFill('DarkOliveGreen');
 		
 		this.newStones = 0;
 		this.towers = {
@@ -2252,9 +2299,9 @@ class SingleStrategy {
 			circleYellow: 0,
 			circlePink: 0,
 			circleSad: 0,
-			pentagonRPS: 0,
-			pentagonSBG: 0,
-			pentagonGYR: 0,
+			pentagonRPS: 1,
+			pentagonSBG: 1,
+			pentagonGYR: 1,
 			star: 0,
 		};
 
@@ -2284,6 +2331,8 @@ class SingleStrategy {
 			enemies: this.enemies,
 			fieldsWithCircles: this.fieldsWithCircles,
 			fieldsWithPentagons: this.fieldsWithPentagons,
+			fieldsWithStars: this.fieldsWithStars,
+			checkpoints: this.checkpoints,
 		}
 	}
 
@@ -2374,6 +2423,7 @@ class SingleStrategy {
 		}
 		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_4__gameObjects_pentagontower_js__["a" /* default */](kind, xp, yp, this.settings.fieldSize / 2 - 2);
 		this.fieldsWithPentagons.push(field);
+		this.fields[x][y].tower.draw.addEventListener('click', () => {this.onClickPentagon.call(this, this.fields[x][y])})
 		for (let i = 0; i < this.fieldsWithCircles.length; i++){
 			if (this.fieldsWithCircles[i].tower.kind.name === deleteCircles[0]){
 				let xCoord = this.fieldsWithCircles[i].coordinates[0];
@@ -2433,6 +2483,75 @@ class SingleStrategy {
 		this.createVariants.call(this, variantRect.field);
 	}
 
+	onClickPentagon(field) {
+		if (!(this.towers.pentagonRPS && this.towers.pentagonSBG && this.towers.pentagonGYR)) {
+			return;
+		}
+		this.variantsShow = [];
+		let star = new __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__["a" /* default */](
+			'star',
+			field.tower.draw.getX() - this.settings.fieldSize,
+			field.tower.draw.getY(),
+			this.settings.variantRadius
+		);
+		star.draw.addEventListener('click', () => {this.onClickNewStar.call(this, field, this.settings.star)});
+		this.variantsShow.push();
+	}
+
+	onClickNewStar(field, kind) {
+		let x = field.coordinates[0];
+		let y = field.coordinates[1];
+		let xp = this.settings.mapX + x * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let yp = this.settings.mapY + y * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let deletePentagons = new Array(...field.tower.kind.pentagons);
+		for (let i = 0; i < deletePentagons.length; i++){
+			if (deletePentagons[i] === field.tower.kind.name) {
+				deletePentagons.splice(i, 1);
+			}
+		}
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++) {
+			let xCoord = this.fieldsWithPentagons[i].coordinates[0];
+			let yCoord = this.fieldsWithPentagons[i].coordinates[1];
+			if (xCoord === field.coordinates[0] && yCoord === field.coordinates[1]){
+				this.fieldsWithCircles.splice(i, 1);
+			}
+		}
+
+
+		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__["a" /* default */](kind, xp, yp, this.settings.fieldSize / 2 - 2);
+		this.fieldsWithStars.push(field);
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
+			if (this.fieldsWithPentagons[i].tower.kind.name === deletePentagons[0]){
+				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
+				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithPentagons.splice(i, 1);
+				break;
+			};
+		};
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
+			if (this.fieldsWithPentagons[i].tower.kind.name === deleteCircles[1]){
+				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
+				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord].tower = new __WEBPACK_IMPORTED_MODULE_3__gameObjects_circletower_js__["a" /* default */](this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithPentagons.splice(i, 1);
+				break;
+			};
+		};
+		this.towers[kind.name]++;
+		this.towers[deletePentagons[0]]--;
+		this.towers[deletePentagons[1]]--;
+		this.variantsShow = [];
+		for (let i = 0; i < 4; i++) {
+			this.variantRects[i].draw.setStroke('black');
+			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+		}
+	}
+
 	generateTower(field) {
 
 		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
@@ -2447,7 +2566,7 @@ class SingleStrategy {
 		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
 		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
 		field['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, field)});
-		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+		
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
@@ -2567,14 +2686,17 @@ class SingleStrategy {
 				}
 				this.fieldsNewTower[i].numberChangesColors--;
 			} else if (this.fieldsNewTower[i].numberChangesColors === 1) {
-				let color = this.fieldsNewTower[i].kind.color;
-				this.fieldsNewTower[i].draw.setFill(color);
+				let endColor = this.fieldsNewTower[i].kind.color;
+				this.fieldsNewTower[i].draw.setFill(endColor);
 				this.fieldsNewTower[i].numberChangesColors--;
+				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
 			}
 		}
 	}
 
 	gameWave() {
+
+
 
 		if (this.path.length === 0) {
 			this.path = this.findPath(this.settings.checkpoints);
@@ -2683,7 +2805,7 @@ class SingleStrategy {
 			}
 		}
 
-		if (this.enemies.length === 0) {
+		// if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].NEW_WAVE_STARTED, {
@@ -2709,7 +2831,7 @@ class SingleStrategy {
 				this.fieldsWithPentagons[i].tower.bulletes = 0;
 			}
 			this.path = [];
-		};
+		// };
 	}
 
 	findPath(checkpoints) {

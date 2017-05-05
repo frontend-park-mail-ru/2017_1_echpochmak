@@ -8,6 +8,7 @@ class Settings {
 
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
+		this.hpCircl = 'hpCircl';
 
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
@@ -28,17 +29,18 @@ class Settings {
 			this.variantRadius = 5;
 		}
 		this.bulletStep = 20;
-		this.monsterStep = 10;
+		this.monsterStep = 20;
 
-		this.numberTowersInStep = 3;
+		this.numberTowersInStep = 1;
+
 		this.addHPInWave = 100;
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 100;
+		this.numberChangesColors = 10;
 		this.throneHealth = 100;
-		this.damage = 1;
-		this.addDamageInWave = 1;
+		this.damage = 0;
+		this.addDamageInWave = 0;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -120,9 +122,11 @@ class Settings {
 
 		this.star = {
 			name: 'star',
-			colors: ['#0000FF', '#00FF00', '#FF0000'],
+			colors: 'khaki',
 			power: 100,
 			radiusFight: 400,
+			numberBullets: 3,
+			pentagons: ['pentagonGYR', 'pentagonRPS', 'pentagonSBG'],
 		};
 
 		this.circles = [

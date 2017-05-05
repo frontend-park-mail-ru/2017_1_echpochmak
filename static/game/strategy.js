@@ -27,12 +27,14 @@ class SingleStrategy {
 		this.variantElements = [];
 		this.fieldsWithCircles = [];
 		this.fieldsWithPentagons = [];
+		this.fieldsWithStars = [];
 		this.variantsShow = [];
 		this.enemies = [];
 		this.throneHealth = this.settings.throneHealth;
 		this.enemiesNumber = 0;
 		this.path = [];
 		this.fieldsNewTower = [];
+		this.checkpoints = [];
 
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i] = new VariantBlock(i);
@@ -47,7 +49,7 @@ class SingleStrategy {
 					Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 				))
 			}
-			this.variantElements.push(new Arrow(i));
+			this.variantElements.push(new Arrow(i, 'inVariantBlocks'));
 			this.variantElements.push(new PentagonTower(
 				this.settings.pentagons[i],
 				this.settings.variantsX + this.settings.variantsXSize * 0.9,
@@ -64,13 +66,18 @@ class SingleStrategy {
 				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
 		}
-		this.variantElements.push(new Arrow(3));
+		this.variantElements.push(new Arrow(3, 'inVariantBlocks'));
 		this.variantElements.push(new StarTower(
 				this.settings.star,
 				this.settings.variantsX + this.settings.variantsXSize * 0.9,
 				this.settings.variantsY + this.settings.variantsYSize * 0.5 + 3 * this.settings.betweenVariants,
 				Math.min(this.settings.variantsYSize / 2 - 7, this.settings.variantsXSize / 10 - 2) 
 			))
+
+		for (let i = 1; i < this.settings.checkpoints.length - 1; i++) {
+			let arrow = new Arrow(i, 'checkpoints');
+			this.checkpoints.push(arrow);
+		}
 		
 		for (let i = 0; i < this.settings.mapSize; i++){
 			this.fields[i] = Array(this.settings.mapSize);
@@ -91,15 +98,16 @@ class SingleStrategy {
 					}),
 					coordinates: [j, i],
 				};
-
-			
-				this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
-				this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
-				this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+				if (!((i === 0) && ((j === 0) || (j === this.settings.mapSize - 1)) || (i === this.settings.mapSize - 1) && ((j === 0) || (j === this.settings.mapSize - 1)))) {
+					this.fields[j][i]['field'].addEventListener('click', () => {this.onClickField.call(this, this.fields[j][i])});
+					this.fields[j][i]['field'].addEventListener('mouseover', () => {this.onOverField.call(this, this.fields[j][i])});
+					this.fields[j][i]['field'].addEventListener('mouseout', () => {this.onOutField.call(this, this.fields[j][i])});
+				}
 
 			};
 		};
-
+		this.fields[0][this.settings.mapSize - 1].field.setFill('DarkOliveGreen');
+		this.fields[this.settings.mapSize - 1][0].field.setFill('DarkOliveGreen');
 		
 		this.newStones = 0;
 		this.towers = {
@@ -109,9 +117,9 @@ class SingleStrategy {
 			circleYellow: 0,
 			circlePink: 0,
 			circleSad: 0,
-			pentagonRPS: 0,
-			pentagonSBG: 0,
-			pentagonGYR: 0,
+			pentagonRPS: 1,
+			pentagonSBG: 1,
+			pentagonGYR: 1,
 			star: 0,
 		};
 
@@ -141,6 +149,8 @@ class SingleStrategy {
 			enemies: this.enemies,
 			fieldsWithCircles: this.fieldsWithCircles,
 			fieldsWithPentagons: this.fieldsWithPentagons,
+			fieldsWithStars: this.fieldsWithStars,
+			checkpoints: this.checkpoints,
 		}
 	}
 
@@ -231,6 +241,7 @@ class SingleStrategy {
 		}
 		this.fields[x][y].tower = new PentagonTower(kind, xp, yp, this.settings.fieldSize / 2 - 2);
 		this.fieldsWithPentagons.push(field);
+		this.fields[x][y].tower.draw.addEventListener('click', () => {this.onClickPentagon.call(this, this.fields[x][y])})
 		for (let i = 0; i < this.fieldsWithCircles.length; i++){
 			if (this.fieldsWithCircles[i].tower.kind.name === deleteCircles[0]){
 				let xCoord = this.fieldsWithCircles[i].coordinates[0];
@@ -290,6 +301,75 @@ class SingleStrategy {
 		this.createVariants.call(this, variantRect.field);
 	}
 
+	onClickPentagon(field) {
+		if (!(this.towers.pentagonRPS && this.towers.pentagonSBG && this.towers.pentagonGYR)) {
+			return;
+		}
+		this.variantsShow = [];
+		let star = new StarTower(
+			'star',
+			field.tower.draw.getX() - this.settings.fieldSize,
+			field.tower.draw.getY(),
+			this.settings.variantRadius
+		);
+		star.draw.addEventListener('click', () => {this.onClickNewStar.call(this, field, this.settings.star)});
+		this.variantsShow.push();
+	}
+
+	onClickNewStar(field, kind) {
+		let x = field.coordinates[0];
+		let y = field.coordinates[1];
+		let xp = this.settings.mapX + x * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let yp = this.settings.mapY + y * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+		let deletePentagons = new Array(...field.tower.kind.pentagons);
+		for (let i = 0; i < deletePentagons.length; i++){
+			if (deletePentagons[i] === field.tower.kind.name) {
+				deletePentagons.splice(i, 1);
+			}
+		}
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++) {
+			let xCoord = this.fieldsWithPentagons[i].coordinates[0];
+			let yCoord = this.fieldsWithPentagons[i].coordinates[1];
+			if (xCoord === field.coordinates[0] && yCoord === field.coordinates[1]){
+				this.fieldsWithCircles.splice(i, 1);
+			}
+		}
+
+
+		this.fields[x][y].tower = new StarTower(kind, xp, yp, this.settings.fieldSize / 2 - 2);
+		this.fieldsWithStars.push(field);
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
+			if (this.fieldsWithPentagons[i].tower.kind.name === deletePentagons[0]){
+				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
+				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord].tower = new CircleTower(this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithPentagons.splice(i, 1);
+				break;
+			};
+		};
+		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
+			if (this.fieldsWithPentagons[i].tower.kind.name === deleteCircles[1]){
+				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
+				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
+				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				let yPixel = this.settings.mapY + yCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
+				this.fields[xCoord][yCoord].tower = new CircleTower(this.settings.stone, xPixel, yPixel, this.settings.fieldSize / 2 - 2);
+				this.fieldsWithPentagons.splice(i, 1);
+				break;
+			};
+		};
+		this.towers[kind.name]++;
+		this.towers[deletePentagons[0]]--;
+		this.towers[deletePentagons[1]]--;
+		this.variantsShow = [];
+		for (let i = 0; i < 4; i++) {
+			this.variantRects[i].draw.setStroke('black');
+			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+		}
+	}
+
 	generateTower(field) {
 
 		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
@@ -304,7 +384,7 @@ class SingleStrategy {
 		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
 		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
 		field['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, field)});
-		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+		
 		circle['coordinates'] = field['coordinates'];
 		this.fieldsNewTower.push(circle);
 		this.newStones++;
@@ -424,14 +504,17 @@ class SingleStrategy {
 				}
 				this.fieldsNewTower[i].numberChangesColors--;
 			} else if (this.fieldsNewTower[i].numberChangesColors === 1) {
-				let color = this.fieldsNewTower[i].kind.color;
-				this.fieldsNewTower[i].draw.setFill(color);
+				let endColor = this.fieldsNewTower[i].kind.color;
+				this.fieldsNewTower[i].draw.setFill(endColor);
 				this.fieldsNewTower[i].numberChangesColors--;
+				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
 			}
 		}
 	}
 
 	gameWave() {
+
+
 
 		if (this.path.length === 0) {
 			this.path = this.findPath(this.settings.checkpoints);
@@ -540,7 +623,7 @@ class SingleStrategy {
 			}
 		}
 
-		if (this.enemies.length === 0) {
+		// if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(Events.NEW_WAVE_STARTED, {
@@ -566,7 +649,7 @@ class SingleStrategy {
 				this.fieldsWithPentagons[i].tower.bulletes = 0;
 			}
 			this.path = [];
-		};
+		// };
 	}
 
 	findPath(checkpoints) {

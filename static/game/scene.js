@@ -85,6 +85,12 @@ class Scene {
 			}
 		}
 
+		
+
+		for (let i = 0; i < this.state.checkpoints.length ; i++) {
+			this.gameLayer.add(this.state.checkpoints[i].draw);
+		}
+
 		this.gameStage.add(this.gameLayer);
 		this.hintsStage.add(this.hintsLayer);
 	}

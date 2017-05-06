@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+	
+	<fest:include src="./record.tmpl.xml"/>
+
+	<div class="list__header" align="center">
+		Доска героев
+		<hr/>
+	</div>
+
+	<div class="line row list__sub-header">
+		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> Рейтинг </div>
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> Имя </div>
+		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> Результат </div>
+	</div>
+
+	<fest:for iterate="json.users" index="i">
+		<fest:get name="record">
+			<fest:params>
+				{
+					user: json.users[i],
+					rating: i
+				}
+			</fest:params>
+		</fest:get>
+	</fest:for>
+
+</fest:template>

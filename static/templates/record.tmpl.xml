@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+
+	<fest:set name="record">	
+		<div class="line row">
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 
+				<fest:value output="text">params.rating + 1</fest:value> 
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center"> 
+				<fest:value output="text">params.user.login</fest:value> 
+			</div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" align="center"> 
+				<fest:value output="text">params.user.score</fest:value> 
+			</div>
+		</div>
+	</fest:set>
+
+</fest:template>

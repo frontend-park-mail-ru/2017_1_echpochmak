@@ -1,32 +1,18 @@
 'use strict';
 
-// Импортируем модули, отвечающие за работу с http и с файловой системой
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 
-// Создаём фукнцию-обработчик запросов
-const worker = function (request, response) {
-	// Выводим лог
-	console.log(`${request.method} ${request.url}`);
-	const url = request.url;
+const PORT = process.env.PORT || 3000;
+const app = express();
 
-	// Определяем, какой из файлов мы будем использовать
-	let content = fs.readFileSync('./static/menu.html', 'utf8');
-	// Записываем заголовок в ответ
-	response.writeHead(200, {"Content-Type": "text/html"});
+app.use('/', express.static('static'));
+app.use('/login', express.static('static'));
+app.use('/register', express.static('static'));
+app.use('/about', express.static('static'));
+app.use('/leaders', express.static('static'));
+app.use('/game', express.static('static'));
+app.use('/multiplayer', express.static('static'));
 
-	// Данные в ответ
-	response.write(content);
-	response.end();
-	console.log('complete');
-};
-
-// Создаём сервер
-const server = http.createServer(worker);
-
-// Определяем, соединения на каком порту будет обрабатывать сервер
-const port = process.env.PORT || 3000;
-console.log(`Сервер запущен! Порт ${port}`);
-
-// Запускаем сервер
-server.listen(port);
+app.listen(PORT, function () {
+	console.log(`Server listen ${PORT} port`);
+});

@@ -1,0 +1,237 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Gem Td API
+  description: Move your app forward with the Uber API
+  version: "1.0.0"
+# the domain of the service
+host: gem-td-back.herokuapp.com
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /api/registration:
+    post:
+      description: |
+        Регистрация нового пользователя
+      parameters:
+        - name: newuser
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewUser'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Ok'
+        409:
+          description: Email or login already exist
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /api/login:
+    post:
+      description: |
+        Вход зарегистрированного пользователя
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Ok'
+        400:
+          description: Wrong login or password
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /api/user:
+    get:
+      description: |
+        Получить логин текущего пользователя
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Login'
+        409:
+          description: User not found
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /api/logout:
+    get:
+      description: |
+        Выйти из аккаунта
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Ok'
+        409:
+          description: User is not authorized
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /api/settings:
+    post:
+      description: |
+        Изменить параметры пользователя
+      parameters:
+        - name: settings
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserSettings'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Ok'
+        409:
+          description: User not found
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Empty value or type
+          schema:
+            $ref: '#/definitions/Error'
+        226:
+          description: Login already exist
+          schema:
+            $ref: '#/definitions/Error'    
+       
+  /api/setscore:
+    post:
+      description: |
+        Отправить текущий рекорд пользователя
+      parameters:
+        - name: score
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Score'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Ok'
+        400:
+          description: Empty user or score
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: User not found
+          schema:
+            $ref: '#/definitions/Error'
+                      
+  
+  /api/getscore:
+    get:
+      description: |
+        Получить очки текущего пользователя
+      responses:
+        200:
+          description: score
+          schema:
+            $ref: '#/definitions/Score'
+        400:
+          description: Empty user
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: User not found
+          schema:
+            $ref: '#/definitions/Error'
+            
+definitions:
+  NewUser:
+    description: |
+      Данные нового пользователя
+    type: object
+    properties:
+      login:
+        type: string
+        description: |
+          Логин пользователя.
+      password:
+        type: string
+        format: password
+        description: |
+          Пароль пользователя.
+      mail:
+        type: string
+        format: email
+        description: |
+          Почта пользователя.
+          
+  User:
+    description: |
+      Данные зарегестрированного пользователя
+    type: object
+    properties:
+      login:
+        type: string
+        description: |
+          Логин пользователя.
+      password:
+        type: string
+        format: password
+        description: |
+          Пароль пользователя.
+          
+  Login:
+    description: |
+      Логин текущего пользователя
+    type: object
+    properties:
+      login:
+        type: string
+        description: |
+          Логин пользователя.
+          
+  UserSettings:
+    description: |
+      Изменить данные пользователя
+    type: object
+    properties:
+      type:
+        type: string
+        description: |
+          Изменяемый парaметр, может принимать значения login/password/mail
+      value:
+        type: string
+        description: |
+          Значение на которое надо заменить текущий параметр
+          
+  Score:
+    description: |
+      Очки пользователя
+    type: object
+    properties:
+      score:
+        type: integer
+        
+
+  Error:
+    type: object
+    properties:
+      error:
+        description: Сообщение об ошибке
+        type: string
+        
+  Ok:
+    type: object
+    properties:
+      ok:
+        type: string

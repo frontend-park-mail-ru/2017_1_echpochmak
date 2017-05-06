@@ -18438,10 +18438,12 @@ class Settings {
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 10;
+		this.numberChangesColors = 6;
 		this.throneHealth = 100;
 		this.damage = 1;
 		this.addDamageInWave = 1;
+
+
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -18523,7 +18525,7 @@ class Settings {
 
 		this.star = {
 			name: 'star',
-			colors: 'khaki',
+			color: 'khaki',
 			power: 100,
 			radiusFight: 400,
 			numberBullets: 3,
@@ -23436,11 +23438,6 @@ class StarTower {
 			innerRadius: radius / 2,
 			outerRadius: radius,
 			fill: 'khaki',
-			//fillRadialGradientStartPoint: 0,
-			//fillRadialGradientStartRadius: 0,
-			//fillRadialGradientEndPoint: 0,
-			//fillRadialGradientEndRadius: radius,
-			//fillRadialGradientColorStops: [0, name.colors[0], 0.5, name.colors[1], 1, name.colors[2]],
 			stroke: 'black',
 			strokeWidth: 0,
 		});
@@ -23449,30 +23446,19 @@ class StarTower {
 		this.radiusFight = name.radiusFight;
 	}
 
-	//fire() {
-	//	this.bulletes.push(new Konva.Circle({
-	//		x: this.draw.x,
-	//		y: this.draw.y,
-	//		radius: 5,
-	//		stroke: 'black',
-	//		strokeWidth: 0,
-	//		fill: 'black'
-	//	}));
-	//}
 	fire(enemie) {
 		let x1 = this.draw.getX();
 		let y1 = this.draw.getY();
 		let x2 = enemie.draw.getX();
 		let y2 = enemie.draw.getY();
-		this.bulletes = new __WEBPACK_IMPORTED_MODULE_1_konva___default.a.Line({
+		this.bulletes.push(new __WEBPACK_IMPORTED_MODULE_1_konva___default.a.Line({
 			points: [x1, y1, x2, y2],
 			stroke: this.kind.color,
 			strokeWidth: this.settings.laserWidth,
 			lineCap: 'round',
-			lineJoin: 'round'
-		});
-	this.bulletes.enemie = enemie;
-	enemie.health -= 2;
+			lineJoin: 'round',
+		}))
+		enemie.health -= 2;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = StarTower;
@@ -23573,7 +23559,11 @@ class Scene {
 			}
 		}
 
-		
+		for (let i = 0; i < this.state.fieldsWithStars.length; i++) {
+			for (let j = 0; j < this.state.fieldsWithStars[i].tower.bulletes.length; j++) {
+				this.gameLayer.add(this.state.fieldsWithStars[i].tower.bulletes[j]);
+			}
+		}		
 
 		for (let i = 0; i < this.state.checkpoints.length ; i++) {
 			this.gameLayer.add(this.state.checkpoints[i].draw);
@@ -23681,6 +23671,8 @@ class SingleStrategy {
 		this.wave = 1;
 		this.score = 0;
 
+		this.betweenEnemies = 10;
+		this.betweenBulles = 3;
 		this.status = 'playerStep';
 		this.fields = Array(this.settings.mapSize);
 		this.variantRects = [];
@@ -23778,13 +23770,22 @@ class SingleStrategy {
 			circleYellow: 0,
 			circlePink: 0,
 			circleSad: 0,
-			pentagonRPS: 1,
-			pentagonSBG: 1,
-			pentagonGYR: 1,
+			pentagonRPS: 0,
+			pentagonSBG: 0,
+			pentagonGYR: 0,
 			star: 0,
 		};
 
 		this.state = {};
+
+		//this.fields[3][4].tower = new StarTower(
+		//	this.settings.star,
+		//	3 * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2 + this.settings.mapX,
+		//	4 * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2 + this.settings.mapY,
+		//	this.settings.fieldSize / 2 - 2
+		//)
+//
+		//this.fieldsWithStars.push(this.fields[3][4]);
 	}
 
 	gameStep() {
@@ -23976,7 +23977,7 @@ class SingleStrategy {
 			this.settings.variantRadius
 		);
 		star.draw.addEventListener('click', () => {this.onClickNewStar.call(this, field, this.settings.star)});
-		this.variantsShow.push();
+		this.variantsShow.push(star);
 	}
 
 	onClickNewStar(field, kind) {
@@ -23984,9 +23985,9 @@ class SingleStrategy {
 		let y = field.coordinates[1];
 		let xp = this.settings.mapX + x * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
 		let yp = this.settings.mapY + y * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
-		let deletePentagons = new Array(...field.tower.kind.pentagons);
+		let deletePentagons = new Array(...kind.pentagons);
 		for (let i = 0; i < deletePentagons.length; i++){
-			if (deletePentagons[i] === field.tower.kind.name) {
+			if (deletePentagons[i] == field.tower.kind.name) {
 				deletePentagons.splice(i, 1);
 			}
 		}
@@ -23994,7 +23995,7 @@ class SingleStrategy {
 			let xCoord = this.fieldsWithPentagons[i].coordinates[0];
 			let yCoord = this.fieldsWithPentagons[i].coordinates[1];
 			if (xCoord === field.coordinates[0] && yCoord === field.coordinates[1]){
-				this.fieldsWithCircles.splice(i, 1);
+				this.fieldsWithPentagons.splice(i, 1);
 			}
 		}
 
@@ -24002,7 +24003,7 @@ class SingleStrategy {
 		this.fields[x][y].tower = new __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__["a" /* default */](kind, xp, yp, this.settings.fieldSize / 2 - 2);
 		this.fieldsWithStars.push(field);
 		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
-			if (this.fieldsWithPentagons[i].tower.kind.name === deletePentagons[0]){
+			if (this.fieldsWithPentagons[i].tower.kind.name == deletePentagons[0]){
 				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
 				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
 				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
@@ -24013,7 +24014,7 @@ class SingleStrategy {
 			};
 		};
 		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
-			if (this.fieldsWithPentagons[i].tower.kind.name === deleteCircles[1]){
+			if (this.fieldsWithPentagons[i].tower.kind.name == deletePentagons[1]){
 				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
 				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
 				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
@@ -24027,10 +24028,7 @@ class SingleStrategy {
 		this.towers[deletePentagons[0]]--;
 		this.towers[deletePentagons[1]]--;
 		this.variantsShow = [];
-		for (let i = 0; i < 4; i++) {
-			this.variantRects[i].draw.setStroke('black');
-			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
-		}
+
 	}
 
 	generateTower(field) {
@@ -24074,9 +24072,12 @@ class SingleStrategy {
 				let variants = this.listVariants();
 				for (let i = 0; i < variants.length; i++) {
 					for (let s = 0; s < 4; s++) {
-						if (variants[i].name == this.variantRects[s].kind.name) {
-							this.variantRects[s].isAble = true;
-							this.variantRects[s].field = this.fields[this.fieldsNewTower[j].coordinates[0]][this.fieldsNewTower[j].coordinates[1]]
+						for (let t = 0; t < 3; t++) {
+
+							if ((variants[i].name == this.variantRects[s].kind.name) && (this.fieldsNewTower[j].kind.name == variants[i].circles[t])){
+								this.variantRects[s].isAble = true;
+								this.variantRects[s].field = this.fields[this.fieldsNewTower[j].coordinates[0]][this.fieldsNewTower[j].coordinates[1]]
+							}
 						}
 					}
 				}
@@ -24089,7 +24090,14 @@ class SingleStrategy {
 					this.variantRects[i].draw.addEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
 				}
 			}
-			
+			for (let i = 0; i < 4; i++) {
+				this.variantRects[i].isAble = false;
+				this.variantRects[i].field = 0;
+				this.variantRects[i].draw.setStroke('black');
+				this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+				this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+
+			}			
 		}
 	}
 
@@ -24168,7 +24176,7 @@ class SingleStrategy {
 	playerStep() {
 		for (let i = 0; i < this.fieldsNewTower.length; i++) {
 			if (this.fieldsNewTower[i].numberChangesColors > 1) {
-				if (this.fieldsNewTower[i].numberChangesColors % 10 === 0) {
+				if (this.fieldsNewTower[i].numberChangesColors % 4 === 0) {
 					let color = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)].color;
 					this.fieldsNewTower[i].draw.setFill(color);
 				}
@@ -24177,7 +24185,9 @@ class SingleStrategy {
 				let endColor = this.fieldsNewTower[i].kind.color;
 				this.fieldsNewTower[i].draw.setFill(endColor);
 				this.fieldsNewTower[i].numberChangesColors--;
-				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+				let x = this.fieldsNewTower[i].coordinates[0];
+				let y = this.fieldsNewTower[i].coordinates[1];
+				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, this.fields[x][y]) } ); 
 			}
 		}
 	}
@@ -24188,14 +24198,21 @@ class SingleStrategy {
 			this.path = this.findPath(this.settings.checkpoints);
 		}
 
+		
+
 		if (this.enemiesNumber < this.settings.numberMonstersInWave) {
-			let monster = new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl);
-			monster.health += this.settings.addHPInWave * (this.wave - 1);
-			this.enemies.push(monster);
-			for (let i = 0; i < this.fieldsWithCircles.length; i++){
-				this.fieldsWithCircles[i].tower.bulletes.push([]);
+			if (this.betweenEnemies > 10) {
+				let monster = new __WEBPACK_IMPORTED_MODULE_2__gameObjects_monster_js__["a" /* default */](this.settings.triangl);
+				monster.health += this.settings.addHPInWave * (this.wave - 1);
+				this.enemies.push(monster);
+				this.betweenEnemies = 0;
+				for (let i = 0; i < this.fieldsWithCircles.length; i++){
+					this.fieldsWithCircles[i].tower.bulletes.push([]);
+				}
+				this.enemiesNumber++;
+			} else {
+				this.betweenEnemies++;
 			}
-			this.enemiesNumber++;
 		}
 
 		for (let i = 0; i < this.fieldsWithCircles.length; i++){
@@ -24203,8 +24220,14 @@ class SingleStrategy {
 				let distY = this.enemies[j].draw.getY() - this.fieldsWithCircles[i].tower.draw.getY();
 				let distX = this.enemies[j].draw.getX() - this.fieldsWithCircles[i].tower.draw.getX();
 				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithCircles[i].tower.radiusFight){
-					this.fieldsWithCircles[i].tower.fire(j);
-					break;
+					if (this.betweenBulles >= 2) {
+						this.fieldsWithCircles[i].tower.fire(j);
+						this.betweenBulles = 0;
+						break;	
+					} else {
+						this.betweenBulles++;
+					}
+					
 				};
 			};
 			for (let j = 0; j < this.fieldsWithCircles[i].tower.bulletes.length; j++){
@@ -24235,6 +24258,27 @@ class SingleStrategy {
 				}
 			}
 		}
+
+		for (let i = 0; i < this.fieldsWithStars.length; i++) {
+			this.fieldsWithStars[i].tower.bulletes = [];
+			for (let j = 0; j < this.enemies.length; j++) {
+				let distY = this.enemies[j].draw.getY() - this.fieldsWithStars[i].tower.draw.getY();
+				let distX = this.enemies[j].draw.getX() - this.fieldsWithStars[i].tower.draw.getX();
+				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithStars[i].tower.radiusFight){
+					this.fieldsWithStars[i].tower.fire(this.enemies[j]);
+					break;
+				}
+			}
+			for (let j = this.enemies.length - 1; j >= 0; j--) {
+				let distY = this.enemies[j].draw.getY() - this.fieldsWithStars[i].tower.draw.getY();
+				let distX = this.enemies[j].draw.getX() - this.fieldsWithStars[i].tower.draw.getX();
+				if (Math.pow(distX * distX + distY * distY, 0.5) <= this.fieldsWithStars[i].tower.radiusFight){
+					this.fieldsWithStars[i].tower.fire(this.enemies[j]);
+					break;
+				}
+			}
+		}
+
 		for (let i = 0; i < this.enemies.length; i++) {
 			let place = this.path[this.enemies[i].numberTurns];
 			let distX = -this.enemies[i].draw.getX() + (this.settings.mapX + place[0] * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2);
@@ -24291,7 +24335,7 @@ class SingleStrategy {
 			}
 		}
 
-		if (this.enemies.length === 0) {
+		if ((this.enemies.length === 0) && (this.enemiesNumber >= this.settings.numberMonstersInWave)) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].NEW_WAVE_STARTED, {
@@ -24315,8 +24359,11 @@ class SingleStrategy {
 			for (let i = 0; i < this.fieldsWithPentagons.length; i++){
 				this.fieldsWithPentagons[i].tower.bulletes = 0;
 			}
+			for (let i = 0; i < this.fieldsWithStars.length; i++){
+				this.fieldsWithStars[i].tower.bulletes = [];
+			}
 			this.path = [];
-		};
+		}
 	}
 
 	findPath(checkpoints) {

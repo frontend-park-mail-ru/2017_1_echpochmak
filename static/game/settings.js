@@ -42,6 +42,8 @@ class Settings {
 		this.damage = 1;
 		this.addDamageInWave = 1;
 
+
+
 		this.circleRed = {
 			name: 'circleRed',
 			color: '#FF0000',
@@ -122,7 +124,7 @@ class Settings {
 
 		this.star = {
 			name: 'star',
-			colors: 'khaki',
+			color: 'khaki',
 			power: 100,
 			radiusFight: 400,
 			numberBullets: 3,

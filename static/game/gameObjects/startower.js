@@ -32,6 +32,6 @@ class StarTower {
 			lineCap: 'round',
 			lineJoin: 'round',
 		}))
-		enemie.health -= 2;
+		enemie.health -= this.settings.starTowerDamage;
 	}
 }

@@ -42,7 +42,9 @@ class Settings {
 		this.damage = 1;
 		this.addDamageInWave = 1;
 
-
+		this.circleTowerDamage = 10;
+		this.pentagonTpwerDamage = 10;
+		this.starTowerDamage = 10;
 
 		this.circleRed = {
 			name: 'circleRed',

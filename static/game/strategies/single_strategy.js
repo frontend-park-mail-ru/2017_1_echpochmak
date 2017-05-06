@@ -554,8 +554,6 @@ class SingleStrategy {
 			this.path = this.findPath(this.settings.checkpoints);
 		}
 
-		
-
 		if (this.enemiesNumber < this.settings.numberMonstersInWave) {
 			if (this.betweenEnemies > 10) {
 				let monster = new Monster(this.settings.triangl);
@@ -592,7 +590,7 @@ class SingleStrategy {
 					let distX = this.enemies[j].draw.getX() - this.fieldsWithCircles[i].tower.bulletes[j][s].getX();
 					if (Math.abs(distX) < this.enemies[j].kind.size && Math.abs(distY) < this.enemies[j].kind.size){
 						this.fieldsWithCircles[i].tower.bulletes[j].splice(s, 1);
-						this.enemies[j].health -= 10;
+						this.enemies[j].health -= this.settings.circleTowerDamage;
 						continue;
 					}
 					let stepX = this.settings.bulletStep / Math.pow(1 + Math.pow(distY/distX, 2), 0.5) * Math.abs(distX) / distX;

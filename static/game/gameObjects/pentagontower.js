@@ -36,6 +36,6 @@ class PentagonTower {
 			lineJoin: 'round'
 		});
 		this.bulletes.enemie = enemie;
-		enemie.health -= 2;
+		enemie.health -= this.settings.pentagonTpwerDamage;
 	}
 }

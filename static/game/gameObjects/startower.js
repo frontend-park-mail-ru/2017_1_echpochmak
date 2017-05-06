@@ -12,11 +12,6 @@ class StarTower {
 			innerRadius: radius / 2,
 			outerRadius: radius,
 			fill: 'khaki',
-			//fillRadialGradientStartPoint: 0,
-			//fillRadialGradientStartRadius: 0,
-			//fillRadialGradientEndPoint: 0,
-			//fillRadialGradientEndRadius: radius,
-			//fillRadialGradientColorStops: [0, name.colors[0], 0.5, name.colors[1], 1, name.colors[2]],
 			stroke: 'black',
 			strokeWidth: 0,
 		});
@@ -25,16 +20,6 @@ class StarTower {
 		this.radiusFight = name.radiusFight;
 	}
 
-	//fire() {
-	//	this.bulletes.push(new Konva.Circle({
-	//		x: this.draw.x,
-	//		y: this.draw.y,
-	//		radius: 5,
-	//		stroke: 'black',
-	//		strokeWidth: 0,
-	//		fill: 'black'
-	//	}));
-	//}
 	fire(enemie) {
 		let x1 = this.draw.getX();
 		let y1 = this.draw.getY();

@@ -322,7 +322,7 @@ class SingleStrategy {
 			this.settings.variantRadius
 		);
 		star.draw.addEventListener('click', () => {this.onClickNewStar.call(this, field, this.settings.star)});
-		this.variantsShow.push();
+		this.variantsShow.push(star);
 	}
 
 	onClickNewStar(field, kind) {
@@ -330,9 +330,9 @@ class SingleStrategy {
 		let y = field.coordinates[1];
 		let xp = this.settings.mapX + x * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
 		let yp = this.settings.mapY + y * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
-		let deletePentagons = new Array(...field.tower.kind.pentagons);
+		let deletePentagons = new Array(...kind.pentagons);
 		for (let i = 0; i < deletePentagons.length; i++){
-			if (deletePentagons[i] === field.tower.kind.name) {
+			if (deletePentagons[i] == field.tower.kind.name) {
 				deletePentagons.splice(i, 1);
 			}
 		}
@@ -340,7 +340,7 @@ class SingleStrategy {
 			let xCoord = this.fieldsWithPentagons[i].coordinates[0];
 			let yCoord = this.fieldsWithPentagons[i].coordinates[1];
 			if (xCoord === field.coordinates[0] && yCoord === field.coordinates[1]){
-				this.fieldsWithCircles.splice(i, 1);
+				this.fieldsWithPentagons.splice(i, 1);
 			}
 		}
 
@@ -348,7 +348,7 @@ class SingleStrategy {
 		this.fields[x][y].tower = new StarTower(kind, xp, yp, this.settings.fieldSize / 2 - 2);
 		this.fieldsWithStars.push(field);
 		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
-			if (this.fieldsWithPentagons[i].tower.kind.name === deletePentagons[0]){
+			if (this.fieldsWithPentagons[i].tower.kind.name == deletePentagons[0]){
 				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
 				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
 				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
@@ -359,7 +359,7 @@ class SingleStrategy {
 			};
 		};
 		for (let i = 0; i < this.fieldsWithPentagons.length; i++){
-			if (this.fieldsWithPentagons[i].tower.kind.name === deleteCircles[1]){
+			if (this.fieldsWithPentagons[i].tower.kind.name == deletePentagons[1]){
 				let xCoord = this.fieldsWithPentagons[i].coordinates[0];
 				let yCoord = this.fieldsWithPentagons[i].coordinates[1];
 				let xPixel = this.settings.mapX + xCoord * (this.settings.fieldSize + 2) + this.settings.fieldSize / 2;
@@ -373,10 +373,7 @@ class SingleStrategy {
 		this.towers[deletePentagons[0]]--;
 		this.towers[deletePentagons[1]]--;
 		this.variantsShow = [];
-		for (let i = 0; i < 4; i++) {
-			this.variantRects[i].draw.setStroke('black');
-			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
-		}
+
 	}
 
 	generateTower(field) {
@@ -420,9 +417,12 @@ class SingleStrategy {
 				let variants = this.listVariants();
 				for (let i = 0; i < variants.length; i++) {
 					for (let s = 0; s < 4; s++) {
-						if (variants[i].name == this.variantRects[s].kind.name) {
-							this.variantRects[s].isAble = true;
-							this.variantRects[s].field = this.fields[this.fieldsNewTower[j].coordinates[0]][this.fieldsNewTower[j].coordinates[1]]
+						for (let t = 0; t < 3; t++) {
+
+							if ((variants[i].name == this.variantRects[s].kind.name) && (this.fieldsNewTower[j].kind.name == variants[i].circles[t])){
+								this.variantRects[s].isAble = true;
+								this.variantRects[s].field = this.fields[this.fieldsNewTower[j].coordinates[0]][this.fieldsNewTower[j].coordinates[1]]
+							}
 						}
 					}
 				}
@@ -523,7 +523,9 @@ class SingleStrategy {
 				let endColor = this.fieldsNewTower[i].kind.color;
 				this.fieldsNewTower[i].draw.setFill(endColor);
 				this.fieldsNewTower[i].numberChangesColors--;
-				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
+				let x = this.fieldsNewTower[i].coordinates[0];
+				let y = this.fieldsNewTower[i].coordinates[1];
+				this.fieldsNewTower[i].draw.addEventListener('click', () => { this.createVariants.call(this, this.fields[x][y]) } ); 
 			}
 		}
 	}
@@ -532,6 +534,15 @@ class SingleStrategy {
 
 		if (this.path.length === 0) {
 			this.path = this.findPath(this.settings.checkpoints);
+		}
+
+		for (let i = 0; i < 4; i++) {
+			this.variantRects[i].isAble = false;
+			this.variantRects[i].field = 0;
+			this.variantRects[i].draw.setStroke('black');
+			this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+			this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
+
 		}
 
 		if (this.enemiesNumber < this.settings.numberMonstersInWave) {
@@ -637,7 +648,7 @@ class SingleStrategy {
 			}
 		}
 
-		if (this.enemies.length === 0) {
+		//if (this.enemies.length === 0) {
 			this.status = 'playerStep';
 			this.wave++;
 			this.mediator.emit(Events.NEW_WAVE_STARTED, {
@@ -662,7 +673,7 @@ class SingleStrategy {
 				this.fieldsWithPentagons[i].tower.bulletes = 0;
 			}
 			this.path = [];
-		};
+		//};
 	}
 
 	findPath(checkpoints) {

@@ -37,10 +37,12 @@ class Settings {
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 10;
+		this.numberChangesColors = 25;
 		this.throneHealth = 100;
 		this.damage = 1;
 		this.addDamageInWave = 1;
+
+
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -122,7 +124,7 @@ class Settings {
 
 		this.star = {
 			name: 'star',
-			colors: 'khaki',
+			color: 'khaki',
 			power: 100,
 			radiusFight: 400,
 			numberBullets: 3,

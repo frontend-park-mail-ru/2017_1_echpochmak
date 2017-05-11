@@ -21,7 +21,7 @@ class SinglePlayer extends BaseView {
 
 		this.startSubView = new SinglePlayerStart();
 		this.gameSubView = new SinglePlayerGame();
-		this.gameManager = new GameManager(new SingleStrategy());
+		// this.gameManager = new GameManager(new SingleStrategy());
 
 		this.router = new Router();
 		this.mediator = new Mediator();

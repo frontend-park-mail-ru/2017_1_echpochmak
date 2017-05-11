@@ -6,7 +6,7 @@ import Register from './views/registration.js'
 import About from './views/about.js'
 import LeaderBoard from './views/leaderboard.js'
 import SinglePlayer from './views/singleplayer/singleplayer.js'
-import MultiPlayer from './views/multiplayer.js'
+import MultiPlayer from './views/multiplayer/multiplayer.js'
 import Authorize from './services/authorize.js'
 import HTTP from './modules/http.js'
 import Router from './modules/router.js'
@@ -17,6 +17,7 @@ const http = new HTTP();
 const router = new Router();
 
 http.BaseURL = 'https://gem-td-back.herokuapp.com';
+// http.BaseURL = 'http://localhost:8082';
 
 router.register('/', new Menu());
 router.register('/login/', new Login());

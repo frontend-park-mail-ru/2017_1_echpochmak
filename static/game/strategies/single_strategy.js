@@ -20,6 +20,9 @@ class SingleStrategy {
 	}
 
 	init() {
+
+		console.log('single_strategy');
+
 		this.mediator = new Mediator();
 		this.settings = new Settings();
 		this.scene = new Scene();

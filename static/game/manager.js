@@ -23,7 +23,6 @@ class GameManager {
 	}
 
 	start() {
-		// this.strategy = new SingleStrategy();
 		this.strategy.init();
 		this.play = true;
 		this.requestID = requestAnimationFrame(this.gameLoop.bind(this));

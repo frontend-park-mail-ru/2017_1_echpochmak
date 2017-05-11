@@ -6,9 +6,9 @@ class MultiplayerStrategy {
 
 	init() {
 
+		console.log('multi_strategy');
 
 		this.timer = 0;
-
 
 		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
 
@@ -32,10 +32,17 @@ class MultiplayerStrategy {
 	}
 
 	gameStep() {
-		// this.timer++;
-		// if (this.timer > 100) {
-		// 	this.ws.send(this.timer);
-		// 	this.timer = 0;
-		// }
+		this.timer++;
+		if (this.timer > 100) {
+			this.ws.send(JSON.stringify({
+				'techpark.game.base.ClientSnap': {
+					square: {
+						x: '2',
+						y: '2'
+					}
+				},
+			}));
+			this.timer = 0;
+		}
 	}
 }

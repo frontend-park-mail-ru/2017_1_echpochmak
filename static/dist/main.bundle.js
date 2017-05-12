@@ -20114,13 +20114,24 @@ class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /*
 
 class GameManager {
 	constructor(strategy) {
+
+		if (GameManager.__instance) {
+			return GameManager.__instance;
+		}
+		
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_1__mediator_js__["a" /* default */]();
-		this.strategy = strategy;
 
 		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].PLAY_NEW_GAME, this.start.bind(this));
 		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].PLAY_AGAIN, this.start.bind(this));
 		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].GAME_FINISHED, this.end.bind(this));
 		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].QUIT_CONFIRMED, this.end.bind(this));
+
+		GameManager.__instance = this;
+	}
+
+	setStrategy(strategy) {
+		this.play = false;
+		this.strategy = strategy;
 	}
 
 	gameLoop() {
@@ -20131,6 +20142,7 @@ class GameManager {
 	}
 
 	start() {
+		console.log(this.strategy);
 		this.strategy.init();
 		this.play = true;
 		this.requestID = requestAnimationFrame(this.gameLoop.bind(this));
@@ -20756,7 +20768,6 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 
 		// this.startSubView = new MultiPlayerStart();
 		this.gameSubView = new __WEBPACK_IMPORTED_MODULE_3__singleplayer_game_js__["a" /* default */]();
-		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */](new __WEBPACK_IMPORTED_MODULE_4__game_strategies_multi_strategy_js__["a" /* default */]());
 
 		this.router = new __WEBPACK_IMPORTED_MODULE_7__modules_router_js__["a" /* default */]();
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__["a" /* default */]();
@@ -20771,7 +20782,8 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 	onStartGame() {
 		// this.get().removeChild(this.startSubView.get());
 		// this.get().appendChild(this.gameSubView.get());
-		// this.mediator.emit(Events.PLAY_NEW_GAME);
+		
+		this.mediator.emit(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].PLAY_NEW_GAME);
 	}
 
 	onQuitConfirm() {
@@ -20797,6 +20809,8 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 
 	show() {
 		super.show();
+		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */]();
+		this.gameManager.setStrategy(new __WEBPACK_IMPORTED_MODULE_4__game_strategies_multi_strategy_js__["a" /* default */]());
 		this.mediator.emit(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].PLAY_NEW_GAME);
 	}
 }
@@ -20908,7 +20922,6 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 
 		this.startSubView = new __WEBPACK_IMPORTED_MODULE_2__start_js__["a" /* default */]();
 		this.gameSubView = new __WEBPACK_IMPORTED_MODULE_3__game_js__["a" /* default */]();
-		// this.gameManager = new GameManager(new SingleStrategy());
 
 		this.router = new __WEBPACK_IMPORTED_MODULE_7__modules_router_js__["a" /* default */]();
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__["a" /* default */]();
@@ -20923,6 +20936,7 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 	onStartGame() {
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
+		
 		this.mediator.emit(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].PLAY_NEW_GAME);
 	}
 
@@ -20945,6 +20959,12 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 
 	unloginSwitch(user) {
 		this.gameSubView.unloginSwitch(user);
+	}
+
+	show() {
+		super.show();
+		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */]();
+		this.gameManager.setStrategy(new __WEBPACK_IMPORTED_MODULE_4__game_strategies_single_strategy_js__["a" /* default */]());
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SinglePlayer;
@@ -24638,7 +24658,7 @@ class SingleStrategy {
 		return(path);
 	}
 }
-/* unused harmony export default */
+/* harmony export (immutable) */ __webpack_exports__["a"] = SingleStrategy;
 
 
 

@@ -21,7 +21,6 @@ class SinglePlayer extends BaseView {
 
 		this.startSubView = new SinglePlayerStart();
 		this.gameSubView = new SinglePlayerGame();
-		// this.gameManager = new GameManager(new SingleStrategy());
 
 		this.router = new Router();
 		this.mediator = new Mediator();
@@ -36,6 +35,7 @@ class SinglePlayer extends BaseView {
 	onStartGame() {
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
+		
 		this.mediator.emit(Events.PLAY_NEW_GAME);
 	}
 
@@ -58,5 +58,11 @@ class SinglePlayer extends BaseView {
 
 	unloginSwitch(user) {
 		this.gameSubView.unloginSwitch(user);
+	}
+
+	show() {
+		super.show();
+		this.gameManager = new GameManager();
+		this.gameManager.setStrategy(new SingleStrategy());
 	}
 }

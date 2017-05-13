@@ -1,7 +1,12 @@
+import Mediator from './mediator.js'
+import Authorize from '../services/authorize.js'
+import Events from './events.js'
+
 export default
 class WebSocketService {
 	constructor() {
-
+		this.mediator = new Mediator();
+		this.authorize = new Authorize();
 	}
 
 	open() {
@@ -26,7 +31,11 @@ class WebSocketService {
 		};
 
 		this.ws.onmessage = (event) => {
-			console.log(this.parseMessage(event.data));
+			const object = this.parseMessage(event.data);
+
+			console.log(object);
+
+			this.parseObject(object);
 		};
 	}
 
@@ -60,7 +69,14 @@ class WebSocketService {
 
 	parseObject(object) {
 		if (object.type === 'techpark.game.base.ServerMazeSnap') {
-
+			const obj = {};
+			obj.map = object.content.map;
+			if (object.content.user === this.authorize.user.username) {
+				obj.myself = true;
+			} else {
+				obj.myself = false;
+			}
+			this.mediator.emit(Events.MULTIPLAYER_NEW_MAP_SNAPSHOT, obj);
 		}
 	}
 }

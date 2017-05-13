@@ -142,22 +142,9 @@ class MultiplayerStrategy {
 
 		this.state = {};
 
+		this.mediator.subscribe(Events.MULTIPLAYER_NEW_MAP_SNAPSHOT, 
+			this.updateMap.bind(this));
 	}
-
-	//gameStep() {
-	//	this.timer++;
-	//	if (this.timer > 100) {
-	//		this.ws.send(JSON.stringify({
-	//			'techpark.game.base.ClientSnap': {
-	//				square: {
-	//					x: '2',
-	//					y: '2'
-	//				}
-	//			},
-	//		}));
-	//		this.timer = 0;
-	//	}
-	//}
 
 	gameStep() {
 		if (this.status === 'playerStep') {
@@ -185,6 +172,10 @@ class MultiplayerStrategy {
 			fieldsWithStars: this.fieldsWithStars,
 			checkpoints: this.checkpoints,
 		}
+	}
+
+	updateMap(arg) {
+		console.log(arg);
 	}
 
 	isAbleTower(place) {
@@ -222,17 +213,6 @@ class MultiplayerStrategy {
 		return false;
 	}
 
-	//onClickField(field) {
-	//	this.ws.send(JSON.stringify({
-	//		'techpark.game.base.ClientSnap': {
-	//			square: {
-	//				x: '2',
-	//				y: '2'
-	//			}
-	//		},
-	//	}));
-	//}
-
 	onClickField(field) {
 		console.log(field.coordinates[0], field.coordinates[1]);
 		this.ws.sendNewTower({
@@ -247,8 +227,7 @@ class MultiplayerStrategy {
 		//} else if (this.variantRects.length < 5) {
 		//	let waveButton = new VariantBlock(4, "You cant stop monsters");
 		//	this.variantRects.push(waveButton);
-		//}		
-	
+		//}	
 
 	onOverField(field) {
 		field.field.setStroke(this.isAbleTower(field) ? 'green' : 'red');

@@ -10,6 +10,9 @@ const Events = {
 	NEW_WAVE_STARTED: 	9,
 	GET_SCORE: 			10,
 	THRONE_DAMAGE: 		11,
+
+	MULTIPLAYER_NEW_MAP_SNAPSHOT: 	12,
+
 }
 
 export default Events;

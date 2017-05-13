@@ -338,6 +338,70 @@ class Authorize {
 
 /***/ }),
 /* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const Events = {
+	GAME_START: 		1,
+	PLAY_NEW_GAME: 		2,
+	TRY_QUIT: 			3,
+	QUIT_CONFIRMED: 	4,
+	QUIT_CANCELED: 		5,
+	GAME_FINISHED: 		6,
+	PLAY_AGAIN: 		7,
+	EXIT_TO_MENU: 		8,
+	NEW_WAVE_STARTED: 	9,
+	GET_SCORE: 			10,
+	THRONE_DAMAGE: 		11,
+
+	MULTIPLAYER_NEW_MAP_SNAPSHOT: 	12,
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Events);
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Mediator {
+	constructor() {
+		if (Mediator.__instance) {
+			return Mediator.__instance;
+		}
+
+		this.messages = {};
+
+		Mediator.__instance = this;
+	}
+
+	emit(event, args) {
+		if (event in this.messages) {
+			for (const callback of this.messages[event]) {
+				callback(args);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	subscribe(event, callback) {
+		if (event in this.messages) {
+			this.messages[event].push(callback);
+		} else {
+			this.messages[event] = [callback];
+		}
+		return true;
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Mediator;
+
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*
@@ -18396,67 +18460,6 @@ class Authorize {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(72)))
 
 /***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const Events = {
-	GAME_START: 		1,
-	PLAY_NEW_GAME: 		2,
-	TRY_QUIT: 			3,
-	QUIT_CONFIRMED: 	4,
-	QUIT_CANCELED: 		5,
-	GAME_FINISHED: 		6,
-	PLAY_AGAIN: 		7,
-	EXIT_TO_MENU: 		8,
-	NEW_WAVE_STARTED: 	9,
-	GET_SCORE: 			10,
-	THRONE_DAMAGE: 		11,
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Events);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class Mediator {
-	constructor() {
-		if (Mediator.__instance) {
-			return Mediator.__instance;
-		}
-
-		this.messages = {};
-
-		Mediator.__instance = this;
-	}
-
-	emit(event, args) {
-		if (event in this.messages) {
-			for (const callback of this.messages[event]) {
-				callback(args);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	subscribe(event, callback) {
-		if (event in this.messages) {
-			this.messages[event].push(callback);
-		} else {
-			this.messages[event] = [callback];
-		}
-		return true;
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Mediator;
-
-
-
-/***/ }),
 /* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -20110,7 +20113,7 @@ class Input extends __WEBPACK_IMPORTED_MODULE_0__BaseBlock_baseblock_js__["a" /*
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20155,7 +20158,7 @@ class Arrow {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20197,7 +20200,7 @@ class CircleTower {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20234,7 +20237,7 @@ class Monster {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20285,7 +20288,7 @@ class PentagonTower {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20333,8 +20336,8 @@ class StarTower {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__strategies_strategy_js__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__strategies_strategy_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__strategies_strategy_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_userservice_js__ = __webpack_require__(10);
 
 
@@ -20392,7 +20395,7 @@ class GameManager {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20504,7 +20507,7 @@ class Scene {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__settings_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_konva__);
 
 
@@ -20938,9 +20941,9 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_strategies_multi_strategy_js__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_manager_js__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_router_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__game_events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__game_events_js__ = __webpack_require__(5);
 
 
 
@@ -21093,9 +21096,9 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_strategies_single_strategy_js__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_manager_js__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_router_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__game_events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__game_events_js__ = __webpack_require__(5);
 
 
 
@@ -23692,10 +23695,10 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__transport_js__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_konva__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_pathfinding__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_pathfinding___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_pathfinding__);
@@ -23842,22 +23845,9 @@ class MultiplayerStrategy {
 
 		this.state = {};
 
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_9__events_js__["a" /* default */].MULTIPLAYER_NEW_MAP_SNAPSHOT, 
+			this.updateMap.bind(this));
 	}
-
-	//gameStep() {
-	//	this.timer++;
-	//	if (this.timer > 100) {
-	//		this.ws.send(JSON.stringify({
-	//			'techpark.game.base.ClientSnap': {
-	//				square: {
-	//					x: '2',
-	//					y: '2'
-	//				}
-	//			},
-	//		}));
-	//		this.timer = 0;
-	//	}
-	//}
 
 	gameStep() {
 		if (this.status === 'playerStep') {
@@ -23885,6 +23875,10 @@ class MultiplayerStrategy {
 			fieldsWithStars: this.fieldsWithStars,
 			checkpoints: this.checkpoints,
 		}
+	}
+
+	updateMap(arg) {
+		console.log(arg);
 	}
 
 	isAbleTower(place) {
@@ -23922,17 +23916,6 @@ class MultiplayerStrategy {
 		return false;
 	}
 
-	//onClickField(field) {
-	//	this.ws.send(JSON.stringify({
-	//		'techpark.game.base.ClientSnap': {
-	//			square: {
-	//				x: '2',
-	//				y: '2'
-	//			}
-	//		},
-	//	}));
-	//}
-
 	onClickField(field) {
 		console.log(field.coordinates[0], field.coordinates[1]);
 		this.ws.sendNewTower({
@@ -23947,8 +23930,7 @@ class MultiplayerStrategy {
 		//} else if (this.variantRects.length < 5) {
 		//	let waveButton = new VariantBlock(4, "You cant stop monsters");
 		//	this.variantRects.push(waveButton);
-		//}		
-	
+		//}	
 
 	onOverField(field) {
 		field.field.setStroke(this.isAbleTower(field) ? 'green' : 'red');
@@ -24504,9 +24486,9 @@ class MultiplayerStrategy {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gameObjects_startower_js__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__variantBlock_js__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_konva__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_konva__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_pathfinding__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_pathfinding___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_pathfinding__);
@@ -25285,9 +25267,17 @@ class SingleStrategy {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_authorize_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__events_js__ = __webpack_require__(5);
+
+
+
+
 class WebSocketService {
 	constructor() {
-
+		this.mediator = new __WEBPACK_IMPORTED_MODULE_0__mediator_js__["a" /* default */]();
+		this.authorize = new __WEBPACK_IMPORTED_MODULE_1__services_authorize_js__["a" /* default */]();
 	}
 
 	open() {
@@ -25312,7 +25302,11 @@ class WebSocketService {
 		};
 
 		this.ws.onmessage = (event) => {
-			console.log(this.parseMessage(event.data));
+			const object = this.parseMessage(event.data);
+
+			console.log(object);
+
+			this.parseObject(object);
 		};
 	}
 
@@ -25346,7 +25340,14 @@ class WebSocketService {
 
 	parseObject(object) {
 		if (object.type === 'techpark.game.base.ServerMazeSnap') {
-
+			const obj = {};
+			obj.map = object.content.map;
+			if (object.content.user === this.authorize.user.username) {
+				obj.myself = true;
+			} else {
+				obj.myself = false;
+			}
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].MULTIPLAYER_NEW_MAP_SNAPSHOT, obj);
 		}
 	}
 }
@@ -25412,8 +25413,8 @@ const auth = new __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__["a" /* def
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
 
 
@@ -25629,8 +25630,8 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(5);
 
 
 
@@ -25686,8 +25687,8 @@ class MultiPlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_authorize_js__ = __webpack_require__(4);
 
 
@@ -25903,8 +25904,8 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_mediator_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_events_js__ = __webpack_require__(5);
 
 
 

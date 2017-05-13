@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 83);
+/******/ 	return __webpack_require__(__webpack_require__.s = 84);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -590,8 +590,8 @@ class Authorize {
       // Node. Does not work with strict CommonJS, but
       // only CommonJS-like enviroments that support module.exports,
       // like Node.
-      var Canvas = __webpack_require__(88);
-      var jsdom = __webpack_require__(89).jsdom;
+      var Canvas = __webpack_require__(89);
+      var jsdom = __webpack_require__(90).jsdom;
 
       Konva.window = jsdom(
         '<!DOCTYPE html><html><head></head><body></body></html>'
@@ -20934,8 +20934,8 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_strategies_multi_strategy_js__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_manager_js__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(7);
@@ -21089,8 +21089,8 @@ class Register extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseview_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__start_js__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_js__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__game_strategies_single_strategy_js__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__game_manager_js__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(7);
@@ -23694,7 +23694,7 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__transport_js__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__transport_js__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_konva__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_pathfinding__ = __webpack_require__(21);
@@ -25285,6 +25285,79 @@ class SingleStrategy {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+class WebSocketService {
+	constructor() {
+
+	}
+
+	open() {
+		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
+
+		this.ws.onopen = () => { 
+			console.log('open');
+			this.sendObject({ 
+				type: 'techpark.game.events.JoinGame',
+				content: {}
+			});
+		};
+
+		this.ws.onerror = (error) => {
+			console.log('error ', error.message);
+		};
+
+		this.ws.onclose = (event) => {
+			console.log('close');
+			console.log('code: ', event.code);
+			console.log('reason: ', event.reason);
+		};
+
+		this.ws.onmessage = (event) => {
+			console.log(this.parseMessage(event.data));
+		};
+	}
+
+	sendNewTower(coord) {
+		this.sendObject({
+			type: 'techpark.game.base.ClientSnap',
+			content: {
+				square: {
+					x: coord.x,
+					y: coord.y
+				},
+			}
+		});
+	}
+
+	sendObject(message) {
+		if (message.content) {
+			message.content = JSON.stringify(message.content);
+		}
+		message = JSON.stringify(message);
+		this.ws.send(message);
+	}
+
+	parseMessage(message) {
+		message = JSON.parse(message);
+		if (message.content) {
+			message.content = JSON.parse(message.content);
+		}
+		return message;
+	}
+
+	parseObject(object) {
+		if (object.type === 'techpark.game.base.ServerMazeSnap') {
+
+		}
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = WebSocketService;
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__views_menu_js__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_login_js__ = __webpack_require__(37);
@@ -25333,7 +25406,7 @@ const auth = new __WEBPACK_IMPORTED_MODULE_7__services_authorize_js__["a" /* def
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25550,7 +25623,7 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25607,7 +25680,7 @@ class MultiPlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25824,7 +25897,7 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25881,12 +25954,6 @@ class SinglePlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /
 
 
 /***/ }),
-/* 88 */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
 /* 89 */
 /***/ (function(module, exports) {
 
@@ -25894,72 +25961,9 @@ class SinglePlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /
 
 /***/ }),
 /* 90 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-class WebSocketService {
-	constructor() {
-
-	}
-
-	open() {
-		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
-
-		this.ws.onopen = () => { 
-			console.log('open');
-			this.sendObject({ 
-				type: 'techpark.game.events.JoinGame',
-				content: {}
-			});
-		};
-
-		this.ws.onerror = (error) => {
-			console.log('error ', error.message);
-		};
-
-		this.ws.onclose = (event) => {
-			console.log('close');
-			console.log('code: ', event.code);
-			console.log('reason: ', event.reason);
-		};
-
-		this.ws.onmessage = (event) => {
-			console.log(this.parseMessage(event.data));
-		};
-	}
-
-	sendNewTower(coord) {
-		this.sendObject({
-			type: 'techpark.game.base.ClientSnap',
-			content: {
-				square: {
-					x: coord.x,
-					y: coord.y
-				},
-			}
-		});
-	}
-
-	sendObject(message) {
-		message.content = JSON.stringify(message.content);
-		message = JSON.stringify(message);
-		this.ws.send(message);
-	}
-
-	parseMessage(message) {
-		message = JSON.parse(message);
-		message.content = JSON.parse(message.content);
-		return message;
-	}
-
-	parseObject(object) {
-		if (object.type === 'techpark.game.base.ServerMazeSnap') {
-			
-		}
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = WebSocketService;
-
+/* (ignored) */
 
 /***/ })
 /******/ ]);

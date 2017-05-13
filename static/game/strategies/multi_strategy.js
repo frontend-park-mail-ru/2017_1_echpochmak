@@ -8,6 +8,7 @@ import VariantBlock from '../variantBlock.js'
 import Arrow from '../gameObjects/arrow.js'
 import Mediator from '../mediator.js'
 import Events from '../events.js'
+import WebSocketService from '../transport.js'
 
 import Konva from 'konva'
 import PF from 'pathfinding'
@@ -24,30 +25,8 @@ class MultiplayerStrategy {
 
 		this.timer = 0;
 
-		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
-
-		this.ws.onopen = () => {
-			console.log('open');
-			this.ws.send('{"type":"techpark.game.events.JoinGame","content":"{}"}');
-		};
-		this.ws.onerror = (error) => {
-			console.log('error ' + error.message);
-		};
-		this.ws.onclose = (event) => {
-			console.log('close');
-			console.log('code: ' + event.code);
-			console.log('reason: ' + event.reason);
-		};
-		this.ws.onmessage = (event) => {
-			const data = event.data;
-			const message = JSON.parse(data);
-	 
-			console.log('message: ', message);
-			// console.log('m1: ', event);
-			// console.log('m2: ', data);
-			// console.log('m3: ', message);
-		};
-
+		this.ws = new WebSocketService();
+		this.ws.open();
 
 		this.mediator = new Mediator();
 		this.settings = new Settings();
@@ -255,7 +234,11 @@ class MultiplayerStrategy {
 	//}
 
 	onClickField(field) {
-		this.ws.send({ "type": "techpark.game.base.ClientSnap", "content":  "{ \"square\": {  \"x\": 2, \"y\": 3}, \"comb\": \"\"}"})
+		console.log(field.coordinates[0], field.coordinates[1]);
+		this.ws.sendNewTower({
+			x: field.coordinates[1],
+			y: field.coordinates[0]
+		})
 	}
 		//if (this.isAbleTower(field)){
 		//	this.generateTower(field);

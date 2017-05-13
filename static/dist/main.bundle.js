@@ -18475,7 +18475,7 @@ class Settings {
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.mapSize = 15;
+		this.mapSize = 10;
 
 		this.checkpoints = [[0, 0], [0, this.mapSize - 1], [this.mapSize - 1, 0], [this.mapSize - 1, this.mapSize - 1]];
 
@@ -23694,10 +23694,12 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gameObjects_arrow_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mediator_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__events_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_konva__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_konva__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_pathfinding__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_pathfinding___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_pathfinding__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__transport_js__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_konva___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_konva__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_pathfinding__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_pathfinding___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_pathfinding__);
+
 
 
 
@@ -23723,30 +23725,8 @@ class MultiplayerStrategy {
 
 		this.timer = 0;
 
-		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
-
-		this.ws.onopen = () => {
-			console.log('open');
-			this.ws.send('{"type":"techpark.game.events.JoinGame","content":"{}"}');
-		};
-		this.ws.onerror = (error) => {
-			console.log('error ' + error.message);
-		};
-		this.ws.onclose = (event) => {
-			console.log('close');
-			console.log('code: ' + event.code);
-			console.log('reason: ' + event.reason);
-		};
-		this.ws.onmessage = (event) => {
-			const data = event.data;
-			const message = JSON.parse(data);
-	 
-			console.log('message: ', message);
-			// console.log('m1: ', event);
-			// console.log('m2: ', data);
-			// console.log('m3: ', message);
-		};
-
+		this.ws = new __WEBPACK_IMPORTED_MODULE_10__transport_js__["a" /* default */]();
+		this.ws.open();
 
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_8__mediator_js__["a" /* default */]();
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
@@ -23823,7 +23803,7 @@ class MultiplayerStrategy {
 			for (let j = 0; j < this.settings.mapSize; j++){
 				this.fields[j][i] = {
 					tower: 0,
-					field: new __WEBPACK_IMPORTED_MODULE_10_konva___default.a.Rect({
+					field: new __WEBPACK_IMPORTED_MODULE_11_konva___default.a.Rect({
 						x: this.settings.mapX + j * this.settings.fieldSize + j * 2,
 						y: this.settings.mapY + i * this.settings.fieldSize + i * 2,
 						width: this.settings.fieldSize,
@@ -23954,7 +23934,11 @@ class MultiplayerStrategy {
 	//}
 
 	onClickField(field) {
-		this.ws.send({ "type": "techpark.game.base.ClientSnap", "content":  "{ \"square\": {  \"x\": 2, \"y\": 3}, \"comb\": \"\"}"})
+		console.log(field.coordinates[0], field.coordinates[1]);
+		this.ws.sendNewTower({
+			x: field.coordinates[1],
+			y: field.coordinates[0]
+		})
 	}
 		//if (this.isAbleTower(field)){
 		//	this.generateTower(field);
@@ -24485,9 +24469,9 @@ class MultiplayerStrategy {
 			}
 		}
 
-		const finder = new __WEBPACK_IMPORTED_MODULE_11_pathfinding___default.a.BiAStarFinder({
+		const finder = new __WEBPACK_IMPORTED_MODULE_12_pathfinding___default.a.BiAStarFinder({
 			allowDiagonal: true,
-			heuristic: __WEBPACK_IMPORTED_MODULE_11_pathfinding___default.a.Heuristic.euclidean
+			heuristic: __WEBPACK_IMPORTED_MODULE_12_pathfinding___default.a.Heuristic.euclidean
 		});
 
 		let path = [];
@@ -24495,7 +24479,7 @@ class MultiplayerStrategy {
 			let subStart = checkpoints[i - 1];
 			let subFinish = checkpoints[i];
 
-			const grid = new __WEBPACK_IMPORTED_MODULE_11_pathfinding___default.a.Grid(matrix);
+			const grid = new __WEBPACK_IMPORTED_MODULE_12_pathfinding___default.a.Grid(matrix);
 			let subPath = finder.findPath(subStart[0], subStart[1], subFinish[0], subFinish[1], grid);
 
 			path = path.concat(subPath);
@@ -25907,6 +25891,75 @@ class SinglePlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 90 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class WebSocketService {
+	constructor() {
+
+	}
+
+	open() {
+		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
+
+		this.ws.onopen = () => { 
+			console.log('open');
+			this.sendObject({ 
+				type: 'techpark.game.events.JoinGame',
+				content: {}
+			});
+		};
+
+		this.ws.onerror = (error) => {
+			console.log('error ', error.message);
+		};
+
+		this.ws.onclose = (event) => {
+			console.log('close');
+			console.log('code: ', event.code);
+			console.log('reason: ', event.reason);
+		};
+
+		this.ws.onmessage = (event) => {
+			console.log(this.parseMessage(event.data));
+		};
+	}
+
+	sendNewTower(coord) {
+		this.sendObject({
+			type: 'techpark.game.base.ClientSnap',
+			content: {
+				square: {
+					x: coord.x,
+					y: coord.y
+				},
+			}
+		});
+	}
+
+	sendObject(message) {
+		message.content = JSON.stringify(message.content);
+		message = JSON.stringify(message);
+		this.ws.send(message);
+	}
+
+	parseMessage(message) {
+		message = JSON.parse(message);
+		message.content = JSON.parse(message.content);
+		return message;
+	}
+
+	parseObject(object) {
+		if (object.type === 'techpark.game.base.ServerMazeSnap') {
+			
+		}
+	}
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = WebSocketService;
+
 
 /***/ })
 /******/ ]);

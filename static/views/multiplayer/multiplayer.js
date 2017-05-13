@@ -3,8 +3,7 @@
 import BaseView from '../baseview.js'
 import BaseBlock from '../../components/BaseBlock/baseblock.js'
 import MultiPlayerStart from './start.js'
-import SinglePlayerGame from '../singleplayer/game.js'
-// import SingleStrategy from '../../game/strategies/single_strategy.js'
+import MultiPlayerGame from './game.js'
 import MultiStrategy from '../../game/strategies/multi_strategy.js'
 import GameManager from '../../game/manager.js'
 import Mediator from '../../game/mediator.js'
@@ -20,8 +19,9 @@ class MultiPlayer extends BaseView {
 		
 		this.get().removeChild(this.back.get());
 
-		// this.startSubView = new MultiPlayerStart();
-		this.gameSubView = new SinglePlayerGame();
+		this.startSubView = new MultiPlayerStart();
+		this.gameSubView = new MultiPlayerGame()
+		//this.gameSubView = new SinglePlayerGame();
 
 		this.router = new Router();
 		this.mediator = new Mediator();
@@ -34,15 +34,15 @@ class MultiPlayer extends BaseView {
 	}
 
 	onStartGame() {
-		// this.get().removeChild(this.startSubView.get());
-		// this.get().appendChild(this.gameSubView.get());
+		this.get().removeChild(this.startSubView.get());
+		this.get().appendChild(this.gameSubView.get());
 		
 		this.mediator.emit(Events.PLAY_NEW_GAME);
 	}
 
 	onQuitConfirm() {
-		// this.get().removeChild(this.gameSubView.get());
-		// this.get().appendChild(this.startSubView.get());
+		this.get().removeChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());
 	}
 
 	onExit() {

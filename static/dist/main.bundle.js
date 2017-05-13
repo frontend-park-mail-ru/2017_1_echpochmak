@@ -23844,6 +23844,7 @@ class MultiplayerStrategy {
 
 		this.ws.onopen = () => {
 			console.log('open');
+			this.ws.send('{"type":"techpark.game.events.JoinGame","content":"{}"}');
 		};
 		this.ws.onerror = (error) => {
 			console.log('error ' + error.message);
@@ -23857,23 +23858,26 @@ class MultiplayerStrategy {
 			const data = event.data;
 			const message = JSON.parse(data);
 	 
-			console.log('message: ' + message.text)
+			console.log('message: ', message);
+			// console.log('m1: ', event);
+			// console.log('m2: ', data);
+			// console.log('m3: ', message);
 		};
 	}
 
 	gameStep() {
-		this.timer++;
-		if (this.timer > 100) {
-			this.ws.send(JSON.stringify({
-				'techpark.game.base.ClientSnap': {
-					square: {
-						x: '2',
-						y: '2'
-					}
-				},
-			}));
-			this.timer = 0;
-		}
+		// this.timer++;
+		// if (this.timer > 100) {
+		// 	this.ws.send(JSON.stringify({
+		// 		'techpark.game.base.ClientSnap': {
+		// 			square: {
+		// 				x: '2',
+		// 				y: '2'
+		// 			}
+		// 		},
+		// 	}));
+		// 	this.timer = 0;
+		// }
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = MultiplayerStrategy;

@@ -43,20 +43,24 @@ class WebSocketService {
 	}
 
 	sendObject(message) {
-		message.content = JSON.stringify(message.content);
+		if (message.content) {
+			message.content = JSON.stringify(message.content);
+		}
 		message = JSON.stringify(message);
 		this.ws.send(message);
 	}
 
 	parseMessage(message) {
 		message = JSON.parse(message);
-		message.content = JSON.parse(message.content);
+		if (message.content) {
+			message.content = JSON.parse(message.content);
+		}
 		return message;
 	}
 
 	parseObject(object) {
 		if (object.type === 'techpark.game.base.ServerMazeSnap') {
-			
+
 		}
 	}
 }

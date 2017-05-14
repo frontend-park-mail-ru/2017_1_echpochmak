@@ -15,8 +15,8 @@ import PF from 'pathfinding'
 
 export default
 class MultiplayerStrategy {
-	constructor() {
-
+	constructor(ws) {
+		this.ws = ws;
 	}
 
 	init() {
@@ -24,9 +24,6 @@ class MultiplayerStrategy {
 		console.log('multi_strategy');
 
 		this.timer = 0;
-
-		this.ws = new WebSocketService();
-		this.ws.open();
 
 		this.mediator = new Mediator();
 		this.settings = new Settings();

@@ -6,10 +6,11 @@ export default
 class WebSocketService {
 	constructor() {
 		this.mediator = new Mediator();
-		this.authorize = new Authorize();
 	}
 
 	open() {
+		this.authorize = new Authorize();
+
 		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
 
 		this.ws.onopen = () => { 
@@ -22,12 +23,16 @@ class WebSocketService {
 
 		this.ws.onerror = (error) => {
 			console.log('error ', error.message);
+			this.mediator.emit(Events.MULTIPLAYER_CONNECTION_REFUSED);
 		};
 
 		this.ws.onclose = (event) => {
 			console.log('close');
 			console.log('code: ', event.code);
 			console.log('reason: ', event.reason);
+			if (event.code !== 1005) {
+				this.mediator.emit(Events.MULTIPLAYER_CONNECTION_REFUSED);
+			}
 		};
 
 		this.ws.onmessage = (event) => {
@@ -37,6 +42,10 @@ class WebSocketService {
 
 			this.parseObject(object);
 		};
+	}
+
+	close() {
+		this.ws.close();
 	}
 
 	sendNewTower(coord) {
@@ -68,7 +77,17 @@ class WebSocketService {
 	}
 
 	parseObject(object) {
-		if (object.type === 'techpark.game.base.ServerMazeSnap') {
+		if (object.type === 'techpark.game.request.InitGame$Request') {
+			const payers = object.content.players;
+			let ally = 'ally';
+			for (let player of payers) {
+				if (player !== this.authorize.user.username) {
+					ally = player;
+				}
+			}
+			this.mediator.emit(Events.MULTIPLAYER_GAME_START, {ally})
+
+		} else if (object.type === 'techpark.game.base.ServerMazeSnap') {
 			const obj = {};
 			obj.map = object.content.map;
 			if (object.content.user === this.authorize.user.username) {

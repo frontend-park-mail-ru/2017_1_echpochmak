@@ -355,6 +355,18 @@ const Events = {
 	THRONE_DAMAGE: 		11,
 
 	MULTIPLAYER_NEW_MAP_SNAPSHOT: 	12,
+	MULTIPLAYER_SEARCH: 			13,
+	MULTIPLAYER_GAME_START: 		14,
+	MULTIPLAYER_PLAY_NEW_GAME: 		15,
+	MULTIPLAYER_TRY_QUIT: 			16,
+	MULTIPLAYER_QUIT_CONFIRMED: 	17,
+	MULTIPLAYER_QUIT_CANCELED: 		18,
+	MULTIPLAYER_GAME_FINISHED: 		19,
+	MULTIPLAYER_PLAY_AGAIN: 		20,
+	MULTIPLAYER_EXIT_TO_MENU: 		21,
+	MULTIPLAYER_NEW_WAVE_STARTED: 	22,
+	MULTIPLAYER_GET_SCORE: 			23,
+	MULTIPLAYER_THRONE_DAMAGE: 		24,
 
 }
 
@@ -18467,9 +18479,9 @@ class Mediator {
 class Settings {
 	constructor() {
 
-		if (Settings.__instance) {
-			return Settings.__instance;
-		}
+		// if (Settings.__instance) {
+		// 	return Settings.__instance;
+		// }
 
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
@@ -18625,7 +18637,7 @@ class Settings {
 			[this.circleGreen, this.circleYellow, this.circleRed]
 		];
 
-		Settings.__instance = this;
+		// Settings.__instance = this;
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Settings;
@@ -20944,6 +20956,8 @@ class Menu extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* default */]
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_router_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__game_events_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__game_transport_js__ = __webpack_require__(83);
+
 
 
 
@@ -20966,36 +20980,50 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 
 		this.startSubView = new __WEBPACK_IMPORTED_MODULE_2__start_js__["a" /* default */]();
 		this.gameSubView = new __WEBPACK_IMPORTED_MODULE_3__game_js__["a" /* default */]()
-		//this.gameSubView = new SinglePlayerGame();
 
 		this.router = new __WEBPACK_IMPORTED_MODULE_7__modules_router_js__["a" /* default */]();
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_6__game_mediator_js__["a" /* default */]();
 
 		this.render();
 
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].GAME_START, this.onStartGame.bind(this));
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].QUIT_CONFIRMED, this.onQuitConfirm.bind(this));
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].EXIT_TO_MENU, this.onExit.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].MULTIPLAYER_SEARCH, this.onSearch.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].MULTIPLAYER_GAME_START, this.onStartGame.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].MULTIPLAYER_QUIT_CONFIRMED, this.onQuitConfirm.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].MULTIPLAYER_EXIT_TO_MENU, this.onExit.bind(this));
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].MULTIPLAYER_PLAY_AGAIN, this.onQuitConfirm.bind(this));
 	}
 
-	onStartGame() {
+	onSearch() {
+		this.ws = new __WEBPACK_IMPORTED_MODULE_9__game_transport_js__["a" /* default */]();
+		this.ws.open();
+	}
+
+	onStartGame(args) {
+		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */]();
+		this.gameManager.setStrategy(new __WEBPACK_IMPORTED_MODULE_4__game_strategies_multi_strategy_js__["a" /* default */](this.ws));
+
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
 		
+		console.log(args.ally);
+
 		this.mediator.emit(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].PLAY_NEW_GAME);
 	}
 
 	onQuitConfirm() {
+		this.ws.close();
 		this.get().removeChild(this.gameSubView.get());
 		this.get().appendChild(this.startSubView.get());
 	}
 
 	onExit() {
-		this.router.go('/');
+		this.ws.close();
+		this.get().removeChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());	this.router.go('/');
 	}
 
 	render() {
-		this.get().appendChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());
 	}
 
 	loginSwitch(user) {
@@ -21004,13 +21032,6 @@ class MultiPlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* defa
 
 	unloginSwitch(user) {
 		this.gameSubView.unloginSwitch(user);
-	}
-
-	show() {
-		super.show();
-		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */]();
-		this.gameManager.setStrategy(new __WEBPACK_IMPORTED_MODULE_4__game_strategies_multi_strategy_js__["a" /* default */]());
-		this.mediator.emit(__WEBPACK_IMPORTED_MODULE_8__game_events_js__["a" /* default */].PLAY_NEW_GAME);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = MultiPlayer;
@@ -21133,6 +21154,9 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 	}
 
 	onStartGame() {
+		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */]();
+		this.gameManager.setStrategy(new __WEBPACK_IMPORTED_MODULE_4__game_strategies_single_strategy_js__["a" /* default */]());
+
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
 		
@@ -21145,6 +21169,8 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 	}
 
 	onExit() {
+		this.get().removeChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());
 		this.router.go('/');
 	}
 
@@ -21158,12 +21184,6 @@ class SinglePlayer extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* def
 
 	unloginSwitch(user) {
 		this.gameSubView.unloginSwitch(user);
-	}
-
-	show() {
-		super.show();
-		this.gameManager = new __WEBPACK_IMPORTED_MODULE_5__game_manager_js__["a" /* default */]();
-		this.gameManager.setStrategy(new __WEBPACK_IMPORTED_MODULE_4__game_strategies_single_strategy_js__["a" /* default */]());
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SinglePlayer;
@@ -21249,7 +21269,7 @@ exports = module.exports = __webpack_require__(11)();
 
 
 // module
-exports.push([module.i, "body {\n  font-family: 'Comic Sans MS', 'Arial';\n  background-size: auto;\n  background-attachment: fixed; }\n\n.list {\n  position: relative;\n  background-color: #DBFCA9;\n  margin-left: 15%;\n  margin-right: 15%;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 3%;\n  font-size: 18pt;\n  border-radius: 20px;\n  border: 1px solid #64734D; }\n  .list__header {\n    font-size: 30pt;\n    margin-bottom: 3%;\n    margin-top: -2%; }\n    .list__header hr {\n      color: #64734D;\n      background-color: #64734D;\n      opacity: 1;\n      height: 1px;\n      border: 0; }\n  .list__sub-header {\n    font-size: 22pt;\n    margin-bottom: 2%; }\n\n.game-field, .hints-field {\n  height: 100vh;\n  padding: 0px; }\n\n.line {\n  padding-bottom: 1%; }\n\n.padd {\n  max-height: 60vh;\n  width: 99%;\n  position: absolute;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n  top: 50%; }\n\n.kirka {\n  background-position: left bottom;\n  position: fixed;\n  bottom: 0%;\n  left: -7%; }\n\n.left-bar {\n  height: 100vh;\n  padding: 0px;\n  background-color: rgba(58, 183, 51, 0.82);\n  border: 1px solid black;\n  border-bottom-right-radius: 20px;\n  border-top-right-radius: 20px;\n  font-size: 25px; }\n  .left-bar__quit {\n    height: 30%;\n    padding: 5%; }\n  .left-bar__score, .left-bar__wave, .left-bar__HP {\n    height: 20%; }\n\n.quit-confirm {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n  .quit-confirm__text {\n    height: 50%;\n    padding: 3%; }\n  .quit-confirm__buttons {\n    height: 50%;\n    padding: 3%; }\n    .quit-confirm__buttons button {\n      margin: 3%; }\n\n.finish {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n  .finish__text {\n    height: 50%;\n    padding: 3%; }\n  .finish__buttons {\n    height: 50%;\n    padding: 3%; }\n    .finish__buttons button {\n      margin: 3%; }\n", ""]);
+exports.push([module.i, "body {\n  font-family: 'Comic Sans MS', 'Arial';\n  background-size: auto;\n  background-attachment: fixed; }\n\n.list {\n  position: relative;\n  background-color: #DBFCA9;\n  margin-left: 15%;\n  margin-right: 15%;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 3%;\n  font-size: 18pt;\n  border-radius: 20px;\n  border: 1px solid #64734D; }\n  .list__header {\n    font-size: 30pt;\n    margin-bottom: 3%;\n    margin-top: -2%; }\n    .list__header hr {\n      color: #64734D;\n      background-color: #64734D;\n      opacity: 1;\n      height: 1px;\n      border: 0; }\n  .list__sub-header {\n    font-size: 22pt;\n    margin-bottom: 2%; }\n\n.game-field, .hints-field {\n  height: 100vh;\n  padding: 0px; }\n\n.line {\n  padding-bottom: 1%; }\n\n.padd {\n  max-height: 60vh;\n  width: 99%;\n  position: absolute;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n  top: 50%; }\n\n.kirka {\n  background-position: left bottom;\n  position: fixed;\n  bottom: 0%;\n  left: -7%; }\n\n.left-bar {\n  height: 100vh;\n  padding: 0px;\n  background-color: rgba(58, 183, 51, 0.82);\n  border: 1px solid black;\n  border-bottom-right-radius: 20px;\n  border-top-right-radius: 20px;\n  font-size: 25px; }\n  .left-bar__quit {\n    height: 20%;\n    padding: 5%; }\n  .left-bar__user, .left-bar__score, .left-bar__wave, .left-bar__HP {\n    height: 20%; }\n\n.game-window {\n  position: fixed;\n  margin-top: 35vh;\n  margin-bottom: 35vh;\n  margin-left: 35vw;\n  margin-right: 35vw;\n  border: 2px solid black;\n  border-radius: 20px;\n  background-color: blue;\n  height: 30vh;\n  width: 30vw;\n  font-size: 20px; }\n  .game-window__text {\n    height: 50%;\n    padding: 3%; }\n  .game-window__buttons {\n    height: 50%;\n    padding: 3%; }\n    .game-window__buttons button {\n      margin: 3%; }\n", ""]);
 
 // exports
 
@@ -23718,8 +23738,8 @@ class RegisterForm extends __WEBPACK_IMPORTED_MODULE_0__Form_form_js__["a" /* de
 
 
 class MultiplayerStrategy {
-	constructor() {
-
+	constructor(ws) {
+		this.ws = ws;
 	}
 
 	init() {
@@ -23727,9 +23747,6 @@ class MultiplayerStrategy {
 		console.log('multi_strategy');
 
 		this.timer = 0;
-
-		this.ws = new __WEBPACK_IMPORTED_MODULE_10__transport_js__["a" /* default */]();
-		this.ws.open();
 
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_8__mediator_js__["a" /* default */]();
 		this.settings = new __WEBPACK_IMPORTED_MODULE_0__settings_js__["a" /* default */]();
@@ -25277,10 +25294,11 @@ class SingleStrategy {
 class WebSocketService {
 	constructor() {
 		this.mediator = new __WEBPACK_IMPORTED_MODULE_0__mediator_js__["a" /* default */]();
-		this.authorize = new __WEBPACK_IMPORTED_MODULE_1__services_authorize_js__["a" /* default */]();
 	}
 
 	open() {
+		this.authorize = new __WEBPACK_IMPORTED_MODULE_1__services_authorize_js__["a" /* default */]();
+
 		this.ws = new WebSocket('wss://gem-td-back.herokuapp.com/game');
 
 		this.ws.onopen = () => { 
@@ -25293,12 +25311,16 @@ class WebSocketService {
 
 		this.ws.onerror = (error) => {
 			console.log('error ', error.message);
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].MULTIPLAYER_CONNECTION_REFUSED);
 		};
 
 		this.ws.onclose = (event) => {
 			console.log('close');
 			console.log('code: ', event.code);
 			console.log('reason: ', event.reason);
+			if (event.code !== 1005) {
+				this.mediator.emit(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].MULTIPLAYER_CONNECTION_REFUSED);
+			}
 		};
 
 		this.ws.onmessage = (event) => {
@@ -25308,6 +25330,10 @@ class WebSocketService {
 
 			this.parseObject(object);
 		};
+	}
+
+	close() {
+		this.ws.close();
 	}
 
 	sendNewTower(coord) {
@@ -25339,7 +25365,17 @@ class WebSocketService {
 	}
 
 	parseObject(object) {
-		if (object.type === 'techpark.game.base.ServerMazeSnap') {
+		if (object.type === 'techpark.game.request.InitGame$Request') {
+			const payers = object.content.players;
+			let ally = 'ally';
+			for (let player of payers) {
+				if (player !== this.authorize.user.username) {
+					ally = player;
+				}
+			}
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_2__events_js__["a" /* default */].MULTIPLAYER_GAME_START, {ally})
+
+		} else if (object.type === 'techpark.game.base.ServerMazeSnap') {
 			const obj = {};
 			obj.map = object.content.map;
 			if (object.content.user === this.authorize.user.username) {
@@ -25391,7 +25427,6 @@ const http = new __WEBPACK_IMPORTED_MODULE_8__modules_http_js__["a" /* default *
 const router = new __WEBPACK_IMPORTED_MODULE_9__modules_router_js__["a" /* default */]();
 
 http.BaseURL = 'https://gem-td-back.herokuapp.com';
-// http.BaseURL = 'http://localhost:8082';
 
 router.register('/', new __WEBPACK_IMPORTED_MODULE_0__views_menu_js__["a" /* default */]());
 router.register('/login/', new __WEBPACK_IMPORTED_MODULE_1__views_login_js__["a" /* default */]());
@@ -25450,6 +25485,7 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 		this.createLeftBar();
 		this.createQuitWindow();
 		this.createFinishWindow();
+		this.createConnectionRefusedWindow();
 
 		this.render();
 		this.makeListeners();
@@ -25468,16 +25504,19 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 			align: 'center'
 		});
 		this.userBlock_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
-		this.userBlock_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
-		this.userBlock_title.get().innerHTML = 'Игрок: '
+		this.userBlock_name1 = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.userBlock_sep = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.userBlock_name2 = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
+		this.userBlock_title.get().innerHTML = 'Игроки: <br>';
+		this.userBlock_sep.get().innerHTML = ', ';
 		
 		this.scoreBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'left-bar__score'
 		});
 		this.scoreBlock_title = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('b');
 		this.scoreBlock_text = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('span');
-		this.scoreBlock_title.get().innerHTML = 'Результат: '
-		this.scoreBlock_text.get().innerHTML = '0'
+		this.scoreBlock_title.get().innerHTML = 'Результат: ';
+		this.scoreBlock_text.get().innerHTML = '0';
 		
 		this.waveBlock = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
 			class: 'left-bar__wave'
@@ -25498,14 +25537,14 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 
 	createQuitWindow() {
 		this.quitConfirm = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'quit-confirm',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.quitText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'quit-confirm__text'
+			class: 'game-window__text'
 		})
 		this.quitButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'quit-confirm__buttons'
+			class: 'game-window__buttons'
 		})
 		this.quitText.get().innerHTML = 'Точно выйти?';
 		this.quitConfirmButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
@@ -25516,14 +25555,14 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 
 	createFinishWindow() {
 		this.finishWindow = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.finishText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish__text'
+			class: 'game-window__text'
 		})
 		this.finishButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish__buttons'
+			class: 'game-window__buttons'
 		})
 		this.exitButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
 		this.exitButton.get().innerHTML = 'Выйти в меню';
@@ -25531,22 +25570,48 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 		this.againButton.get().innerHTML = 'Начать сначала';
 	}
 
+	createConnectionRefusedWindow() {
+		this.CRWindow = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'game-window',
+			align: 'center'
+		})
+		this.CRText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'game-window__text'
+		})
+		this.CRButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
+			class: 'game-window__buttons'
+		})
+		this.CRexitButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.CRexitButton.get().innerHTML = 'Выйти в меню';
+		this.CRagainButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
+		this.CRagainButton.get().innerHTML = 'Начать сначала';
+	}
+
 	makeListeners() {
 
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GAME_FINISHED, (args) => {
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_GAME_START, (args) => {
+			this.userBlock_name2.get().innerHTML = args.ally;
+		})
+
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_CONNECTION_REFUSED, () => {
+			this.CRText.get().innerHTML = 'Соединение с сервером разорвано. Игра окончена. Ваш результат: ' + this.scoreBlock_text.get().innerHTML;
+			this.get().appendChild(this.CRWindow.get());
+		})
+
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_GAME_FINISHED, (args) => {
 			this.finishText.get().innerHTML = 'Игра окончена. </br> Ваш результат: ' + args.score;
 			this.get().appendChild(this.finishWindow.get());
 		})
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].NEW_WAVE_STARTED, (args) => {
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_NEW_WAVE_STARTED, (args) => {
 			this.waveBlock_text.get().innerHTML = args.wave;
 		})
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GET_SCORE, (args) => {
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_GET_SCORE, (args) => {
 			this.scoreBlock_text.get().innerHTML = args.score;
 		})
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].THRONE_DAMAGE, (args) => {
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_THRONE_DAMAGE, (args) => {
 			this.HPBlock_text.get().innerHTML = args.health;
 		})
-		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].PLAY_AGAIN, () => {
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_PLAY_AGAIN, () => {
 			this.waveBlock_text.get().innerHTML = 1;
 			this.scoreBlock_text.get().innerHTML = 0;
 			this.HPBlock_text.get().innerHTML = 100;
@@ -25562,19 +25627,29 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 
 		this.quitConfirmButton.on('click', () => {
 			this.get().removeChild(this.quitConfirm.get());
-			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].QUIT_CONFIRMED, {
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_QUIT_CONFIRMED, {
 				score: parseInt((this.scoreBlock_text.get().innerHTML))
 			});
 		})
 
 		this.exitButton.on('click', () => {
 			this.get().removeChild(this.finishWindow.get());
-			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].EXIT_TO_MENU);
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_EXIT_TO_MENU);
 		})
 
 		this.againButton.on('click', () => {
 			this.get().removeChild(this.finishWindow.get());
-			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].PLAY_AGAIN);
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_PLAY_AGAIN);
+		})
+
+		this.CRexitButton.on('click', () => {
+			this.get().removeChild(this.CRWindow.get());
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_EXIT_TO_MENU);
+		})
+
+		this.CRagainButton.on('click', () => {
+			this.get().removeChild(this.CRWindow.get());
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_PLAY_AGAIN);
 		})
 	}
 
@@ -25590,7 +25665,9 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 		this.leftBar.get().appendChild(this.HPBlock.get());
 
 		this.userBlock.get().appendChild(this.userBlock_title.get());
-		this.userBlock.get().appendChild(this.userBlock_text.get());
+		this.userBlock.get().appendChild(this.userBlock_name1.get());
+		this.userBlock.get().appendChild(this.userBlock_sep.get());
+		this.userBlock.get().appendChild(this.userBlock_name2.get());
 		this.scoreBlock.get().appendChild(this.scoreBlock_title.get());
 		this.scoreBlock.get().appendChild(this.scoreBlock_text.get());
 		this.waveBlock.get().appendChild(this.waveBlock_title.get());
@@ -25609,10 +25686,15 @@ class MultiPlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /* 
 		this.finishWindow.get().appendChild(this.finishButtons.get());
 		this.finishButtons.get().appendChild(this.exitButton.get());
 		this.finishButtons.get().appendChild(this.againButton.get());
+
+		this.CRWindow.get().appendChild(this.CRText.get());
+		this.CRWindow.get().appendChild(this.CRButtons.get());
+		this.CRButtons.get().appendChild(this.CRexitButton.get());
+		this.CRButtons.get().appendChild(this.CRagainButton.get());
 	}
 
 	loginSwitch(user) {
-		this.userBlock_text.get().innerHTML = user;
+		this.userBlock_name1.get().innerHTML = user;
 	}
 
 	unloginSwitch(user) {
@@ -25654,10 +25736,11 @@ class MultiPlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 			class: 'list',
 			align: 'center'
 		});
+		this.message = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div');
 		this.newGame = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button', {
 			align: 'center'
 		});
-		this.newGame.get().innerHTML = 'Начать игру';
+		this.newGame.get().innerHTML = 'Найти союзника';
 
 		this.render();
 		this.makeListeners();
@@ -25666,13 +25749,26 @@ class MultiPlayerStart extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 	makeListeners() {
 		this.newGame.on('click', (event) => {
 			event.preventDefault();
-			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].GAME_START);
+			this.message.get().innerHTML = 'Поиск...';
+			this.newGame.get().disabled = true;
+			this.mediator.emit(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_SEARCH);
+		})
+
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_GAME_START, () => {
+			this.message.get().innerHTML = '';
+			this.newGame.get().disabled = false;
+		})
+
+		this.mediator.subscribe(__WEBPACK_IMPORTED_MODULE_3__game_events_js__["a" /* default */].MULTIPLAYER_CONNECTION_REFUSED, () => {
+			this.message.get().innerHTML = 'Не удалось установить соединение';
+			this.newGame.get().disabled = false;
 		})
 	}
 
 	render() {
 		this.get().appendChild(this.padd.get());
 		this.padd.get().appendChild(this.list.get());
+		this.list.get().appendChild(this.message.get());
 		this.list.get().appendChild(this.newGame.get());
 	}
 }
@@ -25772,14 +25868,14 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 	createQuitWindow() {
 		this.quitConfirm = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'quit-confirm',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.quitText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'quit-confirm__text'
+			class: 'game-window__text'
 		})
 		this.quitButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'quit-confirm__buttons'
+			class: 'game-window__buttons'
 		})
 		this.quitText.get().innerHTML = 'Точно выйти?';
 		this.quitConfirmButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
@@ -25790,14 +25886,14 @@ class SinglePlayerGame extends __WEBPACK_IMPORTED_MODULE_0__baseview_js__["a" /*
 
 	createFinishWindow() {
 		this.finishWindow = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.finishText = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish__text'
+			class: 'game-window__text'
 		})
 		this.finishButtons = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('div', {
-			class: 'finish__buttons'
+			class: 'game-window__buttons'
 		})
 		this.exitButton = new __WEBPACK_IMPORTED_MODULE_1__components_BaseBlock_baseblock_js__["a" /* default */]('button');
 		this.exitButton.get().innerHTML = 'Выйти в меню';

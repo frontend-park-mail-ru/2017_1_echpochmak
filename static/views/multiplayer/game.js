@@ -33,6 +33,7 @@ class MultiPlayerGame extends BaseView {
 		this.createLeftBar();
 		this.createQuitWindow();
 		this.createFinishWindow();
+		this.createConnectionRefusedWindow();
 
 		this.render();
 		this.makeListeners();
@@ -51,16 +52,19 @@ class MultiPlayerGame extends BaseView {
 			align: 'center'
 		});
 		this.userBlock_title = new BaseBlock('b');
-		this.userBlock_text = new BaseBlock('span');
-		this.userBlock_title.get().innerHTML = 'Игрок: '
+		this.userBlock_name1 = new BaseBlock('span');
+		this.userBlock_sep = new BaseBlock('span');
+		this.userBlock_name2 = new BaseBlock('span');
+		this.userBlock_title.get().innerHTML = 'Игроки: <br>';
+		this.userBlock_sep.get().innerHTML = ', ';
 		
 		this.scoreBlock = new BaseBlock('div', {
 			class: 'left-bar__score'
 		});
 		this.scoreBlock_title = new BaseBlock('b');
 		this.scoreBlock_text = new BaseBlock('span');
-		this.scoreBlock_title.get().innerHTML = 'Результат: '
-		this.scoreBlock_text.get().innerHTML = '0'
+		this.scoreBlock_title.get().innerHTML = 'Результат: ';
+		this.scoreBlock_text.get().innerHTML = '0';
 		
 		this.waveBlock = new BaseBlock('div', {
 			class: 'left-bar__wave'
@@ -81,14 +85,14 @@ class MultiPlayerGame extends BaseView {
 
 	createQuitWindow() {
 		this.quitConfirm = new BaseBlock('div', {
-			class: 'quit-confirm',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.quitText = new BaseBlock('div', {
-			class: 'quit-confirm__text'
+			class: 'game-window__text'
 		})
 		this.quitButtons = new BaseBlock('div', {
-			class: 'quit-confirm__buttons'
+			class: 'game-window__buttons'
 		})
 		this.quitText.get().innerHTML = 'Точно выйти?';
 		this.quitConfirmButton = new BaseBlock('button');
@@ -99,14 +103,14 @@ class MultiPlayerGame extends BaseView {
 
 	createFinishWindow() {
 		this.finishWindow = new BaseBlock('div', {
-			class: 'finish',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.finishText = new BaseBlock('div', {
-			class: 'finish__text'
+			class: 'game-window__text'
 		})
 		this.finishButtons = new BaseBlock('div', {
-			class: 'finish__buttons'
+			class: 'game-window__buttons'
 		})
 		this.exitButton = new BaseBlock('button');
 		this.exitButton.get().innerHTML = 'Выйти в меню';
@@ -114,22 +118,48 @@ class MultiPlayerGame extends BaseView {
 		this.againButton.get().innerHTML = 'Начать сначала';
 	}
 
+	createConnectionRefusedWindow() {
+		this.CRWindow = new BaseBlock('div', {
+			class: 'game-window',
+			align: 'center'
+		})
+		this.CRText = new BaseBlock('div', {
+			class: 'game-window__text'
+		})
+		this.CRButtons = new BaseBlock('div', {
+			class: 'game-window__buttons'
+		})
+		this.CRexitButton = new BaseBlock('button');
+		this.CRexitButton.get().innerHTML = 'Выйти в меню';
+		this.CRagainButton = new BaseBlock('button');
+		this.CRagainButton.get().innerHTML = 'Начать сначала';
+	}
+
 	makeListeners() {
 
-		this.mediator.subscribe(Events.GAME_FINISHED, (args) => {
+		this.mediator.subscribe(Events.MULTIPLAYER_GAME_START, (args) => {
+			this.userBlock_name2.get().innerHTML = args.ally;
+		})
+
+		this.mediator.subscribe(Events.MULTIPLAYER_CONNECTION_REFUSED, () => {
+			this.CRText.get().innerHTML = 'Соединение с сервером разорвано. Игра окончена. Ваш результат: ' + this.scoreBlock_text.get().innerHTML;
+			this.get().appendChild(this.CRWindow.get());
+		})
+
+		this.mediator.subscribe(Events.MULTIPLAYER_GAME_FINISHED, (args) => {
 			this.finishText.get().innerHTML = 'Игра окончена. </br> Ваш результат: ' + args.score;
 			this.get().appendChild(this.finishWindow.get());
 		})
-		this.mediator.subscribe(Events.NEW_WAVE_STARTED, (args) => {
+		this.mediator.subscribe(Events.MULTIPLAYER_NEW_WAVE_STARTED, (args) => {
 			this.waveBlock_text.get().innerHTML = args.wave;
 		})
-		this.mediator.subscribe(Events.GET_SCORE, (args) => {
+		this.mediator.subscribe(Events.MULTIPLAYER_GET_SCORE, (args) => {
 			this.scoreBlock_text.get().innerHTML = args.score;
 		})
-		this.mediator.subscribe(Events.THRONE_DAMAGE, (args) => {
+		this.mediator.subscribe(Events.MULTIPLAYER_THRONE_DAMAGE, (args) => {
 			this.HPBlock_text.get().innerHTML = args.health;
 		})
-		this.mediator.subscribe(Events.PLAY_AGAIN, () => {
+		this.mediator.subscribe(Events.MULTIPLAYER_PLAY_AGAIN, () => {
 			this.waveBlock_text.get().innerHTML = 1;
 			this.scoreBlock_text.get().innerHTML = 0;
 			this.HPBlock_text.get().innerHTML = 100;
@@ -145,19 +175,29 @@ class MultiPlayerGame extends BaseView {
 
 		this.quitConfirmButton.on('click', () => {
 			this.get().removeChild(this.quitConfirm.get());
-			this.mediator.emit(Events.QUIT_CONFIRMED, {
+			this.mediator.emit(Events.MULTIPLAYER_QUIT_CONFIRMED, {
 				score: parseInt((this.scoreBlock_text.get().innerHTML))
 			});
 		})
 
 		this.exitButton.on('click', () => {
 			this.get().removeChild(this.finishWindow.get());
-			this.mediator.emit(Events.EXIT_TO_MENU);
+			this.mediator.emit(Events.MULTIPLAYER_EXIT_TO_MENU);
 		})
 
 		this.againButton.on('click', () => {
 			this.get().removeChild(this.finishWindow.get());
-			this.mediator.emit(Events.PLAY_AGAIN);
+			this.mediator.emit(Events.MULTIPLAYER_PLAY_AGAIN);
+		})
+
+		this.CRexitButton.on('click', () => {
+			this.get().removeChild(this.CRWindow.get());
+			this.mediator.emit(Events.MULTIPLAYER_EXIT_TO_MENU);
+		})
+
+		this.CRagainButton.on('click', () => {
+			this.get().removeChild(this.CRWindow.get());
+			this.mediator.emit(Events.MULTIPLAYER_PLAY_AGAIN);
 		})
 	}
 
@@ -173,7 +213,9 @@ class MultiPlayerGame extends BaseView {
 		this.leftBar.get().appendChild(this.HPBlock.get());
 
 		this.userBlock.get().appendChild(this.userBlock_title.get());
-		this.userBlock.get().appendChild(this.userBlock_text.get());
+		this.userBlock.get().appendChild(this.userBlock_name1.get());
+		this.userBlock.get().appendChild(this.userBlock_sep.get());
+		this.userBlock.get().appendChild(this.userBlock_name2.get());
 		this.scoreBlock.get().appendChild(this.scoreBlock_title.get());
 		this.scoreBlock.get().appendChild(this.scoreBlock_text.get());
 		this.waveBlock.get().appendChild(this.waveBlock_title.get());
@@ -192,10 +234,15 @@ class MultiPlayerGame extends BaseView {
 		this.finishWindow.get().appendChild(this.finishButtons.get());
 		this.finishButtons.get().appendChild(this.exitButton.get());
 		this.finishButtons.get().appendChild(this.againButton.get());
+
+		this.CRWindow.get().appendChild(this.CRText.get());
+		this.CRWindow.get().appendChild(this.CRButtons.get());
+		this.CRButtons.get().appendChild(this.CRexitButton.get());
+		this.CRButtons.get().appendChild(this.CRagainButton.get());
 	}
 
 	loginSwitch(user) {
-		this.userBlock_text.get().innerHTML = user;
+		this.userBlock_name1.get().innerHTML = user;
 	}
 
 	unloginSwitch(user) {

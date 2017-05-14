@@ -33,6 +33,9 @@ class SinglePlayer extends BaseView {
 	}
 
 	onStartGame() {
+		this.gameManager = new GameManager();
+		this.gameManager.setStrategy(new SingleStrategy());
+
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
 		
@@ -45,6 +48,8 @@ class SinglePlayer extends BaseView {
 	}
 
 	onExit() {
+		this.get().removeChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());
 		this.router.go('/');
 	}
 
@@ -58,11 +63,5 @@ class SinglePlayer extends BaseView {
 
 	unloginSwitch(user) {
 		this.gameSubView.unloginSwitch(user);
-	}
-
-	show() {
-		super.show();
-		this.gameManager = new GameManager();
-		this.gameManager.setStrategy(new SingleStrategy());
 	}
 }

@@ -81,14 +81,14 @@ class SinglePlayerGame extends BaseView {
 
 	createQuitWindow() {
 		this.quitConfirm = new BaseBlock('div', {
-			class: 'quit-confirm',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.quitText = new BaseBlock('div', {
-			class: 'quit-confirm__text'
+			class: 'game-window__text'
 		})
 		this.quitButtons = new BaseBlock('div', {
-			class: 'quit-confirm__buttons'
+			class: 'game-window__buttons'
 		})
 		this.quitText.get().innerHTML = 'Точно выйти?';
 		this.quitConfirmButton = new BaseBlock('button');
@@ -99,14 +99,14 @@ class SinglePlayerGame extends BaseView {
 
 	createFinishWindow() {
 		this.finishWindow = new BaseBlock('div', {
-			class: 'finish',
+			class: 'game-window',
 			align: 'center'
 		})
 		this.finishText = new BaseBlock('div', {
-			class: 'finish__text'
+			class: 'game-window__text'
 		})
 		this.finishButtons = new BaseBlock('div', {
-			class: 'finish__buttons'
+			class: 'game-window__buttons'
 		})
 		this.exitButton = new BaseBlock('button');
 		this.exitButton.get().innerHTML = 'Выйти в меню';

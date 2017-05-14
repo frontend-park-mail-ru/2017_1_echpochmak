@@ -21,10 +21,11 @@ class MultiPlayerStart extends BaseView {
 			class: 'list',
 			align: 'center'
 		});
+		this.message = new BaseBlock('div');
 		this.newGame = new BaseBlock('button', {
 			align: 'center'
 		});
-		this.newGame.get().innerHTML = 'Начать игру';
+		this.newGame.get().innerHTML = 'Найти союзника';
 
 		this.render();
 		this.makeListeners();
@@ -33,13 +34,26 @@ class MultiPlayerStart extends BaseView {
 	makeListeners() {
 		this.newGame.on('click', (event) => {
 			event.preventDefault();
-			this.mediator.emit(Events.GAME_START);
+			this.message.get().innerHTML = 'Поиск...';
+			this.newGame.get().disabled = true;
+			this.mediator.emit(Events.MULTIPLAYER_SEARCH);
+		})
+
+		this.mediator.subscribe(Events.MULTIPLAYER_GAME_START, () => {
+			this.message.get().innerHTML = '';
+			this.newGame.get().disabled = false;
+		})
+
+		this.mediator.subscribe(Events.MULTIPLAYER_CONNECTION_REFUSED, () => {
+			this.message.get().innerHTML = 'Не удалось установить соединение';
+			this.newGame.get().disabled = false;
 		})
 	}
 
 	render() {
 		this.get().appendChild(this.padd.get());
 		this.padd.get().appendChild(this.list.get());
+		this.list.get().appendChild(this.message.get());
 		this.list.get().appendChild(this.newGame.get());
 	}
 }

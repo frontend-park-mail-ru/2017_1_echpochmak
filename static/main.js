@@ -17,7 +17,6 @@ const http = new HTTP();
 const router = new Router();
 
 http.BaseURL = 'https://gem-td-back.herokuapp.com';
-// http.BaseURL = 'http://localhost:8082';
 
 router.register('/', new Menu());
 router.register('/login/', new Login());

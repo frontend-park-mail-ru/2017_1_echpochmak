@@ -70,16 +70,16 @@ body {
 	font-size: 25px;
 
 	&__quit {
-		height: 30%;
+		height: 20%;
 		padding: 5%;
 	}
-	
-	&__score, &__wave, &__HP {
+
+	&__user, &__score, &__wave, &__HP {
 		height: 20%;
 	}
 }
 
-.quit-confirm {
+.game-window {
 	position: fixed;
 	margin-top: 35vh;
 	margin-bottom: 35vh;
@@ -108,30 +108,10 @@ body {
 	}
 }
 
-.finish {
-	position: fixed;
-	margin-top: 35vh;
-	margin-bottom: 35vh;
-	margin-left: 35vw;
-	margin-right: 35vw;
-	border: 2px solid black;
-	border-radius: 20px;
-	background-color: blue;
-	height: 30vh;
-	width: 30vw;
-	font-size: 20px;
-
-	&__text {
-		height: 50%;
-		padding: 3%;
-	}
+.quit-confirm {
 	
-	&__buttons {
-		height: 50%;
-		padding: 3%;
+}
 
-		button {
-			margin: 3%;
-		}
-	}
+.finish {
+	
 }

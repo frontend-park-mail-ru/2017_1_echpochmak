@@ -9,6 +9,7 @@ import GameManager from '../../game/manager.js'
 import Mediator from '../../game/mediator.js'
 import Router from '../../modules/router.js'
 import Events from '../../game/events.js'
+import WebSocketService from '../../game/transport.js'
 
 export default
 class MultiPlayer extends BaseView {
@@ -21,36 +22,50 @@ class MultiPlayer extends BaseView {
 
 		this.startSubView = new MultiPlayerStart();
 		this.gameSubView = new MultiPlayerGame()
-		//this.gameSubView = new SinglePlayerGame();
 
 		this.router = new Router();
 		this.mediator = new Mediator();
 
 		this.render();
 
-		this.mediator.subscribe(Events.GAME_START, this.onStartGame.bind(this));
-		this.mediator.subscribe(Events.QUIT_CONFIRMED, this.onQuitConfirm.bind(this));
-		this.mediator.subscribe(Events.EXIT_TO_MENU, this.onExit.bind(this));
+		this.mediator.subscribe(Events.MULTIPLAYER_SEARCH, this.onSearch.bind(this));
+		this.mediator.subscribe(Events.MULTIPLAYER_GAME_START, this.onStartGame.bind(this));
+		this.mediator.subscribe(Events.MULTIPLAYER_QUIT_CONFIRMED, this.onQuitConfirm.bind(this));
+		this.mediator.subscribe(Events.MULTIPLAYER_EXIT_TO_MENU, this.onExit.bind(this));
+		this.mediator.subscribe(Events.MULTIPLAYER_PLAY_AGAIN, this.onQuitConfirm.bind(this));
 	}
 
-	onStartGame() {
+	onSearch() {
+		this.ws = new WebSocketService();
+		this.ws.open();
+	}
+
+	onStartGame(args) {
+		this.gameManager = new GameManager();
+		this.gameManager.setStrategy(new MultiStrategy(this.ws));
+
 		this.get().removeChild(this.startSubView.get());
 		this.get().appendChild(this.gameSubView.get());
 		
+		console.log(args.ally);
+
 		this.mediator.emit(Events.PLAY_NEW_GAME);
 	}
 
 	onQuitConfirm() {
+		this.ws.close();
 		this.get().removeChild(this.gameSubView.get());
 		this.get().appendChild(this.startSubView.get());
 	}
 
 	onExit() {
-		this.router.go('/');
+		this.ws.close();
+		this.get().removeChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());	this.router.go('/');
 	}
 
 	render() {
-		this.get().appendChild(this.gameSubView.get());
+		this.get().appendChild(this.startSubView.get());
 	}
 
 	loginSwitch(user) {
@@ -59,12 +74,5 @@ class MultiPlayer extends BaseView {
 
 	unloginSwitch(user) {
 		this.gameSubView.unloginSwitch(user);
-	}
-
-	show() {
-		super.show();
-		this.gameManager = new GameManager();
-		this.gameManager.setStrategy(new MultiStrategy());
-		this.mediator.emit(Events.PLAY_NEW_GAME);
 	}
 }

@@ -160,6 +160,16 @@ class Settings {
 			[this.circleGreen, this.circleYellow, this.circleRed]
 		];
 
+		this.type = {
+			'o': 0,
+			'a': this.circleRed,
+			'b': this.circlePink,
+			'c': this.circleSad,
+			'd': this.circleBlue,
+			'e': this.circleGreen,
+			'f': this.circleYellow,
+		}
+
 		Settings.__instance = this;
 	}
 }

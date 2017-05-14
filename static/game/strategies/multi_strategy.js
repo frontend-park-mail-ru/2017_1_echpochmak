@@ -48,6 +48,11 @@ class MultiplayerStrategy {
 		this.path = [];
 		this.fieldsNewTower = [];
 		this.checkpoints = [];
+		this.lastMap = Array(this.settings.mapSize);
+		for (let i = 0; i < this.lastMap.length; i++) {
+			this.lastMap[i] = "o" * 10
+		}
+
 
 		for (let i = 0; i < 4; i++) {
 			this.variantRects[i] = new VariantBlock(i);
@@ -140,7 +145,7 @@ class MultiplayerStrategy {
 		this.state = {};
 
 		this.mediator.subscribe(Events.MULTIPLAYER_NEW_MAP_SNAPSHOT, 
-			this.updateMap.bind(this));
+			this.generateTower.bind(this));
 	}
 
 	gameStep() {
@@ -171,9 +176,7 @@ class MultiplayerStrategy {
 		}
 	}
 
-	updateMap(arg) {
-		console.log(arg);
-	}
+	
 
 	isAbleTower(place) {
 		for (let i = 0; i < this.settings.checkpoints.length; i++){
@@ -227,11 +230,11 @@ class MultiplayerStrategy {
 		//}	
 
 	onOverField(field) {
-		field.field.setStroke(this.isAbleTower(field) ? 'green' : 'red');
+	//	field.field.setStroke(this.isAbleTower(field) ? 'green' : 'red');
 	}
 
 	onOutField(field) {
-		field.field.setStroke('black');	
+	//	field.field.setStroke('black');	
 	}
 
 	onClickNewPentagon(field, kind, currentNewTower) {
@@ -395,74 +398,53 @@ class MultiplayerStrategy {
 
 	}
 
-	generateTower(field) {
-
-		let circlePro = this.settings.circles[Math.floor(Math.random() * this.settings.circles.length)]
-
-		let circle = new CircleTower(
-			circlePro, 
-			field['field'].getX() + this.settings.fieldSize / 2,
-			field['field'].getY() + this.settings.fieldSize / 2,
-			this.settings.fieldSize / 2 - 2
-		);
-		field.field.setStroke('black');
-		field['field'].removeEventListener('click', () => {this.onClickField.call(this, field)});
-		field['field'].removeEventListener('tap', () => {this.onClickField.call(this, field)});
-		field['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, field)});
-		field['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, field)});
-
-		circle.draw.addEventListener('click', () => { this.createVariants.call(this, field) } ); 
-		circle.draw.addEventListener('tap', () => { this.createVariants.call(this, field) } ); 
-		circle['coordinates'] = field['coordinates'];
-		this.fieldsNewTower.push(circle);
-		this.newStones++;
-
-		if (this.newStones >= this.settings.numberTowersInStep) {
-			for (let i = 0; i < this.settings.mapSize; i++){
-				for (let j = 0; j < this.settings.mapSize; j++){
-					this.fields[i][j]['field'].removeEventListener('click', () => {this.onClickField.call(this, this.fields[i][j])});
-					this.fields[i][j]['field'].removeEventListener('tap', () => {this.onClickField.call(this, this.fields[i][j])});
-					this.fields[i][j]['field'].removeEventListener('mouseover', () => {this.onOverField.call(this, this.fields[i][j])});
-					this.fields[i][j]['field'].removeEventListener('mouseout', () => {this.onOutField.call(this, this.fields[i][j])});
+	generateTower(arg) {
+		let updates = [];
+		for (let i = 0; i < arg.map.length; i++) {
+			for (let j = 0; j < arg.map.length; j++) {
+				if (arg.map[j][i] === 'o') {
+					this.fields[i][j].tower = 0;
+				} else if (this.fields[i][j].tower === 0){
+					this.fields[i][j].tower = new CircleTower(
+						this.settings.type[arg.map[j][i]],
+						this.fields[i][j].field.getX() + this.settings.fieldSize / 2,
+						this.fields[i][j].field.getY() + this.settings.fieldSize / 2,
+						this.settings.fieldSize / 2 - 2
+					)
+					this.fields[i][j].tower.draw.addEventListener('click', () => {this.onClickField(this.fields[i][j])})
+					this.fields[i][j].tower.draw.addEventListener('tap', () => {this.onClickField(this.fields[i][j])})
+				} else if (arg.map[j][i] === '#') {
+					this.fields[i][j].tower = new CircleTower(
+						this.settings.stone,
+						this.fields[i][j].field.getX() + this.settings.fieldSize / 2,
+						this.fields[i][j].field.getY() + this.settings.fieldSize / 2,
+						this.settings.fieldSize / 2 - 2
+					)
+				} else if (arg.map[j][i] === 'z') {
+					this.fields[i][j].tower = new StarTower(
+						this.settings.star,
+						this.fields[i][j].field.getX() + this.settings.fieldSize / 2,
+						this.fields[i][j].field.getY() + this.settings.fieldSize / 2,
+						this.settings.fieldSize / 2 - 2
+					)
+					this.fields[i][j].tower.draw.addEventListener('click', () => {this.onClickField(this.fields[i][j])})
+					this.fields[i][j].tower.draw.addEventListener('tap', () => {this.onClickField(this.fields[i][j])})
+				}
+				else if (this.fields[i][j].tower.kind != this.settings.type[arg.map[j][i]]) {
+					this.fields[i][j].tower = new CircleTower(
+						this.settings.type[arg.map[j][i]],
+						this.fields[i][j].field.getX() + this.settings.fieldSize / 2,
+						this.fields[i][j].field.getY() + this.settings.fieldSize / 2,
+						this.settings.fieldSize / 2 - 2
+					)
+					this.fields[i][j].tower.draw.addEventListener('click', () => {this.onClickField(this.fields[i][j])})
+					this.fields[i][j].tower.draw.addEventListener('tap', () => {this.onClickField(this.fields[i][j])})
 				}
 			}
-			for (let i = 0; i < this.fieldsNewTower.length; i++){
-				let x = this.fieldsNewTower[i].coordinates[0];
-				let y = this.fieldsNewTower[i].coordinates[1];
-				this.fields[x][y].field.setStroke('green');
-			}
-			for (let j = 0; j < this.fieldsNewTower.length; j++) {
-				this.towers[this.fieldsNewTower[j].kind.name]++;
-				let variants = this.listVariants();
-				for (let i = 0; i < variants.length; i++) {
-					for (let s = 0; s < 4; s++) {
-						for (let t = 0; t < 3; t++) {
-
-							if ((variants[i].name == this.variantRects[s].kind.name) && (this.fieldsNewTower[j].kind.name == variants[i].circles[t])){
-								this.variantRects[s].isAble = true;
-								this.variantRects[s].field = this.fields[this.fieldsNewTower[j].coordinates[0]][this.fieldsNewTower[j].coordinates[1]]
-							}
-						}
-					}
-				}
-				this.towers[this.fieldsNewTower[j].kind.name]--;
-			}
-			for (let i = 0; i < this.variantRects.length; i++) {
-				if (this.variantRects[i].isAble) {
-					this.variantRects[i].draw.setStroke('green');
-					this.variantRects[i].draw.addEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
-					this.variantRects[i].draw.addEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
-				}
-			}
-			for (let i = 0; i < 4; i++) {
-				this.variantRects[i].isAble = false;
-				this.variantRects[i].field = 0;
-				this.variantRects[i].draw.setStroke('black');
-				this.variantRects[i].draw.removeEventListener('click', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
-				this.variantRects[i].draw.removeEventListener('tap', () => {this.onClickVariantRect.call(this, this.variantRects[i])});
-
-			}			
 		}
+		this.updateState();
+		this.scene.setState(this.state);
+		this.scene.render();
 	}
 
 	createVariants(field) {

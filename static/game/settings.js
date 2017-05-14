@@ -2,10 +2,6 @@ export default
 class Settings {
 	constructor() {
 
-		// if (Settings.__instance) {
-		// 	return Settings.__instance;
-		// }
-
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
 		this.hpCircl = 'hpCircl';
@@ -160,6 +156,14 @@ class Settings {
 			[this.circleGreen, this.circleYellow, this.circleRed]
 		];
 
-		// Settings.__instance = this;
+		this.type = {
+			'o': 0,
+			'a': this.circleRed,
+			'b': this.circlePink,
+			'c': this.circleSad,
+			'd': this.circleBlue,
+			'e': this.circleGreen,
+			'f': this.circleYellow,
+		}
 	}
 }

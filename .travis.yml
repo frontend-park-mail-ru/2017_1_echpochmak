@@ -1,0 +1,14 @@
+dist: trusty
+sudo: required
+language: node_js
+node_js:
+- '7'
+services:
+  - docker
+script:
+  - docker login --username=_ --password=$(echo $API_KEY) registry.heroku.com
+  - docker build -t registry.heroku.com/gem-td/web .
+  - docker push registry.heroku.com/gem-td/web
+branches:
+  only:
+  - master

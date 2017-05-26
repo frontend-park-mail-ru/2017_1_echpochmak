@@ -2,10 +2,6 @@ export default
 class Settings {
 	constructor() {
 
-		if (Settings.__instance) {
-			return Settings.__instance;
-		}
-
 		this.gameFieldId = 'game-field';
 		this.hintsFieldId = 'hints-field';
 		this.hpCircl = 'hpCircl';
@@ -13,7 +9,7 @@ class Settings {
 		this.gameFieldElement = document.getElementById(this.gameFieldId);
 		this.hintsFieldElement = document.getElementById(this.hintsFieldId);
 
-		this.mapSize = 15;
+		this.mapSize = 10;
 
 		this.checkpoints = [[0, 0], [0, this.mapSize - 1], [this.mapSize - 1, 0], [this.mapSize - 1, this.mapSize - 1]];
 
@@ -37,10 +33,14 @@ class Settings {
 		this.numberMonstersInWave = 20;
 		this.bulletRadius = 5;
 		this.laserWidth = 8;
-		this.numberChangesColors = 10;
+		this.numberChangesColors = 6;
 		this.throneHealth = 100;
 		this.damage = 1;
 		this.addDamageInWave = 1;
+
+		this.circleTowerDamage = 10;
+		this.pentagonTpwerDamage = 10;
+		this.starTowerDamage = 10;
 
 		this.circleRed = {
 			name: 'circleRed',
@@ -122,7 +122,7 @@ class Settings {
 
 		this.star = {
 			name: 'star',
-			colors: 'khaki',
+			color: 'khaki',
 			power: 100,
 			radiusFight: 400,
 			numberBullets: 3,
@@ -156,6 +156,14 @@ class Settings {
 			[this.circleGreen, this.circleYellow, this.circleRed]
 		];
 
-		Settings.__instance = this;
+		this.type = {
+			'o': 0,
+			'a': this.circleRed,
+			'b': this.circlePink,
+			'c': this.circleSad,
+			'd': this.circleBlue,
+			'e': this.circleGreen,
+			'f': this.circleYellow,
+		}
 	}
 }

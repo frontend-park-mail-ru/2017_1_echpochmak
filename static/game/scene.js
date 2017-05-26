@@ -86,7 +86,11 @@ class Scene {
 			}
 		}
 
-		
+		for (let i = 0; i < this.state.fieldsWithStars.length; i++) {
+			for (let j = 0; j < this.state.fieldsWithStars[i].tower.bulletes.length; j++) {
+				this.gameLayer.add(this.state.fieldsWithStars[i].tower.bulletes[j]);
+			}
+		}		
 
 		for (let i = 0; i < this.state.checkpoints.length ; i++) {
 			this.gameLayer.add(this.state.checkpoints[i].draw);

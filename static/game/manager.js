@@ -6,13 +6,24 @@ import UserService from '../services/userservice.js'
 export default
 class GameManager {
 	constructor(strategy) {
+
+		if (GameManager.__instance) {
+			return GameManager.__instance;
+		}
+		
 		this.mediator = new Mediator();
-		this.strategy = strategy;
 
 		this.mediator.subscribe(Events.PLAY_NEW_GAME, this.start.bind(this));
 		this.mediator.subscribe(Events.PLAY_AGAIN, this.start.bind(this));
 		this.mediator.subscribe(Events.GAME_FINISHED, this.end.bind(this));
 		this.mediator.subscribe(Events.QUIT_CONFIRMED, this.end.bind(this));
+
+		GameManager.__instance = this;
+	}
+
+	setStrategy(strategy) {
+		this.play = false;
+		this.strategy = strategy;
 	}
 
 	gameLoop() {
@@ -23,7 +34,7 @@ class GameManager {
 	}
 
 	start() {
-		// this.strategy = new SingleStrategy();
+		console.log(this.strategy);
 		this.strategy.init();
 		this.play = true;
 		this.requestID = requestAnimationFrame(this.gameLoop.bind(this));

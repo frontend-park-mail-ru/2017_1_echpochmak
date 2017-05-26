@@ -32,10 +32,6 @@ module.exports = {
 
 	plugins: [
 		// new CleanWebpackPlugin('dist'),
-		new webpack.LoaderOptionsPlugin({
-			debug: true,
-			postcss: [precss, autoprefixer]
-		}),
 		// new webpack.NoEmitOnErrorsPlugin(),
 		// new HtmlPlugin({
 		// 	filename: 'index.html',
